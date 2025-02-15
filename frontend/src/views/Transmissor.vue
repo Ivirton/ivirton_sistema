@@ -1,5 +1,6 @@
 <script setup>
 import Navegacao from '../components/Navegacao.vue'
+window.document.title = "Transmissor"
 </script>
 <template>
 
@@ -7,20 +8,7 @@ import Navegacao from '../components/Navegacao.vue'
     <main class="main">
         <div class="container ">
 
-            <div class="row">
-                <div class="col-md-10 offset-md-1 card1">
-                    <div class="linha">
-                        <h2 class="mb-4">Transmissões</h2>
-                    </div>
-                    <form class="linha"  method="post">
-                        <div class="input-group mb-3">
-                            <input style="margin-right: 20px;" type="text" class="form-control" name="nome"
-                                placeholder="Nome">
-                            <button class="btn btn-primary " type="submit">Salvar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+         
         </div>
     </main>
    

@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template> 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/"><img class="logo" src="/logo/psm.png" alt="" srcset=""></a>
+            <a class="navbar-brand" href="/">IDEV</a>
 
             <!-- <a class="navbar-brand" href="/<%=href%>"> <%= titulo %></a> -->
 
