@@ -4,14 +4,12 @@
 <template>
 
     <Navegacao />
-    <main class="main">
 
-    </main>
-    <h1>Transmissão</h1>
+    <main class="main" ></main>
+    <h1>Anuncio</h1>
 </template>
 
-<style >
-
+<style>
 .main{
     width: 100%;
     height: 100vh;

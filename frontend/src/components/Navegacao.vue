@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template> 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <!-- <a class="navbar-brand" href="/"><img class="logo" src="/pictures/sistem/logo_podium.png" alt="" srcset=""></a> -->
+            <a class="navbar-brand" href="/"><img class="logo" src="/logo/psm.png" alt="" srcset=""></a>
 
             <!-- <a class="navbar-brand" href="/<%=href%>"> <%= titulo %></a> -->
 
@@ -20,22 +20,17 @@ import { RouterLink, RouterView } from 'vue-router'
                         <RouterLink class="nav-item nav-link" to="/transmissao">Transmissões</RouterLink>
                     </li>
                     <li class="nav-item">
-                        <RouterLink  class="nav-item nav-link" to="/about">Anúncios</RouterLink>
+                        <RouterLink class="nav-item nav-link" to="/anuncio">Anúncios</RouterLink>
                     </li>
-                    <!-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Anúncios
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/carrossel">Rotativo</a></li>
-                            <li><a class="dropdown-item" href="#">Merchan</a></li>
-                        </ul>
-                    </li> -->
                 </ul>
             </div>
         </div>
     </nav>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.logo{
+    width: 70px;
+}
+</style>
