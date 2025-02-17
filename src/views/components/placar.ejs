@@ -2,12 +2,10 @@
 
     <div class="linha">
         <div class="linha">
-
             <h4> <a href="/receptor?id_transmissao=<%= transmissao.id_transmissao %>" target="_blank">Placar</a></h4>
         </div>
         <label class="switch">
-            <input type="checkbox" v-model="transmissao.placar_visibilidade"
-                v-on:change="placar_visibilidade_tx()">
+            <input type="checkbox" v-model="transmissao.placar_visibilidade" v-on:change="placar_visibilidade_tx()">
             <span class="slider"></span>
         </label>
     </div>
@@ -22,6 +20,9 @@
             <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <div class="coluna">
+                        <div class="linha">
+                            <div></div><i class="fas fa-lock"></i>
+                        </div>
                         <small>Largura</small>
                         <div class="PB-range-slider-div">
                             <input type="range" min="0" max="100" v-model="transmissao.placar_x" class="PB-range-slider"
@@ -30,7 +31,7 @@
                         </div>
                         <small>Altura</small>
                         <div class="PB-range-slider-div">
-                            <input type="range" min="-20" max="100" v-model="transmissao.placar_y" class="PB-range-slider"
+                            <input type="range" min="0" max="100" v-model="transmissao.placar_y" class="PB-range-slider"
                                 v-on:input="placar_y_tx(<%= transmissao.id_transmissao %>,<%= transmissao.id_placar %>)">
                             <small class="PB-range-slidervalue">{{transmissao.placar_y}}%</small>
                         </div>
@@ -57,6 +58,10 @@
                     </div>
                     <div class="coluna">
                         <div class="linha">
+                            <div></div>
+                            <i class="fas fa-random" aria-hidden="true"></i>
+                        </div>
+                        <div class="linha">
                             <input class="form-control" type="text" v-on:change="jogo_nome1_tx"
                                 v-model="transmissao.nome_time1">
                             <div style="display: flex; align-items: center;">
@@ -64,53 +69,49 @@
                                     class="fas fa-minus"></i>
                                 <strong class="pontos"
                                     id="pontos_time1_transmissao<%= transmissao.id_transmissao %>">{{transmissao.pontos_time1}}</strong>
-                                <i v-on:click="incrementar_time1()"
-                                    class="fas fa-plus"></i>
+                                <i v-on:click="incrementar_time1()" class="fas fa-plus"></i>
                             </div>
                         </div>
                         <div class="linha">
                             <input class="form-control" type="text" v-on:change="jogo_nome2_tx"
                                 v-model="transmissao.nome_time2">
                             <div style="display: flex; align-items: center;">
-                                <i v-on:click="decrementar_time2()"
-                                    class="fas fa-minus"></i>
+                                <i v-on:click="decrementar_time2()" class="fas fa-minus"></i>
                                 <strong class="pontos">{{transmissao.pontos_time2}}</strong>
-                                <i v-on:click="incrementar_time2()"
-                                    class="fas fa-plus"></i>
+                                <i v-on:click="incrementar_time2()" class="fas fa-plus"></i>
                             </div>
                         </div>
                         <div class="linha">
                             Partida
                             <div style="display: flex; align-items: center;">
-                                <i v-on:click="decrementar_partida()"
-                                    class="fas fa-solid fa-minus"></i>
+                                <i v-on:click="decrementar_partida()" class="fas fa-solid fa-minus"></i>
                                 <strong class="partida">
                                     {{transmissao.partida }}
                                 </strong>
-                                <i v-on:click="incrementar_partida()"
-                                    class=" fas fa-solid fa-plus"></i>
+                                <i v-on:click="incrementar_partida()" class=" fas fa-solid fa-plus"></i>
                             </div>
                         </div>
                         <hr>
+                        
                         <div class="linha">
                             <h3 style="text-align: center;">
                                 {{ transmissao.minuto < 10 ? '0' + transmissao.minuto : transmissao.minuto }}:{{
                                     transmissao.segundo < 10 ? '0' + transmissao.segundo : transmissao.segundo}}</h3>
-                            <input class="form-control" style="width: 70px;" placeholder="0" type="number"
-                                v-on:change="cronometro_duracao_tx" v-model="transmissao.duracao">
+                                    <input class="form-control" style="width: 70px;" placeholder="0" type="number"
+                                        v-on:change="cronometro_duracao_tx" v-model="transmissao.duracao">
                         </div>
                         <div class="linha">
-                            <select style="width: 141px;" class="form-select" id="selectbox" v-on:change="cronometro_tipo_cronometro_tx"
-                            v-model="transmissao.tipo_cronometro">
-                            <option value="" selected="selected" disabled="disabled">Tipo</option>
-                            <option value="0">Progressivo</option>
-                            <option value="1">Regressivo</option>
-                        </select>
-                                    <div style="display: flex;">
-                                        <i v-if="transmissao.icone" class="fas fa-pause" v-on:click="cronometro_play_tx"></i>
-                                        <i v-else="transmissao.icone" class="fas fa-play" v-on:click="cronometro_play_tx"></i>
-                                        <i class="fas fa-stop" v-on:click="cronometro_stop_tx"></i>
-                                    </div>
+                            <select style="width: 141px;" class="form-select" id="selectbox"
+                                v-on:change="cronometro_tipo_cronometro_tx" v-model="transmissao.tipo_cronometro">
+                                <option value="" selected="selected" disabled="disabled">Tipo</option>
+                                <option value="0">Progressivo</option>
+                                <option value="1">Regressivo</option>
+                            </select>
+                            <div style="display: flex;">
+                                <i v-if="transmissao.icone" class="fas fa-pause" v-on:click="cronometro_play_tx"></i>
+                                <i v-else="transmissao.icone" class="fas fa-play" v-on:click="cronometro_play_tx"></i>
+                                <i class="fas fa-stop" v-on:click="cronometro_stop_tx"></i>
+                            </div>
                         </div>
 
                     </div>

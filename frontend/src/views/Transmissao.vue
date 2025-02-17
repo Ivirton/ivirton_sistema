@@ -22,6 +22,8 @@ import Navegacao from '../components/Navegacao.vue'
                 </div>
             </div>
         </div>
+
+       
     </main>
    
 </template>
