@@ -1,12 +1,18 @@
 <script setup>
  import Navegacao from '../components/Navegacao.vue'
+    import AnuncioRotativo from '@/components/AnuncioRotativo.vue';
+ 
 </script>
 <template>
 
     <Navegacao />
 
-    <main class="main" ></main>
-    <h1>Anuncio</h1>
+    <main class="main" >
+
+        
+       
+    </main>
+  
 </template>
 
 <style>
