@@ -23,7 +23,7 @@ function removerItem(id) {
 
 <template>
     <div class="col-md-4 col-sm-6" id="item1">
-        <div class="card shadow-sm p-3 item-card" v-on:click="toggleSelection(this, document.getElementById('checkbox1'))">
+        <div class="card shadow-sm p-3 item-card" onclick="toggleSelection(this, document.getElementById('checkbox1'))">
             <input type="checkbox" class="form-check-input me-2" id="checkbox1">
             <img src="" alt="Thumbnail" class="item-img">
             <div class="mt-2">

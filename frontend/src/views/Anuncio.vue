@@ -8,9 +8,12 @@
     <Navegacao />
 
     <main class="main" >
+        <AnuncioRotativo/>
+        <AnuncioRotativo/>
+
+        <AnuncioRotativo/>
 
         
-       
     </main>
   
 </template>

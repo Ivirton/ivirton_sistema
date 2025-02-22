@@ -1,12 +1,43 @@
-<script setup>
-import Navegacao from '../components/Navegacao.vue'
-</script>
-<template>
+<script>
+import Navegacao from '@/components/Navegacao.vue';
+import axios from 'axios';
 
+export default {
+    data() {
+        return {
+            cep: '',
+            endereco: null,
+            erro: ''
+        };
+    },
+    methods: {
+        async buscarCep() {
+            this.erro = '';
+            this.endereco = null;
+            if (!this.cep) {
+                this.erro = 'Por favor, digite um CEP válido';
+                return;
+            }
+            try {
+                const response = await axios.get(`https://viacep.com.br/ws/${this.cep}/json/`);
+                if (response.data.erro) {
+                    this.erro = 'CEP não encontrado';
+                } else {
+                    this.endereco = response.data;
+                }
+            } catch (error) {
+                this.erro = 'Erro ao buscar o CEP';
+            }
+        }
+    }
+};
+</script>
+
+
+<template>
     <Navegacao />
     <main class="main">
         <div class="container ">
-
             <div class="row">
                 <div class="col-md-10 offset-md-1 card1">
                     <div class="linha">
@@ -16,16 +47,20 @@ import Navegacao from '../components/Navegacao.vue'
                         <div class="input-group mb-3">
                             <input style="margin-right: 20px;" type="text" class="form-control" name="nome"
                                 placeholder="Nome">
-                            <button class="btn btn-primary " type="submit">Salvar</button>
+                            <button class="btn btn-primary " type="submit">in</button>
                         </div>
                     </form>
+                    <ul>
+                        <li v-for="transmissao in transmissoes" :key="transmissao.id">
+                            {{ transmissao.nome }}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
 
        
     </main>
-   
 </template>
 
 <style>
@@ -34,10 +69,12 @@ import Navegacao from '../components/Navegacao.vue'
     height: 100vh;
     background-color: rgb(66, 65, 65);
 }
+
 .mt-5 {
     margin-top: 3rem !important;
     background-color: rgba(127, 255, 212, 0);
 }
+
 .card1 {
     position: relative;
     background-color: rgb(255, 255, 255);

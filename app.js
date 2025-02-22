@@ -8,29 +8,36 @@ const { initializeSocket } = require('./src/controller/socketController');
 require('./src/model/sincronizar');
 
 
-initializeSocket
-const app = express();
-const server = http.createServer(app);
+
+
+
+
+const appExpress = express();
+const server = http.createServer(appExpress);
 initializeSocket(server)
 
 // Configuração do diretório público para servir arquivos estáticos
 router.use(express.static('public'))
 
 // Habilita o middleware para interpretar dados codificados na URL (por exemplo, dados de formulário)
-app.use(bodyParser.urlencoded({ extended: false }))
+appExpress.use(bodyParser.urlencoded({ extended: false }))
 
-// parse application/json
-app.use(bodyParser.json())
+// parse appExpresslication/json
+appExpress.use(bodyParser.json())
 
 // Habilita o middleware para interpretar o corpo das requisições como JSON
 router.use(express.json());
 
 // Configuração do view engine (EJS)
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src/views'));
+appExpress.set('view engine', 'ejs');
+appExpress.set('views', path.join(__dirname, 'src/views'));
 
 // Define o prefixo para as rotas 
-app.use('/', router);
+appExpress.use('/', router);
+
+
+
+
 
 
 //inicializar servidor 
