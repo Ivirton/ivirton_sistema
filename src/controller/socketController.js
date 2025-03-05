@@ -1,6 +1,6 @@
 const socketIo = require('socket.io');
-const trasmisaoController = require('./transmicaoController');
-const rotativoControler = require('./rotativoController');
+// const trasmisaoController = require('./transmicaoController');
+// const rotativoControler = require('./rotativoController');
 // Classe Sujeito que gerencia os observadores
 class Sujeito {
     constructor() {
@@ -38,20 +38,33 @@ class Observador {
 const sujeito = new Sujeito();  // Instância do Sujeito
 const initializeSocket = (server) => {
     const io = socketIo(server);
+    
     io.on('connection', async function (socket) {
+        console.log('Cliente conectado:', socket.id);
         // Cria um novo observador para cada cliente conectado
-        const observador = new Observador(socket.id, socket);
-        sujeito.inscrever(observador);
-        console.log(sujeito.observadores)
+        // const observador = new Observador(socket.id, socket);
+        // sujeito.inscrever(observador);
+        // console.log(sujeito.observadores)
 
         // Remove o observador quando o cliente desconecta
         socket.on('disconnect', () => {
-            console.log('Cliente desconectado:', socket.id);
-            sujeito.desinscrever(observador);
+            // console.log('Cliente desconectado:', socket.id);
+            // sujeito.desinscrever(observador);
         });
+        // socket.on(`entra`, (menssagem) => {
+        //     console.loader(menssagem)
+        //     socket.emit(`getTrasmissao${menssagem.id}`, { data: "recebido" });
+        //     // sujeito.desinscrever(observador);
+        // });
+        socket.on(`entra`, (menssagem) => {
+            console.log("entrando")
+            socket.emit(`entra`, menssagem);
+            // sujeito.desinscrever(observador);
+        });
+        
 
-        trasmisaoController.socket(io, socket)
-        rotativoControler.socket(io, socket)
+        // trasmisaoController.socket(io, socket)
+        // rotativoControler.socket(io, socket)
     });
 };
 module.exports = { initializeSocket };

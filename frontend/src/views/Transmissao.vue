@@ -1,65 +1,117 @@
-<script>
-import Navegacao from '@/components/Navegacao.vue';
+<script >
+import Navegacao from '../components/Navegacao.vue'
 import axios from 'axios';
 
 export default {
     data() {
         return {
-            cep: '',
-            endereco: null,
-            erro: ''
+            transmissao: [],
+            nome: '',
+            erro: '',
+            sucesso: ''
         };
     },
     methods: {
-        async buscarCep() {
-            this.erro = '';
-            this.endereco = null;
-            if (!this.cep) {
-                this.erro = 'Por favor, digite um CEP válido';
+        async getTransmissao() {
+            try {
+                const response = await axios.get('http://localhost:4000/api/transmissao');
+                if (response.data.erro) {
+                    this.erro = 'API não encontrada!';
+                } else {
+                    this.transmissao = response.data;
+                    console.log(transmissao)
+                }
+            } catch (error) {
+                this.erro = 'Erro ao buscar API';
+            }
+        },
+        async addTransmissao() {
+            if (!this.nome) {
+                console.log("erro");
                 return;
             }
             try {
-                const response = await axios.get(`https://viacep.com.br/ws/${this.cep}/json/`);
-                if (response.data.erro) {
-                    this.erro = 'CEP não encontrado';
+                const response = await axios.post('http://localhost:4000/api/transmissao', {
+                    id: this.nome,
+                    nome: this.nome
+                });
+                if (response.status === 201) {
+                    this.sucesso = 'Transmissão adicionada com sucesso!';
+                    this.transmissao.push({
+                        id: this.nome,
+                        nome: this.nome
+                    });
+                    this.nome = '';
                 } else {
-                    this.endereco = response.data;
+                    this.erro = 'Falha ao adicionar transmissão';
                 }
             } catch (error) {
-                this.erro = 'Erro ao buscar o CEP';
+                this.erro = 'Erro ao salvar transmissão';
+            }
+        },
+        async removeTransmissao(id) {
+            try {
+                const response = await axios.delete(`http://localhost:4000/api/transmissao/${id}`);
+                if (response.status === 200) {
+                    this.sucesso = 'Transmissão removida com sucesso!';
+                    this.transmissao = this.transmissao.filter(trans => trans.id !== id);
+                } else {
+                    this.erro = 'Falha ao remover transmissão';
+                }
+            } catch (error) {
+                this.erro = 'Erro ao remover transmissão';
             }
         }
+    },
+    mounted() {
+        this.getTransmissao();
     }
 };
 </script>
 
-
 <template>
     <Navegacao />
     <main class="main">
-        <div class="container ">
+        <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1 card1">
                     <div class="linha">
                         <h2 class="mb-4">Transmissões</h2>
                     </div>
-                    <form class="linha"  method="post">
+                    <form @submit.prevent="addTransmissao" class="linha">
                         <div class="input-group mb-3">
-                            <input style="margin-right: 20px;" type="text" class="form-control" name="nome"
-                                placeholder="Nome">
-                            <button class="btn btn-primary " type="submit">in</button>
+                            <input v-model="nome" style="margin-right: 20px;" type="text" class="form-control"
+                                name="nome" placeholder="Nome">
+                            <button class="btn btn-primary" type="submit">Salvar</button>
                         </div>
                     </form>
-                    <ul>
-                        <li v-for="transmissao in transmissoes" :key="transmissao.id">
-                            {{ transmissao.nome }}
-                        </li>
-                    </ul>
+
+                    <div v-if="sucesso" class="alert alert-success">{{ sucesso }}</div>
+                    <div v-if="erro" class="alert alert-danger">{{ erro }}</div>
+
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Receptor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="trans in transmissao" :key="trans.id">
+                                <td>
+                                    <a :href="`/transmissor?id=${trans.id}`">{{ trans.nome }}</a>
+                                </td>
+                                <td>
+                                    <button @click="removeTransmissao(trans.id)" class="btn">
+                                        <i class="fa fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
-       
     </main>
 </template>
 

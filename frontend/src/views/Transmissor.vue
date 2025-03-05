@@ -4,14 +4,56 @@ import Camada from '../components/Camada.vue'
 import Posicao from '@/components/Posicao.vue';
 import Futebol from '@/components/Futebol.vue';
 import Cronometro from '@/components/Cronometro.vue';
+import { ref, onMounted, reactive } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import socket from '@/socket';
+
+const route = useRoute();
+const id = ref(null);
+let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": "-OKVHr-b7vev09wM3hXm", "nome": "equipe 1", "placar": { "cronometro": { "duracao": 60, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+async function getTransmissao() {
+    try {
+
+        const response = await axios.get(`http://localhost:4000/api/transmissao/${id.value}`);
+        if (response.data.erro) {
+            console.log('API não encontrada!');
+        } else {
+
+            return response.data;
+
+        }
+    } catch (error) {
+        console.log('Erro ao buscar API');
+    }
+}
+
+onMounted(async () => {
+    id.value = route.query.id; // Pegando o parâmetro 'id' da URL
+    // const data = await getTransmissao()
+    // transmissor.nome = data.nome
+    // transmissor = data
+
+
+});
+socket.on("connection", (menssagem) => {
+    console.log(menssagem)
+    socket.emit(`entra`, { "id": id.value });
+})
+socket.on(`getTrasmissao${id.value}`, (menssagem) => {
+    console.log(menssagem)
+});
+
 </script>
 <template>
     <Navegacao />
     <main class="main">
         <article class="body">
+
             <section class="section card1">
                 <Camada titulo="Placar" />
                 <div class="accordion" id="accordionExample">
+
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -37,7 +79,7 @@ import Cronometro from '@/components/Cronometro.vue';
                         <div id="collapseTwu" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Futebol/>
+                                <Futebol />
                             </div>
                         </div>
                     </div>
@@ -52,19 +94,19 @@ import Cronometro from '@/components/Cronometro.vue';
                         <div id="collapseTre" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                              <Cronometro/>
+                                <Cronometro />
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-          
-           
+
+
         </article>
         <article class="aside">
 
             <section class="section card1">
-                <Camada titulo="Merchad" />
+                <Camada titulo="Merchandising" />
                 <div class="accordion" id="accordionExample">
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
@@ -76,12 +118,12 @@ import Cronometro from '@/components/Cronometro.vue';
                         </h2>
                         <div id="collapsesex" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao />
+                                <Posicao v-bind:largura="44" v-bind:tamanho="10" v-bind:altura="33" />
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
-            </section>    
+            </section>
             <section class="section card1">
                 <Camada titulo="Logo" />
                 <div class="accordion" id="accordionExample">
@@ -95,15 +137,15 @@ import Cronometro from '@/components/Cronometro.vue';
                         </h2>
                         <div id="collapsefive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao />
+                                <Posicao v-bind:largura="44" v-bind:tamanho="10" v-bind:altura="33" />
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </section>
             <section class="section card1">
                 <Camada titulo="Anúncios" />
-                
+
                 <div class="accordion" id="accordionExample">
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
@@ -115,10 +157,10 @@ import Cronometro from '@/components/Cronometro.vue';
                         </h2>
                         <div id="collapsefor" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao />
+                                <Posicao v-bind:largura="44" v-bind:tamanho="10" v-bind:altura="33" />
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </section>
         </article>
@@ -126,10 +168,10 @@ import Cronometro from '@/components/Cronometro.vue';
 
 </template>
 
-<style>
+<style scoped>
 .main {
     width: 100%;
-    height: 100vh;
+    height: 115vh;
     background-color: rgb(66, 65, 65);
 }
 

@@ -16,7 +16,7 @@ main{
   display: flex;
   flex-direction: row;
   justify-content: center;
-  /* height: 100vh; */
+  height: 100vh;
   flex-wrap: wrap;
   background: radial-gradient(ellipse at bottom, #1b2735 1000%, #090a0f 100%);
 }
