@@ -3,10 +3,10 @@
 
         <div class="linha">
             <Text />
-            <Score />
+            <Score  />
         </div>
         <div class="linha">
-            <Text valor=""/>
+            <Text/>
             <Score />
         </div>
         <div class="linha">
@@ -31,7 +31,7 @@ import Text from './Text.vue'
 const props = defineProps({
     casaNome: {
         type: Number,
-        required: true,
+
     }
 
 })

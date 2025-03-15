@@ -22,7 +22,7 @@ export default {
                     console.log(transmissao)
                 }
             } catch (error) {
-                this.erro = 'Erro ao buscar API';
+                // this.erro = 'Erro ao buscar API';
             }
         },
         async addTransmissao() {
@@ -36,25 +36,30 @@ export default {
                     nome: this.nome
                 });
                 if (response.status === 201) {
+                    this.getTransmissao();
                     this.sucesso = 'Transmissão adicionada com sucesso!';
                     this.transmissao.push({
                         id: this.nome,
                         nome: this.nome
                     });
                     this.nome = '';
+                    this.sucesso = ""
+                    
                 } else {
-                    this.erro = 'Falha ao adicionar transmissão';
+                    // this.erro = 'Falha ao adicionar transmissão';
                 }
             } catch (error) {
-                this.erro = 'Erro ao salvar transmissão';
+                // this.erro = 'Erro ao salvar transmissão';
             }
         },
         async removeTransmissao(id) {
+          
             try {
                 const response = await axios.delete(`http://localhost:4000/api/transmissao/${id}`);
                 if (response.status === 200) {
                     this.sucesso = 'Transmissão removida com sucesso!';
-                    this.transmissao = this.transmissao.filter(trans => trans.id !== id);
+                    // this.transmissao = this.transmissao.filter(trans => trans.id !== id);
+                    this.getTransmissao();
                 } else {
                     this.erro = 'Falha ao remover transmissão';
                 }
@@ -102,6 +107,7 @@ export default {
                                     <a :href="`/transmissor?id=${trans.id}`">{{ trans.nome }}</a>
                                 </td>
                                 <td>
+                                    
                                     <button @click="removeTransmissao(trans.id)" class="btn">
                                         <i class="fa fa-trash-alt"></i>
                                     </button>

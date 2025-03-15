@@ -2,7 +2,7 @@
 defineProps({
     largura: {
         type: Number,
-        required: true,
+      
     }
 
 })

@@ -1,43 +1,16 @@
 <script setup>
+import { ref, reactive } from 'vue';
 
+// Definindo props corretamente
 const props = defineProps({
-    posicao: {
-        type: null,
-        required: true,
-        largura: {
-            type: Number,
-            required: true,
-        },
-        altura: {
-            type: Number,
-            required: true,
-        },
-        tamanho: {
-            type: Number,
-            required: true,
-        },
-    },
-    largura: {
-        type: Number,
-        required: true,
-    },
-    altura: {
-        type: Number,
-        required: true,
-    },
-    tamanho: {
-        type: Number,
-        required: true,
-    },
+    position: {
+        type: Object,
+        default: () => ({ x: 0, y: 0, z: 0 }) // Definindo os valores padrão
+    }
 })
-import { ref, reactive, defineProps } from 'vue';
 
-const posicao = reactive({ "largura": 0, "altura": 0, "tamanho": 0 })
+const posicao = reactive({ ...props.position }) // Fazendo uma cópia reativa
 
-
-posicao.largura = props.largura
-posicao.altura = props.altura
-posicao.tamanho = props.tamanho
 
 function sendData(data) {
     console.log(data)
@@ -49,22 +22,22 @@ function setValue(data) {
 </script>
 <template>
     <div class="coluna">
-        
+
         <small>Largura</small>
-        <h1>{{ posicao }}</h1>
+        
         <div class="PB-range-slider-div">
-            <input type="range" min="0" max="100" class="PB-range-slider" v-model="posicao.largura" @input="sendData(posicao)">
-            <small class="PB-range-slidervalue">{{ posicao.largura }}%</small>
+            <input type="range" min="0" max="100" class="PB-range-slider" v-model="posicao.x" @input="sendData(posicao)">
+            <small class="PB-range-slidervalue">{{ posicao.x }}%</small>
         </div>
         <small>Altura</small>
         <div class="PB-range-slider-div">
-            <input type="range" min="0" max="100" class="PB-range-slider" v-model="posicao.altura" @input="sendData()">
-            <small class="PB-range-slidervalue">{{ posicao.altura }}%</small>
+            <input type="range" min="0" max="100" class="PB-range-slider" v-model="posicao.y" @input="sendData(posicao)">
+            <small class="PB-range-slidervalue">{{ posicao.y }}%</small>
         </div>
         <small>Tamanho</small>
         <div class="PB-range-slider-div">
-            <input type="range" min="0" max="200" class="PB-range-slider" v-model="posicao.tamanho" @input="sendData()">
-            <small class="PB-range-slidervalue">{{ posicao.tamanho }}%</small>
+            <input type="range" min="0" max="200" class="PB-range-slider" v-model="posicao.z" @input="sendData(posicao)">
+            <small class="PB-range-slidervalue">{{ posicao.z }}%</small>
         </div>
     </div>
 </template>

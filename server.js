@@ -2,9 +2,10 @@ require('dotenv').config();
 const path = require('path');
 const http = require('http');
 const express = require('express');
-const { initializeSocket } = require('./src/controller/socketController');
 const bodyParser = require('body-parser');
 const transmissaoRouter = require('./backend/router/transmissaoRoutes');
+const { database } = require('firebase-admin');
+const { initializeSocket } = require('./backend/socketio');
 
 const appExpress = express();
 const server = http.createServer(appExpress);
@@ -16,7 +17,7 @@ appExpress.use(bodyParser.json());
 appExpress.use(express.json());
 const cors = require('cors');
 
-// const { database } = require('firebase-admin');
+
 
 // const transmissorRouter = require('./backend/router/transmissorRoutes');
 appExpress.use(cors());

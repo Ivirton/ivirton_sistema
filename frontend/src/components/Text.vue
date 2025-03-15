@@ -2,7 +2,7 @@
     <input class="form-control"  type="text" @input="enviarNome(text)" v-model="text.valor">
 </template>
 <script setup>
-import { reactive } from 'vue';
+import { reactive,defineEmits } from 'vue';
 
 const text = reactive({ valor: "" })
 

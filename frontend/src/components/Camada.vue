@@ -3,11 +3,11 @@ import Posicao from './Posicao.vue';
 defineProps({
     titulo: {
         type: String,
-        required: true,
+        
     },
     body: {
         type: String,
-        required: true,
+       
     },
 })
 </script>

@@ -1,20 +1,31 @@
 <template>
     <div style="display: flex; align-items: center;">
         <i class="fas fa-solid fa-minus" @click="removePontos(pontos)"></i>
-        <strong >{{ pontos.pontos }}</strong>
+        <strong>{{ pontos.pontos }}</strong>
         <i class=" fas fa-solid fa-plus" @click="addPontos(pontos)"></i>
     </div>
 </template>
 <script setup>
-import { reactive } from 'vue';
+import { reactive, defineEmits } from 'vue';
+const props = defineProps({
+    id: {
+        type: String,
+    },
+    name: {
+        type: String,
+    }
+})
 const pontos = reactive({ pontos: 0 })
+const emit = defineEmits(['somarpontos'])
 
 function addPontos(data) {
     data.pontos++
+    emit('somarpontos', { nome:"pontos",valor: pontos.pontos, id: props.id , name:props.name})
 }
 function removePontos(data) {
     if (data.pontos > 0) {
         data.pontos--
+        
     }
 }
 </script>

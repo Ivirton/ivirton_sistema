@@ -1,83 +1,64 @@
+const dbFirebase = require("../config/database/firebase/firebaseConfig");
+const { ref, set, push, get, update, remove, child } = require('firebase/database');
 
-const transmissao = {
-    nome: "",
-    placar: {
-        visibilidade: true,
-        posicao: { x: 0, y: 0, z: 0 },
-        jogo: { casa: { nome: "casa", pontos: 0 }, visitante: { nome: "visitante", pontos: 0 }, partida: 1 },
-        cronometro: {
-            segundo: 0,
-            minuto: 0,
-            duracao: 60,
-            icone: "play",
-            tipo: 1
+class TransmissaoModel {
+
+     async create(nome) {
+        if (!nome) {
+            return Promise.reject(new Error("Nome é obrigatório"));
         }
-    },
-    anuncios: {
-        rotativo: {
-            visibilidade: true,
-            posicao: { x: 0, y: 0, z: 0 },
+
+        const newTransmissao = { nome };
+        const usersRef = ref(dbFirebase, 'transmissao');
+        const newUserRef = push(usersRef);
+        newTransmissao.id = newUserRef.key;
+
+        try {
+            await set(newUserRef, newTransmissao);
+            return newTransmissao;
+        } catch (error) {
+            console.error("Erro ao criar transmissão:", error);
+            throw error;
         }
-    },
-    Logo: {
-        visibilidade: true,
-        posicao: { x: 0, y: 0, z: 0 },
-        url: ""
+    }
+
+     async findAll() {
+        return get(child(ref(dbFirebase), "/transmissao"))
+            .then(snapshot => snapshot.exists() ? snapshot.val() : null)
+            .catch(error => {
+                console.error("Erro ao buscar transmissões:", error);
+                throw error;
+            });
+    }
+
+     async findAt(nome) {
+        return get(child(ref(dbFirebase), `/transmissao/${nome}`))
+            .then(snapshot => snapshot.exists() ? snapshot.val() : null)
+            .catch(error => {
+                console.error("Erro ao buscar transmissão:", error);
+                throw error;
+            });
+    }
+
+     async update(id, updates) {
+        const transmissionRef = ref(dbFirebase, `/transmissao/${id}`);
+        return update(transmissionRef, updates)
+            .then(() => ({ message: "Transmissão atualizada com sucesso" }))
+            .catch(error => {
+                console.error("Erro ao atualizar transmissão:", error);
+                throw error;
+            });
+    }
+
+     async delete(id) {
+        return remove(ref(dbFirebase, `/transmissao/${id}`))
+            .then(() => ({ message: "Transmissão removida com sucesso" }))
+            .catch(error => {
+                console.error("Erro ao remover transmissão:", error);
+                throw error;
+            });
     }
 }
-const TransmissaoModel = {
-    async create(key) {
-        try {
-            const t1 = transmissao
-            t1.nome = key
-            await set(ref(db, `transmissao/${key}`), transmissao);
-            console.log('documeton criado com sucesso!');
-        } catch (error) {
-            console.error('Erro ao criar documetno:', error);
-        }
-    },
-    async findAll() {
-        try {
 
-
-        } catch (error) {
-
-            return [];
-        }
-    },
-
-    async findAt(id) {
-        try {
-
-
-
-
-        } catch (error) {
-
-            return null;
-        }
-    },
-
-    async update(id, novoNome) {
-        try {
-
-        } catch (error) {
-            console.error("Erro ao atualizar campo:", error);
-        }
-    },
-
-    async delete(id) {
-        try {
-
-        } catch (error) {
-
-        }
-    }
-};
-
-module.exports = TransmissaoModel
-
-// Correta chamada da função assíncrona
-// (async () => {
-//     console.log(await TransmissaoModel.findAll());
-// })();
+const transmissaoModel = new TransmissaoModel()
+module.exports = transmissaoModel ;

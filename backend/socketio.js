@@ -1,7 +1,5 @@
 const socketIo = require('socket.io');
-const trasmisaoController = require('./transmicaoController');
-const rotativoControler = require('./rotativoController');
-// Classe Sujeito que gerencia os observadores
+
 class Sujeito {
     constructor() {
         this.observadores = [];  // Lista de observadores
@@ -35,7 +33,7 @@ class Observador {
     }
 }
 
-const sujeito = new Sujeito();  // Instância do Sujeito
+const sujeito = new Sujeito(); 
 const initializeSocket = (server) => {
     const io = socketIo(server);
     
@@ -56,15 +54,14 @@ const initializeSocket = (server) => {
         //     socket.emit(`getTrasmissao${menssagem.id}`, { data: "recebido" });
         //     // sujeito.desinscrever(observador);
         // });
-        socket.on(`entra`, (menssagem) => {
-            console.log("entrando")
-            socket.emit(`entra`, menssagem);
+        // socket.emit(`connection`, "oi");
+        socket.on(`menssagem`, (menssagem) => {
+            console.log(menssagem)
+            io.emit(`menssagem`, menssagem);
             // sujeito.desinscrever(observador);
         });
         
-
-        // trasmisaoController.socket(io, socket)
-        rotativoControler.socket(io, socket)
+    
     });
 };
 module.exports = { initializeSocket };

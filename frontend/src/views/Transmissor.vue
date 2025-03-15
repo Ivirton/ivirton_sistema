@@ -3,15 +3,22 @@ import Navegacao from '../components/Navegacao.vue'
 import Camada from '../components/Camada.vue'
 import Posicao from '@/components/Posicao.vue';
 import Futebol from '@/components/Futebol.vue';
+import Score from '@/components/Score.vue'
+import Text from '@/components/Text.vue'
 import Cronometro from '@/components/Cronometro.vue';
 import { ref, onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import socket from '@/socket';
 
+
+
+
+
+
 const route = useRoute();
 const id = ref(null);
-let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": "-OKVHr-b7vev09wM3hXm", "nome": "equipe 1", "placar": { "cronometro": { "duracao": 60, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+let transmissor = reactive({ "Logo": { "posicao": { "x": 44, "y": 22, "z": 33 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": "-OKVHr-b7vev09wM3hXm", "nome": "equipe 1", "placar": { "cronometro": { "duracao": 60, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 10, "y": 23, "z": 33 }, "visibilidade": true } })
 async function getTransmissao() {
     try {
 
@@ -19,7 +26,7 @@ async function getTransmissao() {
         if (response.data.erro) {
             console.log('API não encontrada!');
         } else {
-
+            console.log(response)
             return response.data;
 
         }
@@ -30,18 +37,30 @@ async function getTransmissao() {
 
 onMounted(async () => {
     id.value = route.query.id; // Pegando o parâmetro 'id' da URL
-    // const data = await getTransmissao()
-    // transmissor.nome = data.nome
-    // transmissor = data
+    const data = await getTransmissao()
+    transmissor.nome = data.nome
+    transmissor = data
+    document.title += " " + transmissor.nome
 
 
 });
+
 socket.on("connection", (menssagem) => {
+    console.log(socket.id)
     console.log(menssagem)
     socket.emit(`entra`, { "id": id.value });
 })
-socket.on(`getTrasmissao${id.value}`, (menssagem) => {
+
+function enviarData(data){
+    socket.emit(`menssagem`, data);
+    console.log(data)
+}
+
+
+socket.on(`menssagem`, (menssagem) => {
     console.log(menssagem)
+    // socket.emit(`menssagem`, menssagem);
+   
 });
 
 </script>
@@ -64,7 +83,7 @@ socket.on(`getTrasmissao${id.value}`, (menssagem) => {
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao />
+                                <Posicao v-bind:position="transmissor.placar.posicao" />
                             </div>
                         </div>
                     </div>
@@ -79,7 +98,23 @@ socket.on(`getTrasmissao${id.value}`, (menssagem) => {
                         <div id="collapseTwu" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Futebol />
+                                <div class="coluna">
+
+                                    <div class="linha">
+                                        <Text />
+                                        <Score  @somarpontos="enviarData" :id="transmissor.id" name="casa" />
+                                    </div>
+                                    <div class="linha">
+                                        <Text />
+                                        <Score />
+                                    </div>
+                                    <div class="linha">
+                                        Partida
+                                        <Score />
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -118,7 +153,7 @@ socket.on(`getTrasmissao${id.value}`, (menssagem) => {
                         </h2>
                         <div id="collapsesex" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao v-bind:largura="44" v-bind:tamanho="10" v-bind:altura="33" />
+                                <Posicao v-bind:position="transmissor.anuncios.rotativo.posicao" />
                             </div>
                         </div>
                     </div>
@@ -137,7 +172,7 @@ socket.on(`getTrasmissao${id.value}`, (menssagem) => {
                         </h2>
                         <div id="collapsefive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao v-bind:largura="44" v-bind:tamanho="10" v-bind:altura="33" />
+                                <Posicao v-bind:position="transmissor.Logo.posicao" />
                             </div>
                         </div>
                     </div>
@@ -157,7 +192,7 @@ socket.on(`getTrasmissao${id.value}`, (menssagem) => {
                         </h2>
                         <div id="collapsefor" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao v-bind:largura="44" v-bind:tamanho="10" v-bind:altura="33" />
+                                <Posicao v-bind:position="transmissor.anuncios.rotativo.posicao" />
                             </div>
                         </div>
                     </div>
