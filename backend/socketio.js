@@ -40,14 +40,14 @@ const initializeSocket = (server) => {
     io.on('connection', async function (socket) {
         console.log('Cliente conectado:', socket.id);
         // Cria um novo observador para cada cliente conectado
-        // const observador = new Observador(socket.id, socket);
-        // sujeito.inscrever(observador);
+        const observador = new Observador(socket.id, socket);
+        sujeito.inscrever(observador);
         // console.log(sujeito.observadores)
 
         // Remove o observador quando o cliente desconecta
         socket.on('disconnect', () => {
-            // console.log('Cliente desconectado:', socket.id);
-            // sujeito.desinscrever(observador);
+            console.log('Cliente desconectado:', socket.id);
+            sujeito.desinscrever(observador);
         });
         // socket.on(`entra`, (menssagem) => {
         //     console.loader(menssagem)
