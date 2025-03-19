@@ -32,9 +32,9 @@ appExpress.use('/api/transmissao', transmissaoRouter);
 
 
 // Rota para servir o Vue.js em todas as rotas não API
-appExpress.get('*', (req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-});
+// appExpress.get('*', (req, res) => {
+//     res.sendFile(path.join(frontendPath, 'index.html'));
+// });
 
 
 
