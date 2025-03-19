@@ -1,0 +1,1 @@
+import{c as n,b as t,F as o,o as a}from"./index-B7y8Tta2.js";const c={__name:"Receptor",setup(l){return window.document.title="Receptor",(r,e)=>(a(),n(o,null,[e[0]||(e[0]=t("head",null,null,-1)),e[1]||(e[1]=t("main",{class:"main"},[t("div",{class:"container"},[t("h2",null,"Receptor")])],-1))],64))}};export{c as default};
