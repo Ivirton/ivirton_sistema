@@ -2,7 +2,6 @@
 import Navegacao from '../components/Navegacao.vue'
 import Camada from '../components/Camada.vue'
 import Posicao from '@/components/Posicao.vue';
-import Futebol from '@/components/Futebol.vue';
 import Score from '@/components/Score.vue'
 import Text from '@/components/Text.vue'
 import Cronometro from '@/components/Cronometro.vue';
@@ -16,9 +15,11 @@ import socket from '@/socket';
 
 
 
+
 const route = useRoute();
 const id = ref(null);
-let transmissor = reactive({ "Logo": { "posicao": { "x": 44, "y": 22, "z": 33 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": "-OKVHr-b7vev09wM3hXm", "nome": "equipe 1", "placar": { "cronometro": { "duracao": 60, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 10, "y": 23, "z": 33 }, "visibilidade": true } })
+let data = null
+let transmissor = reactive({ "Logo": { "posicao": { "x": 44, "y": 22, "z": 33 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 60, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
 async function getTransmissao() {
     try {
 
@@ -37,31 +38,22 @@ async function getTransmissao() {
 
 onMounted(async () => {
     id.value = route.query.id; // Pegando o parâmetro 'id' da URL
-    const data = await getTransmissao()
-    transmissor.nome = data.nome
-    transmissor = data
-    document.title += " " + transmissor.nome
-
-
+    data = await getTransmissao();
+    if (data) {
+        transmissor.nome = data.nome;
+        transmissor.id = data.id;
+        transmissor.Logo = data.Logo;
+        transmissor.anuncios = data.anuncios;
+        transmissor.placar = data.placar;
+        document.title += " " + data.nome;
+    }
 });
 
-socket.on("connection", (menssagem) => {
-    console.log(socket.id)
-    console.log(menssagem)
-    socket.emit(`entra`, { "id": id.value });
-})
-
-function enviarData(data){
-    socket.emit(`menssagem`, data);
-    console.log(data)
-}
 
 
-socket.on(`menssagem`, (menssagem) => {
-    console.log(menssagem)
-    // socket.emit(`menssagem`, menssagem);
-   
-});
+
+
+
 
 </script>
 <template>
@@ -99,21 +91,33 @@ socket.on(`menssagem`, (menssagem) => {
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="coluna">
-
+                                    <div class="linha">
+                                        <Text 
+                                            :idTrasnmissao="route.query.id" name="nome" 
+                                            :pontos="transmissor.placar.jogo.casa.nome"
+                                            :socket="socket"/>
+                                        <Score  
+                                            :idTrasnmissao="route.query.id" equipeNome="casa" 
+                                            :pontos="transmissor.placar.jogo.casa.pontos"
+                                            :socket="socket"
+                                        />
+                                    </div> 
                                     <div class="linha">
                                         <Text />
-                                        <Score  @somarpontos="enviarData" :id="transmissor.id" name="casa" />
-                                    </div>
-                                    <div class="linha">
-                                        <Text />
-                                        <Score />
+                                        <Score 
+                                            :idTrasnmissao="route.query.id" equipeNome="visitante" 
+                                            :pontos="transmissor.placar.jogo.visitante.pontos" 
+                                            :socket="socket"
+                                        />
                                     </div>
                                     <div class="linha">
                                         Partida
-                                        <Score />
+                                        <Score  
+                                            :idTrasnmissao="route.query.id" equipeNome="partida" 
+                                            :pontos="transmissor.placar.jogo.partida" 
+                                            :socket="socket" 
+                                        />
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -207,9 +211,9 @@ socket.on(`menssagem`, (menssagem) => {
 .main {
     width: 100%;
     height: 115vh;
-    background: rgb(131,58,180);
-    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 40%, rgba(253,53,36,1) 50%, rgba(252,176,69,1) 100%);
- 
+    background: rgb(131, 58, 180);
+    background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 40%, rgba(253, 53, 36, 1) 50%, rgba(252, 176, 69, 1) 100%);
+
 }
 
 .mt-5 {

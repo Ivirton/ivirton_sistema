@@ -1,39 +1,64 @@
 <template>
     <div style="display: flex; align-items: center;">
-        <i class="fas fa-solid fa-minus" @click="removePontos(pontos)"></i>
-        <strong>{{ pontos.pontos }}</strong>
-        <i class="fas fa-solid fa-plus" @click="addPontos(pontos)"></i>
+        <i class="fas fa-solid fa-minus" @click="removePontos()"></i>
+        <strong v-if="props.pontos < 10 ">0{{ props.pontos }}</strong>
+        <strong v-else>{{ props.pontos }}</strong>
+        <i class="fas fa-solid fa-plus" @click="addPontos()"></i>
     </div>
 </template>
 
 <script setup>
-import { reactive, defineEmits, defineProps } from 'vue';
+import {  defineProps } from 'vue';
 
 const props = defineProps({
-    id: {
+    idTrasnmissao: {
         type: String,
     },
-    name: {
+    equipeNome: {
         type: String,
+    },
+    pontos: {
+        type: Number,
+    },
+    socket: {
+        type: Object
     }
 });
 
-const pontos = reactive({ pontos: 0 });
-
-const emit = defineEmits(['somarpontos']); // Definindo o evento
-
-function addPontos(data) {
-    data.pontos++;
-    emit('somarpontos', { nome: "pontos", valor: data.pontos, id: props.id, name: props.name });
+function addPontos() {
+    props.pontos++;
+    sendData()
 }
 
-function removePontos(data) {
-    if (data.pontos > 0) {
-        data.pontos--;
-        // Emitir os dados depois de remover o ponto
-        emit('somarpontos', { nome: "pontos", valor: data.pontos, id: props.id, name: props.name });
+function removePontos() {
+    if (props.pontos > 0) {
+        props.pontos--;
+        sendData()
     }
 }
+function sendData() {
+    const data = {
+        update:{
+            [`placar/jogo/${props.equipeNome}/pontos`]:props.pontos
+        },
+        "nomeValor": props.equipeNome,
+        valor: props.pontos,
+        "id": props.idTrasnmissao,
+        "equipeNome": props.equipeNome, 
+        socketId: props.socket.id
+    }
+    props.socket.emit(`score`, data);
+    console.log("TX")
+    console.log(data)
+}
+props.socket.on(`score`, (menssagem) => {
+    if (props['equipeNome'] == menssagem['equipeNome'] && props.socket.id != menssagem.socketId) {
+        console.log("RX")
+        console.log(menssagem)
+        props.pontos = menssagem.valor
+    }
+});
+
 </script>
 
 <style scoped>
@@ -54,5 +79,10 @@ function removePontos(data) {
     border-radius: 100%;
     box-shadow: 0px 0px 5px 2px #e7e5e5;
     margin: 0px 2px 0px 6px;
+    transition: all 0.1s ease-in-out;
+}
+.fas:active {
+    transform: scale(0.9);
+    box-shadow: 0px 0px 3px 1px #b0afaf;
 }
 </style>

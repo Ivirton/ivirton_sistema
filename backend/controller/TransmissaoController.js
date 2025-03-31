@@ -42,14 +42,13 @@ const TransmissaoController = {
     },
 
     async update(req, res) {
-        // try {
-        //     const { id } = req.params;
-        //     const { nome } = req.body;
-        //     await TransmissaoModel.update(id, nome);
-        //     res.status(200).json({ message: "Documento atualizado com sucesso!" });
-        // } catch (error) {
-        //     res.status(500).json({ error: "Erro ao atualizar documento", details: error.message });
-        // }
+        const { nome } = req.params;
+        transmissaoModel.update(nome, req.body).then((result) => {
+            console.log(result)
+            res.status(200).json({ message: "Documento atualizado com sucesso!", "res":result});
+        }).catch((err) => {
+            res.status(200).json({ err: err});
+        });
     },
 
     async delete(req, res) {

@@ -1,4 +1,6 @@
 const socketIo = require('socket.io');
+const transmissaoModel = require('./model/transmissaoModel');
+
 
 class Sujeito {
     constructor() {
@@ -22,46 +24,60 @@ class Sujeito {
 }
 // Classe Observador que será notificado
 class Observador {
-    constructor(socket) {
-        // ID do observador
-        this.socket = socket;  // Conexão Socket.io do observador
+    constructor(socket, io) {
+
+        this.socket = socket;
+        this.io = io
+        // this.idTrasnmissao = idTrasnmissao
+
     }
 
-    // Método chamado quando o observador é notificado
+    listen() {
+       this.socket.on(`${this.idTrasnmissao}`, (menssagem) => {
+            console.log(menssagem)
+            this.io.emit(`${this.idTrasnmissao}`, menssagem);
+        });
+    }
+
     atualizar(dados) {
         this.socket.emit('notificacao', dados);
     }
 }
 
-const sujeito = new Sujeito(); 
+const sujeito = new Sujeito();
 const initializeSocket = (server) => {
     const io = socketIo(server);
-    
+
     io.on('connection', async function (socket) {
-        console.log('Cliente conectado:', socket.id);
-        // Cria um novo observador para cada cliente conectado
-        const observador = new Observador(socket.id, socket);
-        sujeito.inscrever(observador);
+        
+        
+        // const observador = new Observador(socket,io,);
+        // sujeito.inscrever(observador);
         // console.log(sujeito.observadores)
 
-        // Remove o observador quando o cliente desconecta
+        
         socket.on('disconnect', () => {
             console.log('Cliente desconectado:', socket.id);
-            sujeito.desinscrever(observador);
+            // sujeito.desinscrever(observador);
         });
-        // socket.on(`entra`, (menssagem) => {
-        //     console.loader(menssagem)
-        //     socket.emit(`getTrasmissao${menssagem.id}`, { data: "recebido" });
-        //     // sujeito.desinscrever(observador);
-        // });
-        // socket.emit(`connection`, "oi");
         socket.on(`menssagem`, (menssagem) => {
             console.log(menssagem)
             io.emit(`menssagem`, menssagem);
             // sujeito.desinscrever(observador);
         });
-        
-    
+        socket.on(`score`, (menssagem) => {
+            console.log(menssagem)
+            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
+                console.log(result)
+               
+            }).catch((err) => {
+               console.error(err)
+            });
+            io.emit(`score`, menssagem);
+        });
+
+
+
     });
 };
 module.exports = { initializeSocket };
