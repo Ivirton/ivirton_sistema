@@ -22,17 +22,17 @@ let data = null
 let transmissor = reactive({ "Logo": { "posicao": { "x": 44, "y": 22, "z": 33 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 60, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
 async function getTransmissao() {
     try {
-
-        const response = await axios.get(`http://localhost:4000/api/transmissao/${id.value}`);
+        // const baseURL = import.meta.env.VITE_API_URL || ""; 
+        const response = await axios.get(`/api/transmissao/${id.value}`);
+        
         if (response.data.erro) {
             console.log('API não encontrada!');
         } else {
-            console.log(response)
+            console.log(response);
             return response.data;
-
         }
     } catch (error) {
-        console.log('Erro ao buscar API');
+        console.log('Erro ao buscar API:', error);
     }
 }
 
