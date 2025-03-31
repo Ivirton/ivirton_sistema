@@ -19,7 +19,7 @@ import socket from '@/socket';
 const route = useRoute();
 const id = ref(null);
 let data = null
-let transmissor = reactive({ "Logo": { "posicao": { "x": 44, "y": 22, "z": 33 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 60, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 0, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
 async function getTransmissao() {
     try {
         // const baseURL = import.meta.env.VITE_API_URL || ""; 
@@ -114,7 +114,7 @@ onMounted(async () => {
                                         Partida
                                         <Score  
                                             :idTrasnmissao="route.query.id" equipeNome="partida" 
-                                            :pontos="transmissor.placar.jogo.partida" 
+                                            :pontos="transmissor.placar.jogo.partida.pontos" 
                                             :socket="socket" 
                                         />
                                     </div>
