@@ -22,6 +22,9 @@ const props = defineProps({
     },
     socket: {
         type: Object
+    },
+    tipo:{
+        type: String
     }
 });
 
@@ -52,7 +55,7 @@ function sendData() {
     console.log(data)
 }
 props.socket.on(`score`, (menssagem) => {
-    if (props['equipeNome'] == menssagem['equipeNome'] && props.socket.id != menssagem.socketId) {
+    if (props['equipeNome'] == menssagem['equipeNome'] && props.socket.id != menssagem.socketId ) {
         console.log("RX")
         console.log(menssagem)
         props.pontos = menssagem.valor

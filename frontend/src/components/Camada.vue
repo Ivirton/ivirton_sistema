@@ -1,28 +1,71 @@
-<script setup>
-import Posicao from './Posicao.vue';
-defineProps({
-    titulo: {
-        type: String,
-        
-    },
-    body: {
-        type: String,
-       
-    },
-})
-</script>
-
 <template>
     <div class="linha">
         <div class="linha">
             <h4>{{ titulo }}</h4>
         </div>
         <label class="switch">
-            <input type="checkbox" v>
+            <input type="checkbox" @change="enviarData()" v-model="props.value">
             <span class="slider"></span>
         </label>
     </div>
 </template>
+<script setup>
+
+const props = defineProps({
+    titulo: {
+        type: String,
+        
+    },
+    idTrasnmissao: {
+        type: String,
+        
+    },
+    socket: {
+        type: Object
+    },
+    body: {
+        type: String,
+       
+    },
+    value:{
+        type:Boolean
+    },
+    camada:{
+        type:String
+    }
+
+})
+function enviarData(){
+    console.log(props.value)
+    sendData()
+}
+
+props.socket.on(`visibilidade`, (menssagem) => {
+    if (props['camada'] == menssagem['camada'] && props.socket.id != menssagem.socketId ) {
+        console.log("RX")
+        console.log(menssagem)
+        props.value = menssagem.valor
+    }
+});
+function sendData() {
+    const data = {
+        update:{
+            [`${props.camada}/visibilidade`]:props.value
+        },
+        camada:props.camada,
+        valor: props.value,
+        "id": props.idTrasnmissao,
+        socketId: props.socket.id
+    }
+    props.socket.emit(`visibilidade`, data);
+    console.log("TX")
+    console.log(data)
+}
+
+
+</script>
+
+
 
 <style scoped>
 /* The switch - the box around the slider */

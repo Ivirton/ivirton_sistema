@@ -24,7 +24,7 @@ async function getTransmissao() {
     try {
         // const baseURL = import.meta.env.VITE_API_URL || ""; 
         const response = await axios.get(`/api/transmissao/${id.value}`);
-        
+
         if (response.data.erro) {
             console.log('API não encontrada!');
         } else {
@@ -62,7 +62,14 @@ onMounted(async () => {
         <article class="body">
 
             <section class="section card1">
-                <Camada titulo="Placar" />
+                <Camada 
+                    titulo="Placar" 
+                    camada="placar" 
+                    :value="transmissor.placar.visibilidade"
+                    :idTrasnmissao="route.query.id" 
+                    :socket="socket"
+                                   
+                    />
                 <div class="accordion" id="accordionExample">
 
                     <!-- Acordeon item 1 Posicao-->
@@ -92,31 +99,44 @@ onMounted(async () => {
                             <div class="accordion-body">
                                 <div class="coluna">
                                     <div class="linha">
-                                        <Text 
-                                            :idTrasnmissao="route.query.id" name="nome" 
-                                            :pontos="transmissor.placar.jogo.casa.nome"
-                                            :socket="socket"/>
-                                        <Score  
-                                            :idTrasnmissao="route.query.id" equipeNome="casa" 
-                                            :pontos="transmissor.placar.jogo.casa.pontos"
+                                        <Text  
+                                            :idTrasnmissao="route.query.id" 
+                                            equipeNome="casa"
+                                            :valor="transmissor.placar.jogo.casa.nome"
                                             :socket="socket"
+                                            tipo="texto"
                                         />
-                                    </div> 
-                                    <div class="linha">
-                                        <Text />
                                         <Score 
-                                            :idTrasnmissao="route.query.id" equipeNome="visitante" 
-                                            :pontos="transmissor.placar.jogo.visitante.pontos" 
-                                            :socket="socket"
+                                            :idTrasnmissao="route.query.id" 
+                                            equipeNome="casa"
+                                            :pontos="transmissor.placar.jogo.casa.pontos" 
+                                            :socket="socket" 
+                                            tipo="pontos"
                                         />
                                     </div>
                                     <div class="linha">
-                                        Partida
-                                        <Score  
-                                            :idTrasnmissao="route.query.id" equipeNome="partida" 
-                                            :pontos="transmissor.placar.jogo.partida.pontos" 
-                                            :socket="socket" 
+                                        <Text 
+                                            :idTrasnmissao="route.query.id" 
+                                            equipeNome="visitante"
+                                            :valor="transmissor.placar.jogo.visitante.nome"
+                                            :socket="socket"
+                                             tipo="texto"
                                         />
+                                        <Score 
+                                            :idTrasnmissao="route.query.id" 
+                                            equipeNome="visitante"
+                                            :pontos="transmissor.placar.jogo.visitante.pontos"
+                                            :socket="socket" 
+                                             tipo="pontos"
+                                            />
+                                            
+                                    </div>
+                                    <div class="linha">
+                                        Partida
+                                        <Score :idTrasnmissao="route.query.id" equipeNome="partida" 
+                                            :pontos="transmissor.placar.jogo.partida.pontos" :socket="socket" 
+                                             tipo="pontos"
+                                            />
                                     </div>
                                 </div>
                             </div>

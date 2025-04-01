@@ -50,21 +50,14 @@ const initializeSocket = (server) => {
 
     io.on('connection', async function (socket) {
         
-        
-        // const observador = new Observador(socket,io,);
+        // const observador = new Observador(socket,io);
         // sujeito.inscrever(observador);
-        // console.log(sujeito.observadores)
-
         
         socket.on('disconnect', () => {
-            console.log('Cliente desconectado:', socket.id);
+            // console.log('Cliente desconectado:', socket.id);
             // sujeito.desinscrever(observador);
         });
-        socket.on(`menssagem`, (menssagem) => {
-            console.log(menssagem)
-            io.emit(`menssagem`, menssagem);
-            // sujeito.desinscrever(observador);
-        });
+       
         socket.on(`score`, (menssagem) => {
             console.log(menssagem)
             transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
@@ -76,7 +69,26 @@ const initializeSocket = (server) => {
             io.emit(`score`, menssagem);
         });
 
-
+        socket.on(`texto`, (menssagem) => {
+            console.log(menssagem)
+            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
+                console.log(result)
+               
+            }).catch((err) => {
+               console.error(err)
+            });
+            io.emit(`texto`, menssagem);
+        });
+        socket.on(`visibilidade`, (menssagem) => {
+            console.log(menssagem)
+            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
+                console.log(result)
+               
+            }).catch((err) => {
+               console.error(err)
+            });
+            io.emit(`visibilidade`, menssagem);
+        });
 
     });
 };
