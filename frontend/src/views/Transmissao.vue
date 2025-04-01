@@ -14,7 +14,7 @@ export default {
     methods: {
         async getTransmissao() {
             try {
-                const response = await axios.get('http://localhost:4000/api/transmissao');
+                const response = await axios.get('/api/transmissao');
                 if (response.data.erro) {
                     this.erro = 'API não encontrada!';
                 } else {
@@ -31,7 +31,7 @@ export default {
                 return;
             }
             try {
-                const response = await axios.post('http://localhost:4000/api/transmissao', {
+                const response = await axios.post('/api/transmissao', {
                     id: this.nome,
                     nome: this.nome
                 });
@@ -55,7 +55,7 @@ export default {
         async removeTransmissao(id) {
           
             try {
-                const response = await axios.delete(`http://localhost:4000/api/transmissao/${id}`);
+                const response = await axios.delete(`/api/transmissao/${id}`);
                 if (response.status === 200) {
                     this.sucesso = 'Transmissão removida com sucesso!';
                     // this.transmissao = this.transmissao.filter(trans => trans.id !== id);
