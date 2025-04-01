@@ -22,9 +22,7 @@ const props = defineProps({
     socket: {
         type: Object
     },
-    tipo:{
-        type:String
-    },
+   
     path:{
         type:String
     }
@@ -37,9 +35,7 @@ function sendData() {
         },
         valor: parseInt(props.valor),
         "id": props.idTrasnmissao,
-        "tipo": props.tipo, 
         socketId: props.socket.id,
-        idTrasnmissao:props.idTrasnmissao,
         path:props.path
     }
     props.socket.emit(`posicao`, data);

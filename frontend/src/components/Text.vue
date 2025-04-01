@@ -12,17 +12,15 @@ const props = defineProps({
         type: String,
 
     },
-    equipeNome: {
-        type: String,
-    },
     valor: {
         type: String,
     },
     socket: {
         type: Object
     },
-    tipo: {
-        type: String
+   
+    path:{
+        type:String
     }
 
 })
@@ -35,12 +33,10 @@ function enviarNome() {
 function sendData() {
     const data = {
         update: {
-            [`placar/jogo/${props.equipeNome}/nome`]: props.valor
+            [props.path]: props.valor
         },
-        "nomeValor": props.equipeNome,
         valor: props.valor,
         "id": props.idTrasnmissao,
-        "equipeNome": props.equipeNome,
         socketId: props.socket.id
     }
     props.socket.emit(`texto`, data);
@@ -48,7 +44,7 @@ function sendData() {
     console.log(data)
 }
 props.socket.on(`texto`, (menssagem) => {
-    if (props['equipeNome'] == menssagem['equipeNome'] && props.socket.id != menssagem.socketId) {
+    if (props.path == menssagem.path && props.socket.id != menssagem.socketId) {
         console.log("RX")
         console.log(menssagem)
         props.valor = menssagem.valor

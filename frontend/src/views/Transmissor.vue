@@ -111,42 +111,43 @@ onMounted(async () => {
                                     <div class="linha">
                                         <Text  
                                             :idTrasnmissao="route.query.id" 
-                                            equipeNome="casa"
                                             :valor="transmissor.placar.jogo.casa.nome"
                                             :socket="socket"
-                                            tipo="texto"
+                                            path="placar/jogo/casa/nome"
+                                           
                                         />
                                         <Score 
                                             :idTrasnmissao="route.query.id" 
-                                            equipeNome="casa"
+                                            path="placar/jogo/casa/pontos"
                                             :pontos="transmissor.placar.jogo.casa.pontos" 
                                             :socket="socket" 
-                                            tipo="pontos"
+                                            
                                         />
                                     </div>
                                     <div class="linha">
                                         <Text 
-                                            :idTrasnmissao="route.query.id" 
-                                            equipeNome="visitante"
+                                            :idTrasnmissao="route.query.id"
                                             :valor="transmissor.placar.jogo.visitante.nome"
                                             :socket="socket"
-                                             tipo="texto"
+                                            path="placar/jogo/visitante/nome"
+                                            
                                         />
                                         <Score 
-                                        path="placar/jogoa/visitante/pontos"
+                                            path="placar/jogoa/visitante/pontos"
                                             :idTrasnmissao="route.query.id" 
-                                            equipeNome="visitante"
                                             :pontos="transmissor.placar.jogo.visitante.pontos"
                                             :socket="socket" 
-                                             tipo="pontos"
+                                           
                                             />
                                             
                                     </div>
                                     <div class="linha">
                                         Partida
-                                        <Score :idTrasnmissao="route.query.id" equipeNome="partida" 
-                                            :pontos="transmissor.placar.jogo.partida.pontos" :socket="socket" 
-                                             tipo="pontos"
+                                        <Score 
+                                            :idTrasnmissao="route.query.id" 
+                                            path="placar/jogo/partida/pontos"
+                                            :pontos="transmissor.placar.jogo.partida.pontos" 
+                                            :socket="socket"
                                             />
                                     </div>
                                 </div>

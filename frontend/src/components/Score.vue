@@ -14,18 +14,13 @@ const props = defineProps({
     idTrasnmissao: {
         type: String,
     },
-    equipeNome: {
-        type: String,
-    },
     pontos: {
         type: Number,
     },
     socket: {
         type: Object
     },
-    tipo:{
-        type: String
-    },
+   
     path:{
         type:String
     }
@@ -45,7 +40,7 @@ function removePontos() {
 function sendData() {
     const data = {
         update:{
-            [`placar/jogo/${props.equipeNome}/pontos`]:props.pontos
+            [props.path]:props.pontos
         },
         "nomeValor": props.equipeNome,
         valor: props.pontos,
@@ -59,7 +54,7 @@ function sendData() {
     console.log(data)
 }
 props.socket.on(`score`, (menssagem) => {
-    if (props['equipeNome'] == menssagem['equipeNome'] && props.socket.id != menssagem.socketId ) {
+    if (props.path == menssagem['path'] && props.socket.id != menssagem.socketId ) {
         console.log("RX")
         console.log(menssagem)
         props.pontos = menssagem.valor
