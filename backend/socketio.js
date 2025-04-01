@@ -89,6 +89,16 @@ const initializeSocket = (server) => {
             });
             io.emit(`visibilidade`, menssagem);
         });
+        socket.on(`posicao`, (menssagem) => {
+            console.log(menssagem)
+            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
+                console.log(result)
+               
+            }).catch((err) => {
+               console.error(err)
+            });
+            io.emit(`posicao`, menssagem);
+        });
 
     });
 };

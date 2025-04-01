@@ -1,47 +1,73 @@
-<script setup>
-import { ref, reactive } from 'vue';
+<template>
+    <small>{{ props.titulo }}</small>
+    <div class="PB-range-slider-div">
+        <input type="range" min="0" max="100" class="PB-range-slider" v-model="props.valor" @input="sendData()">
+        <!-- <small class="PB-range-slidervalue">{{ props.valor }}%</small> -->
+        <input type="number" name="" class="form-control" v-model="props.valor" @input="sendData()"> 
+    </div>
+</template>
 
-// Definindo props corretamente
+<script setup>
 const props = defineProps({
-    position: {
-        type: Object,
-        default: () => ({ x: 0, y: 0, z: 0 }) // Definindo os valores padrão
+    titulo: {
+        type: String
+    },
+    idTrasnmissao: {
+        type: String,
+
+    },
+    valor: {
+        type: Number,
+    },
+    socket: {
+        type: Object
+    },
+    tipo:{
+        type:String
+    },
+    path:{
+        type:String
     }
 })
 
-const posicao = reactive({ ...props.position }) // Fazendo uma cópia reativa
-
-
-function sendData(data) {
+function sendData() {
+    const data = {
+        update:{
+            [`${props.path}`]: parseInt(props.valor)
+        },
+        valor: parseInt(props.valor),
+        "id": props.idTrasnmissao,
+        "tipo": props.tipo, 
+        socketId: props.socket.id,
+        idTrasnmissao:props.idTrasnmissao,
+        path:props.path
+    }
+    props.socket.emit(`posicao`, data);
+    console.log("TX")
     console.log(data)
 }
-function setValue(data) {
-    console.log(data)
+
+if (props.socket) {
+    props.socket.on(`posicao`, (menssagem) => {
+        if ( props.path == menssagem.path && props.socket.id != menssagem.socketId) {
+            console.log("RX");
+            console.log(menssagem);
+            props.valor = menssagem.valor;
+        }
+    });
+} else {
+    console.error("Socket não está disponível.");
 }
 
 </script>
-<template>
-    <div class="coluna">
 
-        <small>Largura</small>
-        
-        <div class="PB-range-slider-div">
-            <input type="range" min="0" max="100" class="PB-range-slider" v-model="posicao.x" @input="sendData(posicao)">
-            <small class="PB-range-slidervalue">{{ posicao.x }}%</small>
-        </div>
-        <small>Altura</small>
-        <div class="PB-range-slider-div">
-            <input type="range" min="0" max="100" class="PB-range-slider" v-model="posicao.y" @input="sendData(posicao)">
-            <small class="PB-range-slidervalue">{{ posicao.y }}%</small>
-        </div>
-        <small>Tamanho</small>
-        <div class="PB-range-slider-div">
-            <input type="range" min="0" max="200" class="PB-range-slider" v-model="posicao.z" @input="sendData(posicao)">
-            <small class="PB-range-slidervalue">{{ posicao.z }}%</small>
-        </div>
-    </div>
-</template>
 <style scoped>
+.form-control {
+    display: block;
+    max-width: 37%;
+    width: 72px;
+    
+}
 /* range  */
 
 .PB-range-slider {

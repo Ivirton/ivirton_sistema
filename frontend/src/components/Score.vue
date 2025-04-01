@@ -25,6 +25,9 @@ const props = defineProps({
     },
     tipo:{
         type: String
+    },
+    path:{
+        type:String
     }
 });
 
@@ -48,7 +51,8 @@ function sendData() {
         valor: props.pontos,
         "id": props.idTrasnmissao,
         "equipeNome": props.equipeNome, 
-        socketId: props.socket.id
+        socketId: props.socket.id,
+        path:props.path
     }
     props.socket.emit(`score`, data);
     console.log("TX")

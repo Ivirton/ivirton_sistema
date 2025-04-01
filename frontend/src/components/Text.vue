@@ -27,6 +27,7 @@ const props = defineProps({
 
 })
 
+
 function enviarNome() {
     sendData()
 }

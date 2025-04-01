@@ -11,11 +11,6 @@ import axios from 'axios';
 import socket from '@/socket';
 
 
-
-
-
-
-
 const route = useRoute();
 const id = ref(null);
 let data = null
@@ -50,11 +45,6 @@ onMounted(async () => {
 });
 
 
-
-
-
-
-
 </script>
 <template>
     <Navegacao />
@@ -67,8 +57,7 @@ onMounted(async () => {
                     camada="placar" 
                     :value="transmissor.placar.visibilidade"
                     :idTrasnmissao="route.query.id" 
-                    :socket="socket"
-                                   
+                    :socket="socket"           
                     />
                 <div class="accordion" id="accordionExample">
 
@@ -82,7 +71,28 @@ onMounted(async () => {
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao v-bind:position="transmissor.placar.posicao" />
+                                <div class="coluna" ></div>
+                                <Posicao titulo="Largura" 
+                                    
+                                    path="placar/posicao/x"
+                                    :valor="transmissor.placar.posicao.x" 
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                />
+                                <Posicao titulo="Altura" 
+                                    
+                                     path="placar/posicao/y"
+                                    :valor="transmissor.placar.posicao.y"
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                  />
+                                <Posicao titulo="Tamanho" 
+                                    
+                                    path="placar/posicao/z"
+                                    :valor="transmissor.placar.posicao.z" 
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                />
                             </div>
                         </div>
                     </div>
@@ -123,6 +133,7 @@ onMounted(async () => {
                                              tipo="texto"
                                         />
                                         <Score 
+                                        path="placar/jogoa/visitante/pontos"
                                             :idTrasnmissao="route.query.id" 
                                             equipeNome="visitante"
                                             :pontos="transmissor.placar.jogo.visitante.pontos"
