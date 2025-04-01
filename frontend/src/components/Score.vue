@@ -1,63 +1,57 @@
 <template>
     <div style="display: flex; align-items: center;">
         <i class="fas fa-solid fa-minus" @click="removePontos()"></i>
-        <strong v-if="props.pontos < 10 ">0{{ props.pontos }}</strong>
-        <strong v-else>{{ props.pontos }}</strong>
+        <strong v-if="props.valor < 10">0{{ props.valor }}</strong>
+        <strong v-else>{{ props.valor }}</strong>
         <i class="fas fa-solid fa-plus" @click="addPontos()"></i>
     </div>
 </template>
 
 <script setup>
-import {  defineProps } from 'vue';
+import { defineProps } from 'vue';
 
 const props = defineProps({
     idTrasnmissao: {
         type: String,
     },
-    pontos: {
+    valor: {
         type: Number,
     },
     socket: {
         type: Object
     },
-   
-    path:{
-        type:String
+
+    path: {
+        type: String
     }
 });
 
 function addPontos() {
-    props.pontos++;
+    props.valor++;
     sendData()
 }
 
 function removePontos() {
-    if (props.pontos > 0) {
-        props.pontos--;
+    if (props.valor > 0) {
+        props.valor--;
         sendData()
     }
 }
 function sendData() {
-    const data = {
-        update:{
-            [props.path]:props.pontos
-        },
-        "nomeValor": props.equipeNome,
-        valor: props.pontos,
+    props.socket.emit(`score`, {
         "id": props.idTrasnmissao,
-        "equipeNome": props.equipeNome, 
         socketId: props.socket.id,
-        path:props.path
-    }
-    props.socket.emit(`score`, data);
-    console.log("TX")
-    console.log(data)
+        update: {[props.path]: props.valor},
+        valor: props.valor,
+        path: props.path
+    });
+
 }
 props.socket.on(`score`, (menssagem) => {
-    if (props.path == menssagem['path'] && props.socket.id != menssagem.socketId ) {
+    if (props.path == menssagem['path'] && props.socket.id != menssagem.socketId) {
         console.log("RX")
         console.log(menssagem)
-        props.pontos = menssagem.valor
+        props.valor = menssagem.valor
     }
 });
 
@@ -83,6 +77,7 @@ props.socket.on(`score`, (menssagem) => {
     margin: 0px 2px 0px 6px;
     transition: all 0.1s ease-in-out;
 }
+
 .fas:active {
     transform: scale(0.9);
     box-shadow: 0px 0px 3px 1px #b0afaf;

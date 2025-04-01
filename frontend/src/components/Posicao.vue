@@ -29,18 +29,15 @@ const props = defineProps({
 })
 
 function sendData() {
-    const data = {
-        update:{
-            [`${props.path}`]: parseInt(props.valor)
-        },
-        valor: parseInt(props.valor),
-        "id": props.idTrasnmissao,
+    
+    props.socket.emit(`posicao`,  {
+        id: props.idTrasnmissao,
         socketId: props.socket.id,
+        update:{[props.path]: parseInt(props.valor)},
+        valor: parseInt(props.valor),
         path:props.path
-    }
-    props.socket.emit(`posicao`, data);
-    console.log("TX")
-    console.log(data)
+    });
+
 }
 
 if (props.socket) {
@@ -52,7 +49,7 @@ if (props.socket) {
         }
     });
 } else {
-    console.error("Socket não está disponível.");
+    
 }
 
 </script>

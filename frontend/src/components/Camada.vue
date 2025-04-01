@@ -4,7 +4,7 @@
             <h4>{{ titulo }}</h4>
         </div>
         <label class="switch">
-            <input type="checkbox" @change="enviarData()" v-model="props.value">
+            <input type="checkbox" @change="sendData()" v-model="props.valor">
             <span class="slider"></span>
         </label>
     </div>
@@ -18,48 +18,36 @@ const props = defineProps({
     },
     idTrasnmissao: {
         type: String,
-        
+    },
+    valor: {
+        type: Number,
     },
     socket: {
         type: Object
     },
-    body: {
-        type: String,
-       
-    },
-    value:{
-        type:Boolean
-    },
-    camada:{
-        type:String
+
+    path: {
+        type: String
     }
 
 })
-function enviarData(){
-    console.log(props.value)
-    sendData()
-}
+
 
 props.socket.on(`visibilidade`, (menssagem) => {
-    if (props['camada'] == menssagem['camada'] && props.socket.id != menssagem.socketId ) {
+    if (props.path == menssagem.path && props.socket.id != menssagem.socketId ) {
         console.log("RX")
         console.log(menssagem)
-        props.value = menssagem.valor
+        props.valor = menssagem.valor
     }
 });
 function sendData() {
-    const data = {
-        update:{
-            [`${props.camada}/visibilidade`]:props.value
-        },
-        camada:props.camada,
-        valor: props.value,
+    props.socket.emit(`visibilidade`, {
         "id": props.idTrasnmissao,
-        socketId: props.socket.id
-    }
-    props.socket.emit(`visibilidade`, data);
-    console.log("TX")
-    console.log(data)
+        socketId: props.socket.id,
+        update: {[props.path]: props.valor},
+        valor: props.valor,
+        path: props.path
+    });
 }
 
 

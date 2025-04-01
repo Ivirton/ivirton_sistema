@@ -69,7 +69,7 @@ const initializeSocket = (server) => {
             io.emit(`score`, menssagem);
         });
 
-        socket.on(`texto`, (menssagem) => {
+        socket.on(`nome`, (menssagem) => {
             console.log(menssagem)
             transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
                 console.log(result)
@@ -77,7 +77,7 @@ const initializeSocket = (server) => {
             }).catch((err) => {
                console.error(err)
             });
-            io.emit(`texto`, menssagem);
+            io.emit(`nome`, menssagem);
         });
         socket.on(`visibilidade`, (menssagem) => {
             console.log(menssagem)

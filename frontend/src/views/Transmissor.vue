@@ -54,8 +54,8 @@ onMounted(async () => {
             <section class="section card1">
                 <Camada 
                     titulo="Placar" 
-                    camada="placar" 
-                    :value="transmissor.placar.visibilidade"
+                    path="placar/visibilidade" 
+                    :valor="transmissor.placar.visibilidade"
                     :idTrasnmissao="route.query.id" 
                     :socket="socket"           
                     />
@@ -87,7 +87,6 @@ onMounted(async () => {
                                     :idTrasnmissao="route.query.id" 
                                   />
                                 <Posicao titulo="Tamanho" 
-                                    
                                     path="placar/posicao/z"
                                     :valor="transmissor.placar.posicao.z" 
                                     :socket="socket"
@@ -119,7 +118,7 @@ onMounted(async () => {
                                         <Score 
                                             :idTrasnmissao="route.query.id" 
                                             path="placar/jogo/casa/pontos"
-                                            :pontos="transmissor.placar.jogo.casa.pontos" 
+                                            :valor="transmissor.placar.jogo.casa.pontos" 
                                             :socket="socket" 
                                             
                                         />
@@ -133,11 +132,10 @@ onMounted(async () => {
                                             
                                         />
                                         <Score 
-                                            path="placar/jogoa/visitante/pontos"
+                                            path="placar/jogo/visitante/pontos"
                                             :idTrasnmissao="route.query.id" 
-                                            :pontos="transmissor.placar.jogo.visitante.pontos"
+                                            :valor="transmissor.placar.jogo.visitante.pontos"
                                             :socket="socket" 
-                                           
                                             />
                                             
                                     </div>
@@ -146,7 +144,7 @@ onMounted(async () => {
                                         <Score 
                                             :idTrasnmissao="route.query.id" 
                                             path="placar/jogo/partida/pontos"
-                                            :pontos="transmissor.placar.jogo.partida.pontos" 
+                                            :valor="transmissor.placar.jogo.partida.pontos" 
                                             :socket="socket"
                                             />
                                     </div>
@@ -177,26 +175,14 @@ onMounted(async () => {
         <article class="aside">
 
             <section class="section card1">
-                <Camada titulo="Merchandising" />
-                <div class="accordion" id="accordionExample">
-                    <!-- Acordeon item 1 Posicao-->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapsesex" aria-expanded="true" aria-controls="collapsesex">
-                                Posição
-                            </button>
-                        </h2>
-                        <div id="collapsesex" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <Posicao v-bind:position="transmissor.anuncios.rotativo.posicao" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="section card1">
-                <Camada titulo="Logo" />
+                <Camada 
+                     titulo="Logo" 
+                     path="Logo/visibilidade" 
+                    :valor="transmissor.Logo.visibilidade"
+                    :idTrasnmissao="route.query.id" 
+                    :socket="socket"
+                />
+                
                 <div class="accordion" id="accordionExample">
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
@@ -215,8 +201,14 @@ onMounted(async () => {
                 </div>
             </section>
             <section class="section card1">
-                <Camada titulo="Anúncios" />
-
+                
+                <Camada 
+                     titulo="Anúncios" 
+                     path="anuncios/rotativo/visibilidade" 
+                    :valor="transmissor.anuncios.rotativo.visibilidade"
+                    :idTrasnmissao="route.query.id" 
+                    :socket="socket"
+                />
                 <div class="accordion" id="accordionExample">
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
