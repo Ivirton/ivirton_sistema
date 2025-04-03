@@ -98,7 +98,7 @@ function sendData(key, valor) {
         path: `${props.path}/${key}`
     });
 }
-z
+
 </script>
 
 <style scoped>

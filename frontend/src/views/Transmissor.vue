@@ -11,6 +11,13 @@
                     :idTrasnmissao="route.query.id" 
                     :socket="socket"           
                     />
+                    <div class="linha">
+                        <div></div>
+                        <a class="link" target="_blank" v-bind:href="receptor">
+                       Link
+                    </a>
+                    </div>
+                   
                 <div class="accordion" id="accordionExample">
 
                     <!-- Acordeon item 1 Posicao-->
@@ -61,6 +68,13 @@
                             <div class="accordion-body">
                                 <div class="coluna">
                                     <div class="linha">
+                                        <Color 
+                                        
+                                            :idTrasnmissao="route.query.id" 
+                                            :valor="transmissor.placar.jogo.casa.color"
+                                            :socket="socket"
+                                            path="placar/jogo/casa/color"
+                                        />
                                         <Text  
                                             :idTrasnmissao="route.query.id" 
                                             :valor="transmissor.placar.jogo.casa.nome"
@@ -77,6 +91,13 @@
                                         />
                                     </div>
                                     <div class="linha">
+                                        <Color 
+                                        
+                                            :idTrasnmissao="route.query.id" 
+                                            :valor="transmissor.placar.jogo.visitante.color"
+                                            :socket="socket"
+                                             path="placar/jogo/visitante/color"
+                                        />
                                         <Text 
                                             :idTrasnmissao="route.query.id"
                                             :valor="transmissor.placar.jogo.visitante.nome"
@@ -237,10 +258,13 @@ import { ref, onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import socket from '@/socket';
+import Color from '@/components/Color.vue';
 
 
 const route = useRoute();
 const id = ref(null);
+const receptor = ref(null);
+
 let data = null
 let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1" ,"hora":0}, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": {pontos:1}, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
 
@@ -269,6 +293,7 @@ onMounted(async () => {
     if (data) {
         transmissor.nome = data.nome;
         transmissor.id = data.id;
+        receptor.value = `/receptor?id=${data.id}`
         transmissor.Logo = data.Logo;
         transmissor.anuncios = data.anuncios;
         transmissor.placar = data.placar;
