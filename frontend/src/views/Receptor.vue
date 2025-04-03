@@ -83,6 +83,9 @@ box-sizing: border-box;
 padding: 0;
 margin: 0;
 }
+body{
+    background-color: #ffffff00;
+}
 .glass-card {
     background: rgba(255, 255, 255, 0.1);
     /* Transparente */
