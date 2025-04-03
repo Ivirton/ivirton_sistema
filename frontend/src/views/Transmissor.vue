@@ -4,22 +4,16 @@
         <article class="body">
             <!-- SCOREBORD -->
             <section class="section card1">
-                <Camada 
-                    titulo="Placar" 
-                    path="placar/visibilidade" 
-                    :valor="transmissor.placar.visibilidade"
-                    :idTrasnmissao="route.query.id" 
-                    :socket="socket"           
-                    />
-                    <div class="linha">
-                        <div></div>
-                        <a class="link" target="_blank" v-bind:href="receptor">
-                       Link
+                <!-- Cabecalho  -->
+                <Camada titulo="Placar" path="placar/visibilidade" :valor="transmissor.placar.visibilidade"
+                    :idTrasnmissao="route.query.id" :socket="socket" />
+                <div class="linha">
+                    <div></div>
+                    <a class="link" target="_blank" v-bind:href="receptor">
+                        Link
                     </a>
-                    </div>
-                   
+                </div>
                 <div class="accordion" id="accordionExample">
-
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -31,27 +25,13 @@
                         <!-- posicao  -->
                         <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                               
-                                <Posicao titulo="Largura" 
-                                    
-                                    path="placar/posicao/x"
-                                    :valor="transmissor.placar.posicao.x" 
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                />
-                                <Posicao titulo="Altura" 
-                                    
-                                     path="placar/posicao/y"
-                                    :valor="transmissor.placar.posicao.y"
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                  />
-                                <Posicao titulo="Tamanho" 
-                                    path="placar/posicao/z"
-                                    :valor="transmissor.placar.posicao.z" 
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                />
+
+                                <Posicao titulo="Largura" path="placar/posicao/x" :valor="transmissor.placar.posicao.x"
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Altura" path="placar/posicao/y" :valor="transmissor.placar.posicao.y"
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Tamanho" path="placar/posicao/z" :valor="transmissor.placar.posicao.z"
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
                             </div>
                         </div>
                     </div>
@@ -68,59 +48,29 @@
                             <div class="accordion-body">
                                 <div class="coluna">
                                     <div class="linha">
-                                        <Color 
-                                        
-                                            :idTrasnmissao="route.query.id" 
-                                            :valor="transmissor.placar.jogo.casa.color"
-                                            :socket="socket"
-                                            path="placar/jogo/casa/color"
-                                        />
-                                        <Text  
-                                            :idTrasnmissao="route.query.id" 
-                                            :valor="transmissor.placar.jogo.casa.nome"
-                                            :socket="socket"
-                                            path="placar/jogo/casa/nome"
-                                           
-                                        />
-                                        <Score 
-                                            :idTrasnmissao="route.query.id" 
-                                            path="placar/jogo/casa/pontos"
-                                            :valor="transmissor.placar.jogo.casa.pontos" 
-                                            :socket="socket" 
-                                            
-                                        />
+                                        <Color :idTrasnmissao="route.query.id"
+                                            :valor="transmissor.placar.jogo.casa.color" :socket="socket"
+                                            path="placar/jogo/casa/color" />
+                                        <Text :idTrasnmissao="route.query.id" :valor="transmissor.placar.jogo.casa.nome"
+                                            :socket="socket" path="placar/jogo/casa/nome" />
+                                        <Score :idTrasnmissao="route.query.id" path="placar/jogo/casa/pontos"
+                                            :valor="transmissor.placar.jogo.casa.pontos" :socket="socket" />
                                     </div>
                                     <div class="linha">
-                                        <Color 
-                                        
-                                            :idTrasnmissao="route.query.id" 
-                                            :valor="transmissor.placar.jogo.visitante.color"
-                                            :socket="socket"
-                                             path="placar/jogo/visitante/color"
-                                        />
-                                        <Text 
-                                            :idTrasnmissao="route.query.id"
-                                            :valor="transmissor.placar.jogo.visitante.nome"
-                                            :socket="socket"
-                                            path="placar/jogo/visitante/nome"
-                                            
-                                        />
-                                        <Score 
-                                            path="placar/jogo/visitante/pontos"
-                                            :idTrasnmissao="route.query.id" 
-                                            :valor="transmissor.placar.jogo.visitante.pontos"
-                                            :socket="socket" 
-                                            />
-                                            
+                                        <Color :idTrasnmissao="route.query.id"
+                                            :valor="transmissor.placar.jogo.visitante.color" :socket="socket"
+                                            path="placar/jogo/visitante/color" />
+                                        <Text :idTrasnmissao="route.query.id"
+                                            :valor="transmissor.placar.jogo.visitante.nome" :socket="socket"
+                                            path="placar/jogo/visitante/nome" />
+                                        <Score path="placar/jogo/visitante/pontos" :idTrasnmissao="route.query.id"
+                                            :valor="transmissor.placar.jogo.visitante.pontos" :socket="socket" />
+
                                     </div>
                                     <div class="linha">
                                         Partida
-                                        <Score 
-                                            :idTrasnmissao="route.query.id" 
-                                            path="placar/jogo/partida/pontos"
-                                            :valor="transmissor.placar.jogo.partida.pontos" 
-                                            :socket="socket"
-                                            />
+                                        <Score :idTrasnmissao="route.query.id" path="placar/jogo/partida/pontos"
+                                            :valor="transmissor.placar.jogo.partida.pontos" :socket="socket" />
                                     </div>
                                 </div>
                             </div>
@@ -137,12 +87,8 @@
                         <div id="collapseTre" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Cronometro 
-                                    :cronometro="transmissor.placar.cronometro"
-                                    path="placar/cronometro" 
-                                    :idTrasnmissao="route.query.id" 
-                                    :socket="socket" 
-                                />
+                                <Cronometro :cronometro="transmissor.placar.cronometro" path="placar/cronometro"
+                                    :idTrasnmissao="route.query.id" :socket="socket" />
                             </div>
                         </div>
                     </div>
@@ -152,14 +98,9 @@
         <article class="aside">
             <!-- LOGO  -->
             <section class="section card1">
-                <Camada 
-                     titulo="Logo" 
-                     path="Logo/visibilidade" 
-                    :valor="transmissor.Logo.visibilidade"
-                    :idTrasnmissao="route.query.id" 
-                    :socket="socket"
-                />
-                
+                <Camada titulo="Logo" path="Logo/visibilidade" :valor="transmissor.Logo.visibilidade"
+                    :idTrasnmissao="route.query.id" :socket="socket" />
+
                 <div class="accordion" id="accordionExample">
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
@@ -171,26 +112,12 @@
                         </h2>
                         <div id="collapsefive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao titulo="Largura" 
-                                    
-                                    path="Logo/posicao/x"
-                                    :valor="transmissor.Logo.posicao.x" 
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                />
-                                <Posicao titulo="Altura" 
-                                    
-                                     path="Logo/posicao/y"
-                                    :valor="transmissor.Logo.posicao.y""
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                  />
-                                <Posicao titulo="Tamanho" 
-                                    path="Logo/posicao/z"
-                                    :valor="transmissor.Logo.posicao.z"" 
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                />
+                                <Posicao titulo="Largura" path="Logo/posicao/x" :valor="transmissor.Logo.posicao.x"
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Altura" path="Logo/posicao/y" :valor="transmissor.Logo.posicao.y""
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Tamanho" path="Logo/posicao/z" :valor="transmissor.Logo.posicao.z"" 
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
                             </div>
                         </div>
                     </div>
@@ -198,14 +125,10 @@
             </section>
             <!-- ANÚNCIOS  -->
             <section class="section card1">
-                
-                <Camada 
-                     titulo="Anúncios" 
-                     path="anuncios/rotativo/visibilidade" 
-                    :valor="transmissor.anuncios.rotativo.visibilidade"
-                    :idTrasnmissao="route.query.id" 
-                    :socket="socket"
-                />
+
+                <Camada titulo="Anúncios" path="anuncios/rotativo/visibilidade"
+                    :valor="transmissor.anuncios.rotativo.visibilidade" :idTrasnmissao="route.query.id"
+                    :socket="socket" />
                 <div class="accordion" id="accordionExample">
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
@@ -217,26 +140,15 @@
                         </h2>
                         <div id="collapsefor" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao titulo="Largura" 
-                                    
-                                    path="anuncios/rotativo/posicao/x"
-                                    :valor="transmissor.anuncios.rotativo.posicao.x" 
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                />
-                                <Posicao titulo="Altura" 
-                                    
-                                     path="anuncios/rotativo/posicao/y"
-                                    :valor="transmissor.anuncios.rotativo.posicao.y"
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                  />
-                                <Posicao titulo="Tamanho" 
-                                    path="anuncios/rotativo/posicao/z"
-                                    :valor="transmissor.anuncios.rotativo.posicao.z" 
-                                    :socket="socket"
-                                    :idTrasnmissao="route.query.id" 
-                                />
+                                <Posicao titulo="Largura" path="anuncios/rotativo/posicao/x"
+                                    :valor="transmissor.anuncios.rotativo.posicao.x" :socket="socket"
+                                    :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Altura" path="anuncios/rotativo/posicao/y"
+                                    :valor="transmissor.anuncios.rotativo.posicao.y" :socket="socket"
+                                    :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Tamanho" path="anuncios/rotativo/posicao/z"
+                                    :valor="transmissor.anuncios.rotativo.posicao.z" :socket="socket"
+                                    :idTrasnmissao="route.query.id" />
                             </div>
                         </div>
                     </div>
@@ -266,7 +178,7 @@ const id = ref(null);
 const receptor = ref(null);
 
 let data = null
-let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1" ,"hora":0}, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": {pontos:1}, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": {"visibilidade":true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
 
 // socket.on(`credenciar`, (menssagem) => {
 //     console.log(menssagem)
@@ -280,7 +192,7 @@ async function getTransmissao() {
         if (response.data.erro) {
             console.log('API não encontrada!');
         } else {
-            
+
             return response.data;
         }
     } catch (error) {
@@ -298,7 +210,7 @@ onMounted(async () => {
         transmissor.anuncios = data.anuncios;
         transmissor.placar = data.placar;
         document.title += " " + data.nome;
-        socket.emit(socket.id, {"idTransmissor":transmissor.id});
+        socket.emit(socket.id, { "idTransmissor": transmissor.id });
     }
 });
 

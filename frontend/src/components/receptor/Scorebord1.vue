@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div>
-                <div class="linha">
+                <div class="linha ">
                     <strong class="cronometro">00:00</strong>
                     <p style="padding: 0px 17px 0px 0px;">1t°</p>
                 </div>
@@ -25,6 +25,26 @@
 </template>
 <script setup>
 
+const props = defineProps({
+    idTrasnmissao: {
+        type: String,
+    },
+    valor: {
+        type: Number,
+    },
+    socket: {
+        type: Object
+    },
+
+    path: {
+        type: String
+    },
+    placar: {
+        type: Object
+    }
+
+})
+
 
 
 </script>
@@ -34,9 +54,23 @@
     margin: 0px;
     box-sizing: border-box;
 }
+.glass {
+    position: relative;
+    /* transform: translateX(-50%); */
+    padding: 10px;
+    background: linear-gradient(to bottom, #010101c7, #000000a3);
+    border-radius: 6px;
+    /* box-shadow: -4px 5px 10px rgb(0 0 0 / 10%); */
+    text-align: center;
+    z-index: 999;
+    border: 1px solid #aaff00ad;
+    overflow: hidden;
+    backdrop-filter: blur(25px);
 
+}
 .scorebord {
     top: 40px;
+    left: 50px;
     position: absolute;
     z-index: 0;
     display: flex;

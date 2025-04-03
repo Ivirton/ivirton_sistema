@@ -11,7 +11,12 @@
                 <option value="1">Regressivo</option>
             </select>
         </div>
+        <Switch :valor="props.cronometro.visibilidade" path="placar/cronometro/visibilidade"
+            :idTrasnmissao="props.idTrasnmissao" :socket="props.socket" />
 
+
+    </div>
+    <div class="linha">
         <div class="linha">
             <div class="coluna">
                 <small>min</small>
@@ -29,14 +34,7 @@
                     @input="sendData('segundo', props.cronometro.segundo)">
             </div>
         </div>
-
-
-
-
-    </div>
-    <div class="linha">
-        <div></div>
-        <div style="display: flex;">
+        <div style="display: flex;align-content: center; align-items: center;">
             <i v-if="cronometro.icone" class="fas fa-pause" @click="play()"></i>
             <i v-else class="fas fa-play" @click="play()"></i>
             <i class="fas fa-stop" @click="stop()"></i>
@@ -46,6 +44,7 @@
 </template>
 <script setup>
 import { defineProps } from 'vue';
+import Switch from './Switch.vue';
 
 const props = defineProps({
     idTrasnmissao: {
@@ -109,7 +108,7 @@ function sendData(key, valor) {
 
 .form-select {
     margin-left: 4px;
-    width: 224px;
+    
 
 }
 

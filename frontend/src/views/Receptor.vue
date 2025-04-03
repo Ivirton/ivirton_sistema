@@ -1,15 +1,57 @@
+
+<template>
+    
+        <Scorebord1 
+            :placar="transmissor.placar"
+            :socket="socket"
+            :idTrasnmissao="route.query.id" 
+        />
+    
+</template>
+
 <script setup>
 import Scorebord1 from '@/components/receptor/Scorebord1.vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import socket from '@/socket';
+import { onMounted, reactive, ref } from 'vue';
+const route = useRoute();
+const id = ref(null);
 
+let data = null
+let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": {"visibilidade":true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+
+async function getTransmissao() {
+    try {
+        // const baseURL = import.meta.env.VITE_API_URL || ""; 
+        const response = await axios.get(`/api/transmissao/${id.value}`);
+
+        if (response.data.erro) {
+            console.log('API não encontrada!');
+        } else {
+
+            return response.data;
+        }
+    } catch (error) {
+        console.log('Erro ao buscar API:', error);
+    }
+}
+onMounted(async () => {
+    id.value = route.query.id; // Pegando o parâmetro 'id' da URL
+    data = await getTransmissao();
+    if (data) {
+        transmissor.nome = data.nome;
+        transmissor.id = data.id;
+        // receptor.value = `/receptor?id=${data.id}`
+        transmissor.Logo = data.Logo;
+        transmissor.anuncios = data.anuncios;
+        transmissor.placar = data.placar;
+        document.title += " " + data.nome;
+        
+    }
+});
 window.document.title = "Receptor"
 </script>
-<template>
-    <main>
-        <Scorebord1 
-        
-        />
-    </main>
-</template>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Jersey+25&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Teko:wght@300..700&display=swap');
 
@@ -29,20 +71,7 @@ body {
     border-radius: 5px;
 }
 
-.glass {
-    position: relative;
-    /* transform: translateX(-50%); */
-    padding: 10px;
-    background: linear-gradient(to bottom, #010101c7, #000000a3);
-    border-radius: 6px;
-    /* box-shadow: -4px 5px 10px rgb(0 0 0 / 10%); */
-    text-align: center;
-    z-index: 999;
-    border: 1px solid #aaff00ad;
-    overflow: hidden;
-    backdrop-filter: blur(25px);
 
-}
 * {
 
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
