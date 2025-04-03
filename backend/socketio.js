@@ -31,42 +31,43 @@ class Observador {
             console.log(menssagem)
             this.idTransmissor = menssagem.idTransmissor
             if(menssagem.idTransmissor){
-                this.listen(`${menssagem.idTransmissor}_score`)
-                this.listen(`${menssagem.idTransmissor}_nome`)
-                this.listen(`${menssagem.idTransmissor}_visibilidade`)
-                this.listen(`${menssagem.idTransmissor}_posicao`)
-                this.listen(`${menssagem.idTransmissor}_cronometro`)
+              
             }
         });
 
     }
 
-    listen(porta) { 
-        this.socket.on(porta, (menssagem) => {
-            if (!menssagem || !menssagem.id) {
-                console.error("Mensagem inválida recebida em", porta);
-                return;
-            }
-            console.log(menssagem)
-            transmissaoModel.update(menssagem.id, menssagem.update).then((result) => {console.log(result)}).catch((err) => console.error(err));
-            this.io.emit(porta, menssagem);
-        });
-    }
+   
 }
 
-const sujeito = new Sujeito();
+function listen(porta,io,socket) { 
+    socket.on(porta, (menssagem) => {
+        if (!menssagem || !menssagem.id) {
+            console.error("Mensagem inválida recebida em", porta);
+            return;
+        }
+        console.log(menssagem)
+        transmissaoModel.update(menssagem.id, menssagem.update).then((result) => {console.log(result)}).catch((err) => console.error(err));
+        io.emit(porta, menssagem);
+    });
+}
+
 const initializeSocket = (server) => {
     const io = socketIo(server);
 
     io.on('connection',  function (socket) {
-
-        const observador = new Observador(socket,io);
-        sujeito.inscrever(observador);
+        console.log('Cliente conectado:', socket.id); 
+        listen("score",io,socket)
+        listen("nome",io,socket)
+        listen("visibilidade",io,socket)
+        listen("posicao",io,socket)
+        listen("cronome,tro",io,socket)
+       
 
 
         socket.on('disconnect', () => {
             console.log('Cliente desconectado:', socket.id); 
-            sujeito.desinscrever(observador);
+            
         });
     });
 };

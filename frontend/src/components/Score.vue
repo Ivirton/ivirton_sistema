@@ -38,7 +38,7 @@ function removePontos() {
     }
 }
 function sendData() {
-    props.socket.emit(`${props.idTrasnmissao}_score`, {
+    props.socket.emit(`score`, {
         "id": props.idTrasnmissao,
         socketId: props.socket.id,
         update: {[props.path]: props.valor},
@@ -47,8 +47,8 @@ function sendData() {
     });
 
 }
-props.socket.on(`${props.idTrasnmissao}_score`, (menssagem) => {
-    if (props.path == menssagem['path'] && props.socket.id != menssagem.socketId) {
+props.socket.on(`score`, (menssagem) => {
+    if (props.path == menssagem['path'] && props.socket.id != menssagem.socketId && menssagem.id == props.idTrasnmissao) {
         console.log("RX")
         console.log(menssagem)
         props.valor = menssagem.valor

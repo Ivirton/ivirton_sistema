@@ -80,8 +80,8 @@ function stop() {
     sendData("segundo", props.cronometro.segundo)
 }
 
-props.socket.on(`${props.idTrasnmissao}_cronometro`, (menssagem) => {
-    if (`${props.path}/${menssagem.key}` == menssagem.path && props.socket.id != menssagem.socketId) {
+props.socket.on(`cronometro`, (menssagem) => {
+    if (`${props.path}/${menssagem.key}` == menssagem.path && props.socket.id != menssagem.socketId && menssagem.id == props.idTrasnmissao) {
         console.log("RX")
         console.log(menssagem)
         props.cronometro[menssagem.key] = menssagem.valor
@@ -89,7 +89,7 @@ props.socket.on(`${props.idTrasnmissao}_cronometro`, (menssagem) => {
 });
 function sendData(key, valor) {
 
-    props.socket.emit(`${props.idTrasnmissao}_cronometro`, {
+    props.socket.emit(`cronometro`, {
         "id": props.idTrasnmissao,
         socketId: props.socket.id,
         update: { [`${props.path}/${key}`]: valor },
