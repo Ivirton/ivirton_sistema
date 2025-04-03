@@ -61,7 +61,8 @@ const initializeSocket = (server) => {
         listen("nome",io,socket)
         listen("visibilidade",io,socket)
         listen("posicao",io,socket)
-        listen("cronome,tro",io,socket)
+        listen("cronometro",io,socket)
+        listen("color",io,socket)
        
 
 
