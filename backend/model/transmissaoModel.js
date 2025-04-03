@@ -1,5 +1,6 @@
 const dbFirebase = require("../config/database/firebase/firebaseConfig");
 const { ref, set, push, get, update, remove, child } = require('firebase/database');
+const transmissorEntity = require("./transmissao");
 
 class TransmissaoModel {
 
@@ -7,8 +8,9 @@ class TransmissaoModel {
         if (!nome) {
             return Promise.reject(new Error("Nome é obrigatório"));
         }
-
-        const newTransmissao = { nome };
+        
+        const newTransmissao = {...transmissorEntity}
+        newTransmissao.nome = nome
         const usersRef = ref(dbFirebase, 'transmissao');
         const newUserRef = push(usersRef);
         newTransmissao.id = newUserRef.key;

@@ -30,7 +30,7 @@ const props = defineProps({
 
 function sendData() {
     
-    props.socket.emit(`posicao`,  {
+    props.socket.emit(`${props.idTrasnmissao}_posicao`,  {
         id: props.idTrasnmissao,
         socketId: props.socket.id,
         update:{[props.path]: parseInt(props.valor)},
@@ -41,7 +41,7 @@ function sendData() {
 }
 
 if (props.socket) {
-    props.socket.on(`posicao`, (menssagem) => {
+    props.socket.on(`${props.idTrasnmissao}_posicao`, (menssagem) => {
         if ( props.path == menssagem.path && props.socket.id != menssagem.socketId) {
             console.log("RX");
             console.log(menssagem);

@@ -1,56 +1,8 @@
-<script setup>
-import Navegacao from '../components/Navegacao.vue'
-import Camada from '../components/Camada.vue'
-import Posicao from '@/components/Posicao.vue';
-import Score from '@/components/Score.vue'
-import Text from '@/components/Text.vue'
-import Cronometro from '@/components/Cronometro.vue';
-import { ref, onMounted, reactive } from 'vue';
-import { useRoute } from 'vue-router';
-import axios from 'axios';
-import socket from '@/socket';
-
-
-const route = useRoute();
-const id = ref(null);
-let data = null
-let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 0, "icone": "play", "minuto": 0, "segundo": 0, "tipo": 1 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": 1, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
-async function getTransmissao() {
-    try {
-        // const baseURL = import.meta.env.VITE_API_URL || ""; 
-        const response = await axios.get(`/api/transmissao/${id.value}`);
-
-        if (response.data.erro) {
-            console.log('API não encontrada!');
-        } else {
-            console.log(response);
-            return response.data;
-        }
-    } catch (error) {
-        console.log('Erro ao buscar API:', error);
-    }
-}
-
-onMounted(async () => {
-    id.value = route.query.id; // Pegando o parâmetro 'id' da URL
-    data = await getTransmissao();
-    if (data) {
-        transmissor.nome = data.nome;
-        transmissor.id = data.id;
-        transmissor.Logo = data.Logo;
-        transmissor.anuncios = data.anuncios;
-        transmissor.placar = data.placar;
-        document.title += " " + data.nome;
-    }
-});
-
-
-</script>
 <template>
     <Navegacao />
     <main class="main">
         <article class="body">
-
+            <!-- SCOREBORD -->
             <section class="section card1">
                 <Camada 
                     titulo="Placar" 
@@ -69,9 +21,10 @@ onMounted(async () => {
                                 Posição
                             </button>
                         </h2>
+                        <!-- posicao  -->
                         <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <div class="coluna" ></div>
+                               
                                 <Posicao titulo="Largura" 
                                     
                                     path="placar/posicao/x"
@@ -163,17 +116,20 @@ onMounted(async () => {
                         <div id="collapseTre" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Cronometro />
+                                <Cronometro 
+                                    :cronometro="transmissor.placar.cronometro"
+                                    path="placar/cronometro" 
+                                    :idTrasnmissao="route.query.id" 
+                                    :socket="socket" 
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-
-
         </article>
         <article class="aside">
-
+            <!-- LOGO  -->
             <section class="section card1">
                 <Camada 
                      titulo="Logo" 
@@ -194,12 +150,32 @@ onMounted(async () => {
                         </h2>
                         <div id="collapsefive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao v-bind:position="transmissor.Logo.posicao" />
+                                <Posicao titulo="Largura" 
+                                    
+                                    path="Logo/posicao/x"
+                                    :valor="transmissor.Logo.posicao.x" 
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                />
+                                <Posicao titulo="Altura" 
+                                    
+                                     path="Logo/posicao/y"
+                                    :valor="transmissor.Logo.posicao.y""
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                  />
+                                <Posicao titulo="Tamanho" 
+                                    path="Logo/posicao/z"
+                                    :valor="transmissor.Logo.posicao.z"" 
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+            <!-- ANÚNCIOS  -->
             <section class="section card1">
                 
                 <Camada 
@@ -220,7 +196,26 @@ onMounted(async () => {
                         </h2>
                         <div id="collapsefor" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <Posicao v-bind:position="transmissor.anuncios.rotativo.posicao" />
+                                <Posicao titulo="Largura" 
+                                    
+                                    path="anuncios/rotativo/posicao/x"
+                                    :valor="transmissor.anuncios.rotativo.posicao.x" 
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                />
+                                <Posicao titulo="Altura" 
+                                    
+                                     path="anuncios/rotativo/posicao/y"
+                                    :valor="transmissor.anuncios.rotativo.posicao.y"
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                  />
+                                <Posicao titulo="Tamanho" 
+                                    path="anuncios/rotativo/posicao/z"
+                                    :valor="transmissor.anuncios.rotativo.posicao.z" 
+                                    :socket="socket"
+                                    :idTrasnmissao="route.query.id" 
+                                />
                             </div>
                         </div>
                     </div>
@@ -228,8 +223,61 @@ onMounted(async () => {
             </section>
         </article>
     </main>
-
 </template>
+
+<script setup>
+
+import Navegacao from '../components/Navegacao.vue'
+import Camada from '../components/Camada.vue'
+import Posicao from '@/components/Posicao.vue';
+import Score from '@/components/Score.vue'
+import Text from '@/components/Text.vue'
+import Cronometro from '@/components/Cronometro.vue';
+import { ref, onMounted, reactive } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import socket from '@/socket';
+
+
+const route = useRoute();
+const id = ref(null);
+let data = null
+let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": { "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1" ,"hora":0}, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": {pontos:1}, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+
+// socket.on(`credenciar`, (menssagem) => {
+//     console.log(menssagem)
+// });
+
+async function getTransmissao() {
+    try {
+        // const baseURL = import.meta.env.VITE_API_URL || ""; 
+        const response = await axios.get(`/api/transmissao/${id.value}`);
+
+        if (response.data.erro) {
+            console.log('API não encontrada!');
+        } else {
+            
+            return response.data;
+        }
+    } catch (error) {
+        console.log('Erro ao buscar API:', error);
+    }
+}
+onMounted(async () => {
+    id.value = route.query.id; // Pegando o parâmetro 'id' da URL
+    data = await getTransmissao();
+    if (data) {
+        transmissor.nome = data.nome;
+        transmissor.id = data.id;
+        transmissor.Logo = data.Logo;
+        transmissor.anuncios = data.anuncios;
+        transmissor.placar = data.placar;
+        document.title += " " + data.nome;
+        socket.emit(socket.id, {"idTransmissor":transmissor.id});
+    }
+});
+
+</script>
 
 <style scoped>
 .main {

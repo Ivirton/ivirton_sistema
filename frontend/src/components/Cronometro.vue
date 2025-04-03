@@ -1,31 +1,129 @@
 <template>
     <div class="linha">
-        <h3 style="text-align: center;">00:00</h3>
-        <input class="form-control" style="width: 70px;" placeholder="0" type="number">
+        <!-- <h3 style="text-align: center;">00:00</h3> -->
+
+        <div class="coluna">
+            <small>Tipo</small>
+            <select class="form-select" id="selectbox" v-model="props.cronometro.tipo"
+                @change="sendData('tipo', props.cronometro.tipo)">
+                <option value="" selected="selected" disabled="disabled">Tipo</option>
+                <option value="0">Progressivo</option>
+                <option value="1">Regressivo</option>
+            </select>
+        </div>
+
+        <div class="linha">
+            <div class="coluna">
+                <small>min</small>
+                <input class="form-control" min="0" placeholder="0m" type="number" v-model="props.cronometro.minuto"
+                    @input="sendData('minuto', props.cronometro.minuto)">
+            </div>
+            <div class="coluna">
+                <small>seg</small>
+                <input class="form-control" min="0" placeholder="0s" type="number" v-model="props.cronometro.segundo"
+                    @input="sendData('segundo', props.cronometro.segundo)">
+            </div>
+            <div class="coluna">
+                <small>duracao</small>
+                <input class="form-control" min="0" placeholder="0s" type="number" v-model="props.cronometro.duracao"
+                    @input="sendData('segundo', props.cronometro.segundo)">
+            </div>
+        </div>
+
+
+
+
     </div>
     <div class="linha">
-        <select style="width: 141px;" class="form-select" id="selectbox" >
-            <option value="" selected="selected" disabled="disabled">Tipo</option>
-            <option value="0">Progressivo</option>
-            <option value="1">Regressivo</option>
-        </select>
+        <div></div>
         <div style="display: flex;">
-            <i class="fas fa-pause"></i>
-            <i class="fas fa-play"></i>
-            <i class="fas fa-stop"></i>
+            <i v-if="cronometro.icone" class="fas fa-pause" @click="play()"></i>
+            <i v-else class="fas fa-play" @click="play()"></i>
+            <i class="fas fa-stop" @click="stop()"></i>
         </div>
     </div>
 
 </template>
 <script setup>
-defineProps({
-    largura: {
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    idTrasnmissao: {
+        type: String,
+    },
+    valor: {
         type: Number,
+    },
+    socket: {
+        type: Object
+    },
+
+    path: {
+        type: String
+    },
+    cronometro: {
+        type: Object
     }
+
 })
+
+function play() {
+    props.cronometro.icone = !props.cronometro.icone
+    sendData("icone", props.cronometro.icone)
+}
+function stop() {
+    props.cronometro.icone = false
+    sendData("icone", props.cronometro.icone)
+    props.cronometro.minuto = 0
+    props.cronometro.segundo = 0
+    sendData("minuto", props.cronometro.minuto)
+    sendData("segundo", props.cronometro.segundo)
+}
+
+props.socket.on(`${props.idTrasnmissao}_cronometro`, (menssagem) => {
+    if (`${props.path}/${menssagem.key}` == menssagem.path && props.socket.id != menssagem.socketId) {
+        console.log("RX")
+        console.log(menssagem)
+        props.cronometro[menssagem.key] = menssagem.valor
+    }
+});
+function sendData(key, valor) {
+
+    props.socket.emit(`${props.idTrasnmissao}_cronometro`, {
+        "id": props.idTrasnmissao,
+        socketId: props.socket.id,
+        update: { [`${props.path}/${key}`]: valor },
+        valor: valor,
+        key: key,
+        path: `${props.path}/${key}`
+    });
+}
+z
 </script>
 
 <style scoped>
+.form-control {
+    margin-left: 4px;
+    width: 70px;
+}
+
+.form-select {
+    margin-left: 4px;
+    width: 224px;
+
+}
+
+small {
+    font-size: .875em;
+    margin-left: 8px;
+    color: #737272;
+}
+
+.coluna {
+    display: flex;
+    flex-direction: column;
+}
+
 .fas {
     font-size: 12px;
     font-weight: 900;
@@ -43,6 +141,8 @@ defineProps({
     border-radius: 100%;
     box-shadow: 0px 0px 5px 2px #e7e5e5;
     margin: 0px 2px 0px 6px;
+    transition: all .1s ease-in-out;
+
 }
 
 .form-select {

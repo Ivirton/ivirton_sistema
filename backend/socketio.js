@@ -15,12 +15,9 @@ class Sujeito {
     // Remove um observador
     desinscrever(observador) {
         this.observadores = this.observadores.filter(obs => obs !== observador);
+        observador = null
     }
 
-    // Notifica todos os observadores sobre um evento
-    notificar(dados) {
-        this.observadores.forEach(observador => observador.atualizar(dados));
-    }
 }
 // Classe Observador que será notificado
 class Observador {
@@ -28,19 +25,32 @@ class Observador {
 
         this.socket = socket;
         this.io = io
-        // this.idTrasnmissao = idTrasnmissao
 
-    }
-
-    listen() {
-       this.socket.on(`${this.idTrasnmissao}`, (menssagem) => {
+        this.socket.on(socket.id, (menssagem) => {
+            console.log("id transmisso recebido")
             console.log(menssagem)
-            this.io.emit(`${this.idTrasnmissao}`, menssagem);
+            this.idTransmissor = menssagem.idTransmissor
+            if(menssagem.idTransmissor){
+                this.listen(`${menssagem.idTransmissor}_score`)
+                this.listen(`${menssagem.idTransmissor}_nome`)
+                this.listen(`${menssagem.idTransmissor}_visibilidade`)
+                this.listen(`${menssagem.idTransmissor}_posicao`)
+                this.listen(`${menssagem.idTransmissor}_cronometro`)
+            }
         });
+
     }
 
-    atualizar(dados) {
-        this.socket.emit('notificacao', dados);
+    listen(porta) { 
+        this.socket.on(porta, (menssagem) => {
+            if (!menssagem || !menssagem.id) {
+                console.error("Mensagem inválida recebida em", porta);
+                return;
+            }
+            console.log(menssagem)
+            transmissaoModel.update(menssagem.id, menssagem.update).then((result) => {console.log(result)}).catch((err) => console.error(err));
+            this.io.emit(porta, menssagem);
+        });
     }
 }
 
@@ -48,58 +58,16 @@ const sujeito = new Sujeito();
 const initializeSocket = (server) => {
     const io = socketIo(server);
 
-    io.on('connection', async function (socket) {
-        
-        // const observador = new Observador(socket,io);
-        // sujeito.inscrever(observador);
-        
+    io.on('connection',  function (socket) {
+
+        const observador = new Observador(socket,io);
+        sujeito.inscrever(observador);
+
+
         socket.on('disconnect', () => {
-            // console.log('Cliente desconectado:', socket.id);
-            // sujeito.desinscrever(observador);
+            console.log('Cliente desconectado:', socket.id); 
+            sujeito.desinscrever(observador);
         });
-       
-        socket.on(`score`, (menssagem) => {
-            console.log(menssagem)
-            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
-                console.log(result)
-               
-            }).catch((err) => {
-               console.error(err)
-            });
-            io.emit(`score`, menssagem);
-        });
-
-        socket.on(`nome`, (menssagem) => {
-            console.log(menssagem)
-            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
-                console.log(result)
-               
-            }).catch((err) => {
-               console.error(err)
-            });
-            io.emit(`nome`, menssagem);
-        });
-        socket.on(`visibilidade`, (menssagem) => {
-            console.log(menssagem)
-            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
-                console.log(result)
-               
-            }).catch((err) => {
-               console.error(err)
-            });
-            io.emit(`visibilidade`, menssagem);
-        });
-        socket.on(`posicao`, (menssagem) => {
-            console.log(menssagem)
-            transmissaoModel.update(menssagem.id,menssagem.update ).then((result) => {
-                console.log(result)
-               
-            }).catch((err) => {
-               console.error(err)
-            });
-            io.emit(`posicao`, menssagem);
-        });
-
     });
 };
 module.exports = { initializeSocket };

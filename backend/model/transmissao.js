@@ -1,30 +1,33 @@
-const transmissao = {
-    nome:"",
-    id:"",
-    placar: {
-        visibilidade: true,
-        posicao: { x: 0, y: 0, z: 0 },
-        jogo: { casa: { nome: "casa", pontos: 0 }, visitante: { nome: "visitante", pontos: 0 } ,partida:1},
-        cronometro:{
-            segundo:0,
-            minuto:0,
-            duracao:60,
-            icone:"play",
-            tipo:1
+let transmissorEntity = {
+    "Logo": {
+        "posicao": { "x": 0, "y": 0, "z": 0 },
+        "url": "",
+        "visibilidade": true
+    },
+    "anuncios": {
+        "rotativo": {
+            "posicao": { "x": 0, "y": 0, "z": 0 },
+            "visibilidade": true
         }
     },
-    anuncios: {
-        rotativo: {
-            visibilidade: true,
-            posicao: { x: 0, y: 0, z: 0 },
-        }
-    },
-    Logo:{
-        visibilidade: true,
-        posicao: { x: 0, y: 0, z: 0 },
-        url: ""
+    "id": null,
+    "nome": "",
+    "placar": {
+        "cronometro": { "duracao": 0, "icone": true, "hora": 0, "minuto": 0, "segundo": 0, "tipo": "1", },
+        "jogo": {
+            "casa": {
+                "nome": "casa", "pontos": 0
+            },
+            "partida": { pontos: 1 },
+            "visitante": {
+                "nome": "visitante", "pontos": 0
+            }
+        },
+        "posicao": { "x": 0, "y": 0, "z": 0 },
+        "visibilidade": true
     }
 }
 
-module.exports = transmissao
+
+module.exports = transmissorEntity
 

@@ -33,7 +33,7 @@ const props = defineProps({
 })
 
 
-props.socket.on(`visibilidade`, (menssagem) => {
+props.socket.on(`${props.idTrasnmissao}_visibilidade`, (menssagem) => {
     if (props.path == menssagem.path && props.socket.id != menssagem.socketId ) {
         console.log("RX")
         console.log(menssagem)
@@ -41,7 +41,7 @@ props.socket.on(`visibilidade`, (menssagem) => {
     }
 });
 function sendData() {
-    props.socket.emit(`visibilidade`, {
+    props.socket.emit(`${props.idTrasnmissao}_visibilidade`, {
         "id": props.idTrasnmissao,
         socketId: props.socket.id,
         update: {[props.path]: props.valor},
