@@ -6,6 +6,10 @@
             :socket="socket"
             :idTrasnmissao="route.query.id" 
         />
+
+        <div class="glass-card ">
+            <p>olar mundo</p>
+        </div>
     
 </template>
 
