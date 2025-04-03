@@ -1,26 +1,25 @@
 <template>
     <section class="scorebord">
-        
-            <div class="linha" style="border-bottom: 0.1px solid #353535;">
-                <div class="equipes">
-                    <div class="linha casa">
-                        <strong class="nome">Casa</strong>
-                        <strong class="pontos">0</strong>
-                    </div>
-                    <div class="linha visitante">
-                        <strong class="pontos">0</strong>
-                        <strong class="nome">Visitante</strong>
-                    </div>
-                </div>
-                <div class="cronometro">
-                    <div class="linha">
 
-                        <strong class="pontos">00:00</strong>
-                        <strong style="padding: 0px 17px 0px 0px;">1t°</strong>
-                    </div>
+        <div class="linha">
+            <div class="equipes">
+                <div class="linha casa">
+                    <strong class="nome">Casa</strong>
+                    <strong class="pontos">0</strong>
+                </div>
+                <div class="linha visitante">
+                    <strong class="pontos">0</strong>
+                    <strong class="nome">Visitante</strong>
                 </div>
             </div>
-        
+            <div>
+                <div class="linha">
+                    <strong class="cronometro">00:00</strong>
+                    <p style="padding: 0px 17px 0px 0px;">1t°</p>
+                </div>
+            </div>
+        </div>
+
 
     </section>
 </template>
@@ -45,9 +44,14 @@
     align-items: center;
     background-color: black;
     animation: slide-up 0.5s ease;
+    border-radius: 8px;
 }
 
-.cronometro {}
+.cronometro {
+    padding: 7px 10px 7px 10px;
+    /* min-width: 68px; */
+    text-align: center;
+}
 
 .casa {
     background-color: rgb(69, 2, 252);
