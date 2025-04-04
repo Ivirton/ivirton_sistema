@@ -2,14 +2,13 @@
 <template>
     
         <Scorebord1 
+             path="placar/"
             :placar="transmissor.placar"
             :socket="socket"
             :idTrasnmissao="route.query.id" 
         />
 
-        <div class="glass-card ">
-            <p>olar mundo</p>
-        </div>
+      
     
 </template>
 
@@ -23,13 +22,13 @@ const route = useRoute();
 const id = ref(null);
 
 let data = null
-let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": {"visibilidade":true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": {"visibilidade":true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 ,color:"#596b57"}, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 ,color:"#596b57"} }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
 
 async function getTransmissao() {
     try {
         // const baseURL = import.meta.env.VITE_API_URL || ""; 
         const response = await axios.get(`/api/transmissao/${id.value}`);
-
+        console.log(response.data)
         if (response.data.erro) {
             console.log('API não encontrada!');
         } else {
@@ -51,6 +50,7 @@ onMounted(async () => {
         transmissor.anuncios = data.anuncios;
         transmissor.placar = data.placar;
         document.title += " " + data.nome;
+       
         
     }
 });
