@@ -147,22 +147,35 @@ props.socket.on("color", (menssagem) => {
     background-color: black;
     animation: slide-up 0.5s ease;
     border-radius: 8px;
+   
+   
+
 }
 
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.changed {
+    transform: translateY(20px);
+    opacity: 0;
+}
 .cronometro {
     padding: 7px 10px 7px 10px;
     /* min-width: 68px; */
     text-align: center;
 }
 
-.casa {
-    /* background-color: rgb(69, 2, 252); */
 
-}
-
-.visitante {
-    /* background-color: red; */
-}
 
 .equipes {
     display: flex;

@@ -100,7 +100,6 @@
             <section class="section card1">
                 <Camada titulo="Logo" path="Logo/visibilidade" :valor="transmissor.Logo.visibilidade"
                     :idTrasnmissao="route.query.id" :socket="socket" />
-
                 <div class="accordion" id="accordionExample">
                     <!-- Acordeon item 1 Posicao-->
                     <div class="accordion-item">
@@ -118,6 +117,21 @@
                                     :socket="socket" :idTrasnmissao="route.query.id" />
                                 <Posicao titulo="Tamanho" path="Logo/posicao/z" :valor="transmissor.Logo.posicao.z"" 
                                     :socket="socket" :idTrasnmissao="route.query.id" />
+                            </div>
+                        </div>
+                    </div>
+                       <!-- Acordeon item 1 d-->
+                       <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapsefive01" aria-expanded="true" aria-controls="collapsefive01">
+                                Imagem
+                            </button>
+                        </h2>
+                        <div id="collapsefive01" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                               <img src="" alt="">
+                               <h1>ola</h1>
                             </div>
                         </div>
                     </div>

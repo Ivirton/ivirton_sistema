@@ -1,22 +1,5 @@
 <template>
-    <div class="linha">
-        <!-- <h3 style="text-align: center;">00:00</h3> -->
-
-        <div class="coluna">
-            <small>Tipo</small>
-            <select class="form-select" id="selectbox" v-model="props.cronometro.tipo"
-                @change="sendData('tipo', props.cronometro.tipo)">
-                <option value="" selected="selected" disabled="disabled">Tipo</option>
-                <option value="0">Progressivo</option>
-                <option value="1">Regressivo</option>
-            </select>
-        </div>
-        <Switch :valor="props.cronometro.visibilidade" path="placar/cronometro/visibilidade"
-            :idTrasnmissao="props.idTrasnmissao" :socket="props.socket" />
-
-
-    </div>
-    <div class="linha">
+      <div class="linha">
         <div class="linha">
             <div class="coluna">
                 <small>min</small>
@@ -40,6 +23,21 @@
             <i class="fas fa-stop" @click="stop()"></i>
         </div>
     </div>
+    <div class="linha">
+        <div class="coluna">
+            <small>Tipo</small>
+            <select class="form-select" id="selectbox" v-model="props.cronometro.tipo"
+                @change="sendData('tipo', props.cronometro.tipo)">
+                <option value="" selected="selected" disabled="disabled">Tipo</option>
+                <option value="0">Progressivo</option>
+                <option value="1">Regressivo</option>
+            </select>
+        </div>
+        <Switch :valor="props.cronometro.visibilidade" path="placar/cronometro/visibilidade"
+            :idTrasnmissao="props.idTrasnmissao" :socket="props.socket" />
+
+    </div>
+  
 
 </template>
 <script setup>
