@@ -8,8 +8,7 @@
             :idTrasnmissao="route.query.id" 
         />
 
-      
-    
+   
 </template>
 
 <script setup>
