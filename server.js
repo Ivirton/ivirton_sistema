@@ -4,7 +4,7 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const transmissaoRouter = require('./backend/router/transmissaoRoutes');
-const { database } = require('firebase-admin');
+
 const { initializeSocket  } = require('./backend/socketio');
 // const transmissorRouter = require('./backend/router/transmissorRoutes');
 
@@ -22,13 +22,14 @@ appExpress.use(bodyParser.json());
 appExpress.use(express.json());
 
 const cors = require('cors');
+const anuncioRouter = require('./backend/router/anuncioRolter');
 
 appExpress.use(cors());
 
 // Define o prefixo para as rotas da API
 appExpress.use('/api/transmissao', transmissaoRouter);
 
-// appExpress.use('/api/transmissor', transmissorRouter);
+appExpress.use('/', anuncioRouter);
 
 // Servindo os arquivos estáticos do Vue.js
 const frontendPath = path.join(__dirname, 'frontend/dist');
