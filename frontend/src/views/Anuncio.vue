@@ -1,7 +1,6 @@
 <script setup>
 import Navegacao from '../components/Navegacao.vue'
 import AnuncioRotativo from '@/components/AnuncioRotativo.vue';
-
 import modalUploadAnuncio from '@/components/modalUploadAnuncio.vue';
 
 
@@ -18,10 +17,11 @@ import modalUploadAnuncio from '@/components/modalUploadAnuncio.vue';
         </div>
         
         <modalUploadAnuncio />
+        <AnuncioRotativo imagem="https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//156533.Z6-RhayMMSs5.jpg" />
+        <AnuncioRotativo />
         <AnuncioRotativo />
         <AnuncioRotativo />
 
-        <AnuncioRotativo />
 
 
     </main>

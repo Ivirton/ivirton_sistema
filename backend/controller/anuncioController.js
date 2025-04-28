@@ -1,22 +1,23 @@
 const AnuncioModel = require("../model/anuncioModel");
-
 const anuncioModel = new AnuncioModel()
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const AnuncioController = {
-    async create(req, res) {
-        //crie uma novo anuncio 
-        if(!req.body){
-            res.status(500).json({ details: error.message });
-        }
-        anuncioModel.create(req.body).then((data) => {
-            res.status(201).json({ 'message': "Documento criado com sucesso!", 'data': data });
+    async create(req) {
+        //cria um novo anuncio 
+        const anun = {"nome":req.file.originalname,"duracao":req.body.duracao,"visibilidade":req.body.visibilidade}
+        console.log(anun)
+        anuncioModel.create(anun).then((data) => {
+            // res.status(201).json({ 'message': "Documento criado com sucesso!", 'data': data });
         }).catch((error) => {
-            res.status(500).json({ error: "Erro ao criar documento", details: error.message });
+            // res.status(500).json({ error: "Erro ao criar documento", details: error.message });
         })
     },
 
     async findAll(req, res) {
-        //retorna todas as tramissoes em um arquivo json
+        //retorna todas as anuncuios em um arquivo json
         anuncioModel.findAll().then((data) => {
             console.log(data)
             res.status(200).json(data);
@@ -27,7 +28,7 @@ const AnuncioController = {
     },
 
     async findAt(req, res) {
-        //busca uma unica transmissao em um arquivo jason
+        //busca uma unica anuncios em um arquivo jason
         const { id } = req.params;
         anuncioModel.findAt(id)
             .then((data) => {
@@ -43,9 +44,9 @@ const AnuncioController = {
         const { id } = req.params;
         anuncioModel.update(id, req.body).then((result) => {
             console.log(result)
-            res.status(200).json({ message: "Documento atualizado com sucesso!", "res":result});
+            res.status(200).json({ message: "Documento atualizado com sucesso!", "res": result });
         }).catch((err) => {
-            res.status(200).json({ err: err});
+            res.status(200).json({ err: err });
         });
     },
 
@@ -58,6 +59,7 @@ const AnuncioController = {
             res.status(500).json({ error: "Erro ao deletar documento", details: error.message });
         })
     }
+   
 };
 
 module.exports = AnuncioController;

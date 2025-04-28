@@ -11,13 +11,12 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 
 const fs = require('fs');
-const path = require('path');
+const AnuncioController = require('../controller/anuncioController');
 
 const upload = multer({ dest: 'uploads/' });
 anuncioRouter.post('/upload', upload.single('imagem'), async (req, res) => {
-   
+   AnuncioController.create(req)
   const file = req.file;
-
   if (!file) return res.status(400).send('Nenhum arquivo enviado.');
 
   const fileBuffer = fs.readFileSync(file.path);
@@ -37,7 +36,8 @@ anuncioRouter.post('/upload', upload.single('imagem'), async (req, res) => {
     .from('imagens')
     .getPublicUrl(file.originalname);
 
-  res.json({ url: publicURL });
+  
+  res.redirect("/anuncio")
 });
 
 module.exports = anuncioRouter

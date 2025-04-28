@@ -7,21 +7,23 @@ class AnuncioModel {
        if (!data) {
            return Promise.reject(new Error("dados é obrigatório"));
        }
-       const novoAnuncio = {id:"", nome:"",duracao:20,visibilidade:true}
+       const novoAnuncio = {id:"", nome:"",duracao:20}
        
        novoAnuncio.nome = data.nome
        novoAnuncio.duracao = data.duracao
        novoAnuncio.visibilidade = data.visibilidade
 
-       const usersRef = ref(dbFirebase, 'anuncios');
+       const usersRef = ref(dbFirebase, `anuncios`);
        const newUserRef = push(usersRef);
        novoAnuncio.id = newUserRef.key;
+
+       
 
        try {
            await set(newUserRef, novoAnuncio);
            return novoAnuncio;
        } catch (error) {
-           console.error("Erro ao criar transmissão:", error);
+           console.error("Erro ao criar anuncio:", error);
            throw error;
        }
    }

@@ -11,7 +11,7 @@
                         <div class="linha">
                             <div class="form-group">
                                 <label for="checkbox" class="col-form-label">Ativo</label>
-                                <input class="form-check-input" type="checkbox" name="ativo" id="checkbox" checked
+                                <input class="form-check-input" type="checkbox" name="visibilidade" id="checkbox" checked
                                     required>
                             </div>
                             <div class="form-group">
