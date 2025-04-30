@@ -15,7 +15,9 @@ const AnuncioController = require('../controller/anuncioController');
 
 const upload = multer({ dest: 'uploads/' });
 anuncioRouter.post('/upload', upload.single('imagem'), async (req, res) => {
-   AnuncioController.create(req)
+  AnuncioController.create(req)
+
+
   const file = req.file;
   if (!file) return res.status(400).send('Nenhum arquivo enviado.');
 
@@ -36,8 +38,10 @@ anuncioRouter.post('/upload', upload.single('imagem'), async (req, res) => {
     .from('imagens')
     .getPublicUrl(file.originalname);
 
-  
+
   res.redirect("/anuncio")
+
+  
 });
 
 module.exports = anuncioRouter

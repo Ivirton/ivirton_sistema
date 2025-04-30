@@ -1,18 +1,15 @@
 const AnuncioModel = require("../model/anuncioModel");
 const anuncioModel = new AnuncioModel()
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+
 
 const AnuncioController = {
     async create(req) {
-        //cria um novo anuncio 
         const anun = {"nome":req.file.originalname,"duracao":req.body.duracao,"visibilidade":req.body.visibilidade}
         console.log(anun)
         anuncioModel.create(anun).then((data) => {
-            // res.status(201).json({ 'message': "Documento criado com sucesso!", 'data': data });
+            
         }).catch((error) => {
-            // res.status(500).json({ error: "Erro ao criar documento", details: error.message });
+            
         })
     },
 
