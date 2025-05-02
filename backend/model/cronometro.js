@@ -74,4 +74,9 @@ class CronometroEntity {
         // enviarMensagemSocket(this.transmisao.id_transmissao, "id_cronometro", this.transmisao.id_cronometro, "segundo", this.transmisao.segundo)
 
     }
+    
+}
+
+function name(params) {
+    
 }
