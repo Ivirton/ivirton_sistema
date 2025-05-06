@@ -22,7 +22,7 @@ function listen(porta, io, socket) {
 
 // Função principal que inicializa o Socket.IO no servidor fornecido
 const initializeSocket = (server) => {
-    const io = new Server(server);  // Alteração: Usar `new` para instanciar o servidor do Socket.IO
+    const io = new Server(server);  
 
     io.on('connection', (socket) => {
         console.log('Cliente conectado:', socket.id);
