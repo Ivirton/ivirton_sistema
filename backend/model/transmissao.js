@@ -29,5 +29,5 @@ let transmissorEntity = {
 }
 
 
-module.exports = transmissorEntity
+
 

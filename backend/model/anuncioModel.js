@@ -1,4 +1,4 @@
-const dbFirebase = require("../config/database/firebase/firebaseConfig");
+const dbFirebase = require("../config/firebaseConfig");
 const { ref, set, push, get, update, remove, child } = require('firebase/database');
 
 class AnuncioModel {
