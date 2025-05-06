@@ -1,16 +1,18 @@
-const dbFirebase = require("../config/firebaseConfig");
-const { ref, set, push, get, update, remove, child } = require('firebase/database');
-const transmissorEntity = require("./transmissao");
+// backend/model/transmissaoModel.js
+import dbFirebase from "../config/firebaseConfig.js";
+import { ref, set, push, get, update, remove, child } from 'firebase/database';
+import transmissorEntity from "./transmissao.js";
 
 class TransmissaoModel {
 
-     async create(nome) {
+    async create(nome) {
         if (!nome) {
             return Promise.reject(new Error("Nome é obrigatório"));
         }
-        
-        const newTransmissao = {...transmissorEntity}
-        newTransmissao.nome = nome
+
+        const newTransmissao = { ...transmissorEntity };
+        newTransmissao.nome = nome;
+
         const usersRef = ref(dbFirebase, 'transmissao');
         const newUserRef = push(usersRef);
         newTransmissao.id = newUserRef.key;
@@ -24,7 +26,7 @@ class TransmissaoModel {
         }
     }
 
-     async findAll() {
+    async findAll() {
         return get(child(ref(dbFirebase), "/transmissao"))
             .then(snapshot => snapshot.exists() ? snapshot.val() : null)
             .catch(error => {
@@ -33,7 +35,7 @@ class TransmissaoModel {
             });
     }
 
-     async findAt(nome) {
+    async findAt(nome) {
         return get(child(ref(dbFirebase), `/transmissao/${nome}`))
             .then(snapshot => snapshot.exists() ? snapshot.val() : null)
             .catch(error => {
@@ -42,7 +44,7 @@ class TransmissaoModel {
             });
     }
 
-     async update(id, updates) {
+    async update(id, updates) {
         const transmissionRef = ref(dbFirebase, `/transmissao/${id}`);
         return update(transmissionRef, updates)
             .then(() => ({ message: "Transmissão atualizada com sucesso" }))
@@ -52,7 +54,7 @@ class TransmissaoModel {
             });
     }
 
-     async delete(id) {
+    async delete(id) {
         return remove(ref(dbFirebase, `/transmissao/${id}`))
             .then(() => ({ message: "Transmissão removida com sucesso" }))
             .catch(error => {
@@ -62,5 +64,5 @@ class TransmissaoModel {
     }
 }
 
-const transmissaoModel = new TransmissaoModel()
-module.exports = transmissaoModel ;
+const transmissaoModel = new TransmissaoModel();
+export default transmissaoModel;

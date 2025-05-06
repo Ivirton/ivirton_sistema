@@ -1,13 +1,13 @@
-//transmissaorouter.js
-const TransmissaoController = require("../controller/TransmissaoController");
+// backend/router/transmissaoRoutes.js
+import express from 'express';
+import TransmissaoController from '../controller/TransmissaoController.js';
 
-const express = require('express');
 const transmissaoRouter = express.Router();
 
 transmissaoRouter.post("/", TransmissaoController.create);              // Criar documento
 transmissaoRouter.get("/", TransmissaoController.findAll);              // Buscar todos os documentos
-transmissaoRouter.get("/:nome", TransmissaoController.findAt);          // Buscar um documento por ID
+transmissaoRouter.get("/:nome", TransmissaoController.findAt);          // Buscar um documento por nome
 transmissaoRouter.put("/:nome", TransmissaoController.update);          // Atualizar um documento
 transmissaoRouter.delete("/:id", TransmissaoController.delete);         // Deletar um documento
 
-module.exports = transmissaoRouter;
+export default transmissaoRouter;

@@ -1,69 +1,70 @@
-const dbFirebase = require("../config/firebaseConfig");
-const { ref, set, push, get, update, remove, child } = require('firebase/database');
+// backend/model/AnuncioModel.js
+import dbFirebase from "../config/firebaseConfig.js";
+import { ref, set, push, get, update, remove, child } from 'firebase/database';
 
 class AnuncioModel {
 
     async create(data) {
-       if (!data) {
-           return Promise.reject(new Error("dados é obrigatório"));
-       }
-       const novoAnuncio = {id:"", nome:"",duracao:20}
-       
-       novoAnuncio.nome = data.nome
-       novoAnuncio.duracao = data.duracao
-       novoAnuncio.visibilidade = data.visibilidade
+        if (!data) {
+            return Promise.reject(new Error("dados é obrigatório"));
+        }
 
-       const usersRef = ref(dbFirebase, `anuncios`);
-       const newUserRef = push(usersRef);
-       novoAnuncio.id = newUserRef.key;
+        const novoAnuncio = {
+            id: "",
+            nome: data.nome || "",
+            duracao: data.duracao || 20,
+            visibilidade: data.visibilidade || false,
+        };
 
-       
+        const usersRef = ref(dbFirebase, 'anuncios');
+        const newUserRef = push(usersRef);
+        novoAnuncio.id = newUserRef.key;
 
-       try {
-           await set(newUserRef, novoAnuncio);
-           return novoAnuncio;
-       } catch (error) {
-           console.error("Erro ao criar anuncio:", error);
-           throw error;
-       }
-   }
+        try {
+            await set(newUserRef, novoAnuncio);
+            return novoAnuncio;
+        } catch (error) {
+            console.error("Erro ao criar anuncio:", error);
+            throw error;
+        }
+    }
 
     async findAll() {
-       return get(child(ref(dbFirebase), "/anuncios"))
-           .then(snapshot => snapshot.exists() ? snapshot.val() : null)
-           .catch(error => {
-               console.error("Erro ao buscar anuncios:", error);
-               throw error;
-           });
-   }
+        return get(child(ref(dbFirebase), "/anuncios"))
+            .then(snapshot => snapshot.exists() ? snapshot.val() : null)
+            .catch(error => {
+                console.error("Erro ao buscar anuncios:", error);
+                throw error;
+            });
+    }
 
     async findAt(id) {
-       return get(child(ref(dbFirebase), `/anuncios/${id}`))
-           .then(snapshot => snapshot.exists() ? snapshot.val() : null)
-           .catch(error => {
-               console.error("Erro ao buscar anuncio:", error);
-               throw error;
-           });
-   }
+        return get(child(ref(dbFirebase), `/anuncios/${id}`))
+            .then(snapshot => snapshot.exists() ? snapshot.val() : null)
+            .catch(error => {
+                console.error("Erro ao buscar anuncio:", error);
+                throw error;
+            });
+    }
 
     async update(id, updates) {
-       const transmissionRef = ref(dbFirebase, `/anuncios/${id}`);
-       return update(transmissionRef, updates)
-           .then(() => ({ message: "anuncio atualizada com sucesso" }))
-           .catch(error => {
-               console.error("Erro ao atualizar anuncio:", error);
-               throw error;
-           });
-   }
+        const anuncioRef = ref(dbFirebase, `/anuncios/${id}`);
+        return update(anuncioRef, updates)
+            .then(() => ({ message: "Anúncio atualizado com sucesso" }))
+            .catch(error => {
+                console.error("Erro ao atualizar anuncio:", error);
+                throw error;
+            });
+    }
 
     async delete(id) {
-       return remove(ref(dbFirebase, `/anuncios/${id}`))
-           .then(() => ({ message: "anuncios removida com sucesso" }))
-           .catch(error => {
-               console.error("Erro ao remover anuncios:", error);
-               throw error;
-           });
-   }
+        return remove(ref(dbFirebase, `/anuncios/${id}`))
+            .then(() => ({ message: "Anúncio removido com sucesso" }))
+            .catch(error => {
+                console.error("Erro ao remover anuncio:", error);
+                throw error;
+            });
+    }
 }
 
-module.exports = AnuncioModel
+export default AnuncioModel;
