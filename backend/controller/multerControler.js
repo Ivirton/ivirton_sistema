@@ -1,12 +1,12 @@
-const multer = require('multer');
-const { createClient } = require('@supabase/supabase-js');
-
-const supabaseUrl = 'https://uogqtlofsmvofetnsvug.supabase.co'
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvZ3F0bG9mc212b2ZldG5zdnVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0NDY0NTUsImV4cCI6MjA1OTAyMjQ1NX0.E4OZIqiY0EchGdrZd9eWaQCrYrrunwogayMau7sUFAU"
-const supabase = createClient(supabaseUrl, supabaseKey)
+import multer from 'multer';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import supabase from '../config/supabaseClient.js';
 
 const multerControler = {
-    async upload(file) {
+    async createFile(file, nameBuckets) {
+        if (!file) return res.status(400).send('Nenhum arquivo enviado.');
         const fileBuffer = fs.readFileSync(file.path);
         const { data, error } = await supabase.storage
             .from('imagens')
@@ -14,13 +14,13 @@ const multerControler = {
                 contentType: file.mimetype,
                 upsert: true,
             });
-
         fs.unlinkSync(file.path); // remove arquivo temporário
-
         if (error) return res.status(500).send(error.message);
-
+        //Buckets de armazenamento de subabase 
         const { publicURL } = supabase.storage
-            .from('imagens')
+            .from(nameBuckets)
             .getPublicUrl(file.originalname);
     }
 }
+
+export default multerControler;

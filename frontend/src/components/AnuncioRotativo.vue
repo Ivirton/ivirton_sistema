@@ -1,15 +1,16 @@
 <script setup>
+import CheckBoxInput from '@/components/CheckBoxInput.vue';
 const props = defineProps({
     largura: {
         type: Number,
-      
-    },
-    imagem:{
-        type:String
-    }
 
+    },
+    imagemName: {
+        type: String
+    }
 })
 
+const imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${props.imagemName}`
 function toggleSelection(card, checkbox) {
     checkbox.checked = !checkbox.checked;
     if (checkbox.checked) {
@@ -25,81 +26,57 @@ function removerItem(id) {
 </script>
 
 <template>
-    <div class="col-md-4 col-sm-6" id="item1">
-        <div class="card shadow-sm p-3 item-card" onclick="toggleSelection(this, document.getElementById('checkbox1'))">
-            <input type="checkbox" class="form-check-input me-2" id="checkbox1">
-            <img :src="props.imagem" alt="Thumbnail" class="item-img">
-            <div class="mt-2">
-                <h6 class="mb-1">Item 1</h6>
-                <small class="text-muted">Duração:</small>
-                <input type="number" class="form-control w-25 d-inline" value="150" min="1"
-                    onclick="event.stopPropagation();"> Seg
-                <button class="btn btn-danger btn-sm mt-2 w-100"
-                    onclick="event.stopPropagation(); removerItem('item1')">Remover</button>
-            </div>
+    <div class="carde">
+
+
+
+        <img :src="imagem" class="" alt="...">
+        <div class="body_head">
+            <CheckBoxInput />
+            <input type="number" class="form-control" placeholder="0" aria-describedby="basic-addon2">
+            <a href="#" class="btn btn-danger" role="button">Remover</a>
+            <i class="bi bi-x-square-fill"></i>
         </div>
+
+
     </div>
+
 </template>
 
 
 <style scoped>
-.selected {
-    border: 2px solid #007bff;
+img{
+    border-radius: 5px;
+}
+.carde {
+    display: flex
+;
+    width: 320px;
+    background-color: #fff;
+    flex-direction: column;
+    height: fit-content;
+    border-radius: 6px;
+    box-shadow: 6px -1px 20px #00000040;
+    margin-left: 8px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+
 }
 
-.bg-light {
-    --bs-bg-opacity: 1;
-    background-color: rgb(219 221 223) !important;
+
+.body_head {
+    display: flex;
+    height: 49px;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.item-img {
+.card-img-top {
     width: 100%;
-    height: auto;
-    max-height: 150px;
-    /* Ajusta a altura sem perder a proporção */
-    object-fit: cover;
     border-radius: 5px;
 }
 
-.form-check-input:checked[type=checkbox] {
-    --bs-form-check-bg-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e);
-    font-size: 19px;
-    margin-top: 12px;
-    margin-bottom: 14px;
-    border-radius: 100%;
-}
-
-.form-check-input:focus {
-    border-color: #86b7fe;
-    outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
-    font-size: 19px;
-    margin-top: 12px;
-    margin-bottom: 14px;
-    border-radius: 100%;
-}
-
-.form-check-input[type=checkbox] {
-    border-radius: .25em;
-    font-size: 19px;
-    margin-top: 12px;
-    margin-bottom: 14px;
-    border-radius: 100%;
-}
-
-.selected {
-    border: 2px solid #007bff;
-    border-radius: 7px;
-    padding: 0px;
-}
-
-.col-md-4 {
-    flex: 0 0 auto;
-    width: 27.333333%;
-    margin: 2px;
-    padding: 0px;
-    min-width: 350px;
-    /* border: 2px solid #c8dbeefe; */
-    border-radius: 7px;
+.form-control {
+    width: 70px;
 }
 </style>

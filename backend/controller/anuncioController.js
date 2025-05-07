@@ -1,22 +1,27 @@
 // backend/controller/AnuncioController.js
 import AnuncioModel from "../model/anuncioModel.js";
+import multerControler from "./multerControler.js";
 const anuncioModel = new AnuncioModel();
 
 const AnuncioController = {
-    async create(req) {
+
+    async create(req, res) {
         const anun = {
             nome: req.file.originalname,
-            duracao: req.body.duracao,
-            visibilidade: req.body.visibilidade
+            duracao: req.body.duracao || 0,
+            visibilidade: req.body.visibilidade || false
         };
-        console.log(anun);
-        try {
-            await anuncioModel.create(anun);
-            // Se necessário, pode adicionar um retorno ou mensagem aqui
-        } catch (error) {
-            console.error("Erro ao criar anúncio:", error);
-            // Pode lançar erro ou tratar como preferir
-        }
+
+        anuncioModel.create(anun)
+            .then((data) => {
+                multerControler.createFile(req.file, "imagens")
+                console.log({ message: "Documento criado com sucesso!", data })
+                res.status(201).json({ message: "Documento criado com sucesso!", data });
+            })
+            .catch((error) => {
+                console.error({ error: "Erro ao criar documento", details: error.message })
+                res.status(500).json({ error: "Erro ao criar documento", details: error.message });
+            });
     },
 
     async findAll(req, res) {

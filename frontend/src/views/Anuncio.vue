@@ -5,33 +5,83 @@ import modalUploadAnuncio from '@/components/modalUploadAnuncio.vue';
 
 
 
+
 </script>
 <template>
 
     <Navegacao />
 
     <main class="main">
-        <div class="linha">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-            data-bs-target="#exampleModal" data-bs-whatever="@mdo">Novo</button>
+
+        <div class="header">
+            
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Novo</button>
+                <button type="button" class="btn btn-dark">Ativar</button>
+                <button type="button" class="btn btn-dark">Desativar</button>
+                <button type="button" class="btn btn-dark">Limpar</button>
+
+            </div>
+            <div class="linha">
+                
+            </div>
         </div>
-        
-        <modalUploadAnuncio />
-        <AnuncioRotativo imagem="https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//156533.Z6-RhayMMSs5.jpg" />
-        <AnuncioRotativo />
-        <AnuncioRotativo />
-        <AnuncioRotativo />
+        <div class="anuncios">
+            <AnuncioRotativo imagemName="podium1.jpg" />
+            <AnuncioRotativo imagemName="podium1.jpg" />
+            <AnuncioRotativo imagemName="podium1.jpg" />
+            <AnuncioRotativo imagemName="podium1.jpg" />
+            <AnuncioRotativo imagemName="podium1.jpg" />
+            <AnuncioRotativo imagemName="podium1.jpg" />
+
+            <AnuncioRotativo imagemName="podium1.jpg" />
+
+            <AnuncioRotativo imagemName="podium1.jpg" />
+
+            <AnuncioRotativo imagemName="podium1.jpg" />
+
+            <AnuncioRotativo imagemName="podium1.jpg" />
+
+            <AnuncioRotativo imagemName="podium1.jpg" />
+
+            <AnuncioRotativo imagemName="podium1.jpg" />
+
+            <AnuncioRotativo imagemName="podium1.jpg" />
 
 
+        </div>
 
     </main>
-
+    <modalUploadAnuncio />
 </template>
 
 <style>
+.header {
+    margin-top: 20px;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+}
+
+.h-100 {
+    height: auto !important;
+}
+
+.anuncios {
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
 .main {
-    width: 100%;
-    height: 100vh;
-    background-color: rgb(66, 65, 65);
+    /* width: 100%; */
+}
+
+body {
+   background-color: antiquewhite;
 }
 </style>
