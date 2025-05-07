@@ -69,6 +69,7 @@ img{
     height: 49px;
     justify-content: space-around;
     align-items: center;
+    background-color: #1e1b1b;
 }
 
 .card-img-top {

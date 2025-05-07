@@ -81,7 +81,5 @@ import modalUploadAnuncio from '@/components/modalUploadAnuncio.vue';
     /* width: 100%; */
 }
 
-body {
-   background-color: antiquewhite;
-}
+
 </style>
