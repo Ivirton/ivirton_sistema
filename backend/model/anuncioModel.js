@@ -48,6 +48,8 @@ class AnuncioModel {
     }
 
     async update(id, updates) {
+
+       //update: {'nome': "1DIA.jpg"}
         const anuncioRef = ref(dbFirebase, `/anuncios/${id}`);
         return update(anuncioRef, updates)
             .then(() => ({ message: "Anúncio atualizado com sucesso" }))
@@ -66,5 +68,5 @@ class AnuncioModel {
             });
     }
 }
-
-export default AnuncioModel;
+const anuncioModel = new AnuncioModel()
+export default anuncioModel;

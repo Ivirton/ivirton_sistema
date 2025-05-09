@@ -1,44 +1,39 @@
-import { Server } from 'socket.io';  // Alteração aqui
+import { Server } from 'socket.io';
 
-import transmissaoModel from './model/transmissaoModel.js';
+import { FactorTrasmissaoSocket, FactorAnuncioSocket } from './socketsIO/factorySocket.js';
 
-// Função que escuta mensagens em um canal específico (porta)
-function listen(porta, io, socket) {
-    socket.on(porta, (menssagem) => {
-        if (!menssagem || !menssagem.id) {
-            console.error("Mensagem inválida recebida em", porta);
-            return;
-        }
-
-        console.log(menssagem);
-
-        transmissaoModel.update(menssagem.id, menssagem.update)
-            .then((result) => console.log(result))
-            .catch((err) => console.error(err));
-
-        io.emit(porta, menssagem);
-    });
-}
-
-// Função principal que inicializa o Socket.IO no servidor fornecido
 const initializeSocket = (server) => {
-    const io = new Server(server);  
+    // Função principal que inicializa o Socket.IO no servidor fornecido
+    const ativado = false;
+    const io = new Server(server);
+   
 
     io.on('connection', (socket) => {
         console.log('Cliente conectado:', socket.id);
+        if (ativado) {
 
-        listen("score", io, socket);
-        listen("nome", io, socket);
-        listen("visibilidade", io, socket);
-        listen("posicao", io, socket);
-        listen("cronometro", io, socket);
-        listen("color", io, socket);
+            const transmissaoSocket = new FactorTrasmissaoSocket(io, socket)
 
-        socket.on('disconnect', () => {
-            console.log('Cliente desconectado:', socket.id);
-        });
+            transmissaoSocket.addPorta("score")
+            transmissaoSocket.addPorta("nome")
+            transmissaoSocket.addPorta("visibilidade")
+            transmissaoSocket.addPorta("posicao")
+            transmissaoSocket.addPorta("cronometro")
+            transmissaoSocket.addPorta("color")
+            transmissaoSocket.listen()
+
+            const anunciosSocket = new FactorAnuncioSocket(io, socket)
+            anunciosSocket.addPorta("anuncio_visibilidade")
+            anunciosSocket.listen()
+
+
+
+        }
+
+        socket.on('disconnect', () => console.log('Cliente desconectado:', socket.id))
+
     });
+   
 };
 
-// Exporta a função para ser usada em outro módulo
 export default initializeSocket;

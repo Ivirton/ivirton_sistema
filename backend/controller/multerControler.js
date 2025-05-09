@@ -4,23 +4,56 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import supabase from '../config/supabaseClient.js';
 
+// Cria um objeto com a função createFile, responsável por lidar com o upload
 const multerControler = {
-    async createFile(file, nameBuckets) {
+    
+    async createFile(file, nameBuckets, res) {
+        // Essa função recebe o arquivo enviado e o nome do bucket onde ele será salvo
+        // Verifica se nenhum arquivo foi enviado pelo usuário
         if (!file) return res.status(400).send('Nenhum arquivo enviado.');
+
+        // Lê o conteúdo do arquivo temporário salvo no servidor
         const fileBuffer = fs.readFileSync(file.path);
+
+         // Envia esse arquivo para a Supabase Storage no bucket 'imagens'
         const { data, error } = await supabase.storage
-            .from('imagens')
-            .upload(`/${file.originalname}`, fileBuffer, {
-                contentType: file.mimetype,
-                upsert: true,
+            .from(nameBuckets)               // Ex: 'imagens'
+            .upload(file.originalname, fileBuffer, {
+                contentType: file.mimetype, // Define o tipo do arquivo (ex: image/png)
+                upsert: true,               // Se já existir, sobrescreve o arquivo
             });
-        fs.unlinkSync(file.path); // remove arquivo temporário
-        if (error) return res.status(500).send(error.message);
-        //Buckets de armazenamento de subabase 
+
+        // Remove o arquivo temporário do servidor após o upload
+        fs.unlinkSync(file.path);
+
+        // Se houve algum erro durante o upload, envia uma resposta de erro
+        if (error) return res.status(500).send({ erro: 'Erro ao enviar arquivo', detalhes: error.message });
+
+        // Recupera a URL pública do arquivo enviado para que possa ser acessado pela web
         const { publicURL } = supabase.storage
             .from(nameBuckets)
             .getPublicUrl(file.originalname);
+
+        // Retorna a URL do arquivo como resposta JSON
+        return res.status(200).json({
+            mensagem: 'Arquivo enviado com sucesso!',
+            urlPublica: publicURL
+        });
+    },
+    async deleteFile(fileName,nameBuckets) {
+        // Função para remover aquivo do Supabase
+        const { data, error } = await supabase.storage
+            .from(nameBuckets) // nome do bucket
+            .remove([fileName]); // passa o nome exato do arquivo
+    
+        if (error) {
+            console.error("Erro ao deletar aquivo do Supabase:", error.message);
+            return { success: false, message: error.message };
+        }
+    
+        return { success: true, message: "Arquivo deletado com sucesso!", data };
     }
 }
+
 
 export default multerControler;

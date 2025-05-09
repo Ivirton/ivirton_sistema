@@ -18,6 +18,7 @@ const appExpress = express(); //servidor express
 const server = http.createServer(appExpress);
 initializeSocket(server);  // Inicializa o Socket.IO
 
+
 appExpress.use(bodyParser.urlencoded({ extended: false }));
 appExpress.use(bodyParser.json());
 appExpress.use(express.json());

@@ -45,6 +45,9 @@ class TransmissaoModel {
     }
 
     async update(id, updates) {
+        //exemplo
+       // update: { 'placar/jogo/visitante/pontos': 1 },
+
         const transmissionRef = ref(dbFirebase, `/transmissao/${id}`);
         return update(transmissionRef, updates)
             .then(() => ({ message: "Transmissão atualizada com sucesso" }))
