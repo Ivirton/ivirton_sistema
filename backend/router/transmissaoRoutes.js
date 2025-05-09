@@ -1,6 +1,6 @@
 // backend/router/transmissaoRoutes.js
 import express from 'express';
-import TransmissaoController from '../controller/TransmissaoController.js';
+import TransmissaoController from '../controllers/TransmissaoController.js';
 
 const transmissaoRouter = express.Router();
 

@@ -2,7 +2,7 @@
 import express from 'express';
 const anuncioRouter = express.Router();
 import multer from 'multer';
-import AnuncioController from '../controller/anuncioController.js';
+import AnuncioController from '../controllers/anuncioController.js';
 
 const upload = multer({ dest: 'uploads/' });
 

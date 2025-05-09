@@ -7,7 +7,7 @@ import { FactorTrasmissaoSocket, FactorAnuncioSocket } from './factorySocket.js'
 // Função que inicializa e configura o servidor WebSocket
 const initializeSocket = (server) => {
     // Flag para ativar ou desativar o gerenciamento dos sockets personalizados
-    const ativado = false;
+    const ativado = true;
 
     // Cria uma instância do servidor Socket.io utilizando o servidor HTTP fornecido
     const io = new Server(server);
