@@ -49,11 +49,11 @@ onMounted(async () => {
         </div>
 
         <div class="anuncios">
-            <AnuncioRotativo v-for="(anuncio, index) in anuncios" :key="index" :imagemName="anuncio.nome || 'default.jpg'" />
+            <AnuncioRotativo v-for="(anuncio, index) in anuncios" :id="anuncio.id" :duracao="anuncio.duracao"  :imagemName="anuncio.nome" />
         </div>
     </main>
 
-    <modalUploadAnuncio />
+    <modalUploadAnuncio/>
 </template>
 
 <style>

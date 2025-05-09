@@ -8,6 +8,8 @@ import supabase from '../config/supabaseClient.js';
 const multerControler = {
     
     async createFile(file, nameBuckets, res) {
+        const utf8FileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+
         // Essa função recebe o arquivo enviado e o nome do bucket onde ele será salvo
         // Verifica se nenhum arquivo foi enviado pelo usuário
         if (!file) return res.status(400).send('Nenhum arquivo enviado.');

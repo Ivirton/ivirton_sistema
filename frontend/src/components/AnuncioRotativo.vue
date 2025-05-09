@@ -1,5 +1,6 @@
 <script setup>
 import CheckBoxInput from '@/components/CheckBoxInput.vue';
+import axios from 'axios';
 const props = defineProps({
     largura: {
         type: Number,
@@ -7,6 +8,12 @@ const props = defineProps({
     },
     imagemName: {
         type: String
+    },
+    id:{
+        type:String
+    },
+    duracao:{
+        type:Number
     }
 })
 
@@ -21,7 +28,21 @@ function toggleSelection(card, checkbox) {
 }
 
 function removerItem(id) {
-    document.getElementById(id).remove();
+    async function getAnuncio() {
+    try {
+        const response = await axios.delete(`/api/anuncios/${id}`);
+        if (response.data.erro) {
+            console.log('API não encontrada!');
+            return [];
+        } else {
+           
+            return response.data;
+        }
+    } catch (error) {
+        console.log('Erro ao buscar API:', error);
+        return [];
+    }
+}
 }
 </script>
 
@@ -34,7 +55,7 @@ function removerItem(id) {
         <div class="body_head">
             <CheckBoxInput />
             <input type="number" class="form-control" placeholder="0" aria-describedby="basic-addon2">
-            <a href="#" class="btn btn-danger" role="button">Remover</a>
+            <a href="#" class="btn btn-danger" @click="removerItem(props.id)" role="button">Remover</a>
             <i class="bi bi-x-square-fill"></i>
         </div>
 

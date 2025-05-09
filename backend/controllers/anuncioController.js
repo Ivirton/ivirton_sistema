@@ -7,8 +7,9 @@ const AnuncioController = {
 
     async create(req, res) {
         // Cria o objeto com os dados do anúncio, pegando informações do arquivo e do corpo da requisição
+        const utf8FileName = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
         const anun = {
-            nome: req.file.originalname,
+            nome: utf8FileName,
             duracao: req.body.duracao || 0,
             visibilidade: req.body.visibilidade || false
         };
@@ -20,6 +21,7 @@ const AnuncioController = {
                 multerControler.createFile(req.file, "imagens", res);
     
                 // Exibe e envia resposta de sucesso
+                //  res.status(200).json(data); // Envia como resposta
                 console.log({ message: "Documento criado com sucesso!", data });
                 // Atenção: esse `res.status(201).json(...)` pode ser chamado 2 vezes. Deve-se ajustar!
                 // Aqui poderia ser retirado e movido para dentro de `multerControler.createFile(...)`
@@ -69,7 +71,10 @@ const AnuncioController = {
         const { id } = req.params;
         console.log(id);
         try {
+            const data = await anuncioModel.findAt(id);
+            multerControler.deleteFile(data.nome, "imagens");//remove do subabase
             await anuncioModel.delete(id); // Remove do banco de dados
+            
             res.status(200).json({ message: "Documento deletado com sucesso!" });
         } catch (error) {
             res.status(500).json({ error: "Erro ao deletar documento", details: error.message });

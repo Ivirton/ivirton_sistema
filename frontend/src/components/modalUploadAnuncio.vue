@@ -36,7 +36,8 @@
   <script setup>
   import { ref } from 'vue'
   import axios from 'axios'
-  
+  import { defineProps,defineEmits } from 'vue'
+ 
   const duracao = ref(20)
   const visibilidade = ref(true)
   const imagem = ref(null)
@@ -57,6 +58,7 @@
           'Content-Type': 'multipart/form-data'
         }
       })
+      
       console.log('Anúncio enviado com sucesso!', response.data)
       // aqui você pode fechar o modal ou atualizar a lista
     } catch (error) {
