@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 //impotaçoes do projeto
-import initializeSocket from './backend/socketio.js';  
+import initializeSocket from './backend/socketsIO/socketio.js';  
 import transmissaoRouter from './backend/router/transmissaoRoutes.js';
 import anuncioRouter from './backend/router/anuncioRolter.js';
 dotenv.config();
