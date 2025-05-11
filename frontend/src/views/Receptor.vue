@@ -9,8 +9,9 @@
         />
 
         <Anuncios 
-            imagem="churrascaria_avenida.jpg"
-            :anuncios="transmissor.anuncios.rotativo"
+            imagem="https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//churrascaria_avenida.jpg"
+            :idTrasnmissao="transmissor.id"
+            :socket="socket"
         />
 
 

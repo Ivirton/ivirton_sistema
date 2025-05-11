@@ -120,8 +120,8 @@
                             </div>
                         </div>
                     </div>
-                       <!-- Acordeon item 1 d-->
-                       <div class="accordion-item">
+                    <!-- Acordeon item 1 d-->
+                    <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapsefive01" aria-expanded="true" aria-controls="collapsefive01">
@@ -130,8 +130,8 @@
                         </h2>
                         <div id="collapsefive01" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                               <img src="" alt="">
-                               <h1>ola</h1>
+                                <img src="" alt="">
+                                <h1>ola</h1>
                             </div>
                         </div>
                     </div>
@@ -166,6 +166,22 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Acordeon item Controle de anuncios-->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseAnun" aria-expanded="true" aria-controls="collapseAnun">
+                                Controle de Anúncios
+                            </button>
+                        </h2>
+                        <div id="collapseAnun" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ControlesAnuncio :socket="socket" :idTrasnmissao="route.query.id"
+                                    :anuncio="transmissor.anuncios.rotativo" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </article>
@@ -185,6 +201,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import socket from '@/socket';
 import Color from '@/components/Color.vue';
+import ControlesAnuncio from '@/components/transmissor/ControlesAnuncio.vue';
 
 
 const route = useRoute();
@@ -192,7 +209,9 @@ const id = ref(null);
 const receptor = ref(null);
 
 let data = null
-let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": {"visibilidade":true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, 
+"anuncios": {
+     "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true,"play":false } }, "id": null, "nome": "", "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
 
 // socket.on(`credenciar`, (menssagem) => {
 //     console.log(menssagem)

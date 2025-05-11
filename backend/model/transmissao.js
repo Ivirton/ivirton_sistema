@@ -7,7 +7,11 @@ const transmissorEntity = {
     anuncios: {
       rotativo: {
         posicao: { x: 0, y: 0, z: 0 },
-        visibilidade: true
+        visibilidade: true,
+        play:false,
+        imagem:"",
+        duracao:0,
+        indice:0
       }
     },
     id: null,

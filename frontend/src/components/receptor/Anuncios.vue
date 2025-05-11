@@ -1,20 +1,17 @@
 <template>
 
-    <section class="anuncios " >
-        <img class="anunciosImagem" :src='imagem'>
+    <section class="anuncios ">
+        <img class="anunciosImagem" :src='props.imagem'>
     </section>
 
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';
-import axios from 'axios';
-const anuncios = ref([]);
-const indice = 0;
-const interval = null
-const contador = 0;
-const imagem = ref(`https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//churrascaria_avenida.jpg`);
-
-
+// import axios from 'axios';
+// const anuncios = ref([]);
+// const indice = 0;
+// const interval = null
+// const contador = 0;
 const props = defineProps({
     idTrasnmissao: {
         type: String,
@@ -36,58 +33,85 @@ const props = defineProps({
     }
 
 })
-async function getAnuncio() {
-    try {
-        const response = await axios.get('/api/anuncios/');
-        if (response.data.erro) {
-            console.log('API não encontrada!');
-            return [];
-        } else {
-            console.log(response.data);
-            return response.data;
+// async function getAnuncio() {
+//     try {
+//         const response = await axios.get('/api/anuncios/');
+//         if (response.data.erro) {
+//             console.log('API não encontrada!');
+//             return [];
+//         } else {
+//             console.log(response.data);
+//             return response.data;
+//         }
+//     } catch (error) {
+//         console.log('Erro ao buscar API:', error);
+//         return [];
+//     }
+// }
+
+async function listen(porta, setValor) {
+    props.socket.on(porta, (menssagem) => {
+        if (menssagem.id == props.idTrasnmissao) {
+            console.log("RX")
+            console.log(menssagem)
+            setValor(menssagem.valor);
         }
-    } catch (error) {
-        console.log('Erro ao buscar API:', error);
-        return [];
-    }
+    });
 }
 
-function proximoIndice() {
-    if (indice < anuncios.length - 1) {
-        indice++;
-    } else {
-        indice = 0;
-    }
-    return indice;
-}
-function playAnuncio() {
-    interval = setInterval(() => {
-        if (duracao === contador) {
-            //   this.proximo()
-            contador = 0
-        }
+listen(`setImagemAnuncio${props.idTrasnmissao}`, (valor) => {
+    props.imagem = valor
+})
 
-        contador++
-    }, 1000)
-}
 
-function stopAnuncio() {
-    clearInterval(interval);
-}
-function setAnuncio() {
-    if (anuncios.length > 0) {
-        props.imagem = anuncios[indice].url;
-        playAnuncio();
-    }
-}
 
-onMounted(async () => {
-    anuncios.value = await getAnuncio();
 
-});
+
+
+
+
+
+
+
+
+
+
+// function proximoIndice() {
+//     if (indice < anuncios.length - 1) {
+//         indice++;
+//     } else {
+//         indice = 0;
+//     }
+//     return indice;
+// }
+// function playAnuncio() {
+//     interval = setInterval(() => {
+//         if (duracao === contador) {
+//             //   this.proximo()
+//             contador = 0
+//         }
+
+//         contador++
+//     }, 1000)
+// }
+
+// function stopAnuncio() {
+//     clearInterval(interval);
+// }
+// function setAnuncio() {
+//     if (anuncios.length > 0) {
+//         props.imagem = anuncios[indice].url;
+//         playAnuncio();
+//     }
+// }
+
+// onMounted(async () => {
+//     // anuncios.value = await getAnuncio();
+
+// });
 </script>
-<style scoped>
 
+<style scoped>
 .anunciosImagem {
     max-width: 300px;
 }
@@ -131,7 +155,4 @@ onMounted(async () => {
     /* animation: slide-dow 0.5s ease; */
     /* transform: translateY(1%); */
 }
-
-
-
 </style>

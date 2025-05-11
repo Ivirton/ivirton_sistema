@@ -1,5 +1,5 @@
 <template>
-      <div class="linha">
+    <div class="linha">
         <div class="linha">
             <div class="coluna">
                 <small>min</small>
@@ -37,7 +37,7 @@
             :idTrasnmissao="props.idTrasnmissao" :socket="props.socket" />
 
     </div>
-  
+
 
 </template>
 <script setup>
@@ -106,7 +106,7 @@ function sendData(key, valor) {
 
 .form-select {
     margin-left: 4px;
-    
+
 
 }
 
