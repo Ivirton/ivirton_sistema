@@ -49,11 +49,12 @@ onMounted(async () => {
         </div>
 
         <div class="anuncios">
-            <AnuncioRotativo v-for="(anuncio, index) in anuncios" :id="anuncio.id" :duracao="anuncio.duracao"  :imagemName="anuncio.nome" />
+            <AnuncioRotativo v-for="(anuncio, index) in anuncios" :id="anuncio.id" :duracao="anuncio.duracao"
+                :imagemName="anuncio.nome" />
         </div>
     </main>
 
-    <modalUploadAnuncio/>
+    <modalUploadAnuncio />
 </template>
 
 <style>
@@ -75,9 +76,6 @@ onMounted(async () => {
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 20px;
-}
-
-.main {
-    /* width: 100%; */
+    align-content: baseline;
 }
 </style>

@@ -14,7 +14,11 @@ const props = defineProps({
     },
     duracao:{
         type:Number
+    },
+    anuncio: {
+        type: Object
     }
+
 })
 
 const imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${props.imagemName}`

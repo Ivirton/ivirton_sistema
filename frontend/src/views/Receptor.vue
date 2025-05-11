@@ -8,11 +8,19 @@
             :idTrasnmissao="route.query.id" 
         />
 
+        <Anuncios 
+            imagem="churrascaria_avenida.jpg"
+            :anuncios="transmissor.anuncios.rotativo"
+        />
+
+
    
 </template>
 
 <script setup>
 import Scorebord1 from '@/components/receptor/Scorebord1.vue';
+import Anuncios from '@/components/receptor/Anuncios.vue';
+
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import socket from '@/socket';

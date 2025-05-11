@@ -1,7 +1,6 @@
 <template>
-    <section class="scorebord" v-if="placar.visibilidade"  
-    :style="{ left: props.placar.posicao.x + 'vw', top: props.placar.posicao.y + 'vh',zoom: props.placar.posicao.z + '%'}"
-    >
+    <section class="scorebord" v-if="placar.visibilidade"
+        :style="{ left: props.placar.posicao.x + 'vw', top: props.placar.posicao.y + 'vh', zoom: props.placar.posicao.z + '%' }">
         <div class="linha">
             <div class="equipes">
                 <div class="linha casa" :style="{ backgroundColor: props.placar.jogo.casa.color }">
@@ -60,7 +59,9 @@ function listen(porta, path, setValor) {
         }
     });
 }
-listen("score", "placar/jogo/partida/pontos", (valor) => props.placar.jogo.partida.pontos = valor)
+listen("score", "placar/jogo/partida/pontos", (valor) => {
+    props.placar.jogo.partida.pontos = valor
+})
 
 listen("nome", "placar/jogo/casa/nome", (valor) => props.placar.jogo.casa.nome = valor)
 listen("score", "placar/jogo/casa/pontos", (valor) => props.placar.jogo.casa.pontos = valor)
@@ -147,8 +148,8 @@ props.socket.on("color", (menssagem) => {
     background-color: black;
     animation: slide-up 0.5s ease;
     border-radius: 8px;
-   
-   
+
+
 
 }
 
@@ -169,6 +170,7 @@ props.socket.on("color", (menssagem) => {
     transform: translateY(20px);
     opacity: 0;
 }
+
 .cronometro {
     padding: 7px 10px 7px 10px;
     /* min-width: 68px; */

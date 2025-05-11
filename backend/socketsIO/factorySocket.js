@@ -55,5 +55,7 @@ class FactorAnuncioSocket extends FactorSocketIO {
     }
 }
 
+
+
 // Exporta as classes especializadas para serem usadas em outras partes do projeto
 export { FactorAnuncioSocket, FactorTrasmissaoSocket };

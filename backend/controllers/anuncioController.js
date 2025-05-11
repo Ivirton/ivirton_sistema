@@ -1,5 +1,6 @@
 // backend/controller/AnuncioController.js
 import anuncioModel from "../model/anuncioModel.js";
+import verificar from "../verificadores/anuncios.js";
 import multerControler from "./multerControler.js";
 
 
@@ -7,9 +8,9 @@ const AnuncioController = {
 
     async create(req, res) {
         // Cria o objeto com os dados do anúncio, pegando informações do arquivo e do corpo da requisição
-        const utf8FileName = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+        
         const anun = {
-            nome: utf8FileName,
+            nome: verificar.removerCaracteres(req.file.originalname),
             duracao: req.body.duracao || 0,
             visibilidade: req.body.visibilidade || false
         };
@@ -18,6 +19,7 @@ const AnuncioController = {
         anuncioModel.create(anun)
             .then((data) => {
                 // Envia o arquivo para a Supabase (no bucket 'imagens')
+                
                 multerControler.createFile(req.file, "imagens", res);
     
                 // Exibe e envia resposta de sucesso
