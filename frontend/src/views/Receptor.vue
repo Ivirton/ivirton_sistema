@@ -1,21 +1,11 @@
-
 <template>
-    
-        <Scorebord1 
-             path="placar/"
-            :placar="transmissor.placar"
-            :socket="socket"
-            :idTrasnmissao="route.query.id" 
-        />
 
-        <Anuncios 
-            imagem="https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//churrascaria_avenida.jpg"
-            :idTrasnmissao="transmissor.id"
-            :socket="socket"
-        />
+    <Scorebord1 path="placar/" :placar="transmissor.placar" :socket="socket" :idTrasnmissao="route.query.id" />
+
+    <Anuncios :imagem="transmissor.anuncios.rotativo.imagem" :idTrasnmissao="transmissor.id" :socket="socket" />
 
 
-   
+
 </template>
 
 <script setup>
@@ -30,7 +20,20 @@ const route = useRoute();
 const id = ref(null);
 
 let data = null
-let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, "anuncios": { "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } }, "id": null, "nome": "", "placar": { "cronometro": {"visibilidade":true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 ,color:"#596b57"}, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 ,color:"#596b57"} }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+let transmissor = reactive({
+    "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true },
+    "anuncios": {
+        rotativo: {
+            posicao: { x: 0, y: 0, z: 0 },
+            visibilidade: true,
+            play: false,
+            imagem: "",
+            duracao: 0,
+            indice: 0
+        }
+    }, "id": null, "nome": "",
+    "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0, color: "#596b57" }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0, color: "#596b57" } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true }
+})
 
 async function getTransmissao() {
     try {
@@ -58,8 +61,8 @@ onMounted(async () => {
         transmissor.anuncios = data.anuncios;
         transmissor.placar = data.placar;
         document.title += " " + data.nome;
-       
-        
+
+
     }
 });
 window.document.title = "Receptor"
@@ -71,6 +74,7 @@ body {
     width: 100%;
     height: 100vh;
 }
+
 .card {
     position: absolute;
     left: 200px;
@@ -86,18 +90,20 @@ body {
 
 * {
 
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-font-optical-sizing: auto;
-font-style: normal;
-color: #fff;
-box-sizing: border-box;
-padding: 0;
-margin: 0;
+    font-optical-sizing: auto;
+    font-style: normal;
+    color: #fff;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
-body{
+
+body {
     background-color: #ffffff00;
 }
+
 .glass-card {
     background: rgba(255, 255, 255, 0.1);
     /* Transparente */
@@ -113,5 +119,4 @@ body{
     color: #fff;
     text-align: center;
 }
-
 </style>

@@ -22,37 +22,126 @@ class FactorSocketIO {
                     console.error("Mensagem inválida recebida na porta", porta);
                     return;
                 }
-
-                // Atualiza os dados no banco de dados usando o ID e os novos dados
-                this.model.update(menssagem.id, menssagem.update)
-                    .then((result) => console.log(result))
-                    .catch((err) => console.error(err));
+                if (menssagem.update) {
+                    this.update(menssagem.id, menssagem.update)
+                }
 
                 // Emite a mesma mensagem para todos os clientes conectados
                 this.io.emit(porta, menssagem);
                 console.log(menssagem);
             });
         });
+
     }
 
-    // Adiciona uma nova porta (evento) à lista que será escutada
+    update(id, update) {
+        // Atualiza os dados no banco de dados usando o ID e os novos dados
+        this.model.update(id, update)
+            .then((result) => console.log(result))
+            .catch((err) => console.error(err));
+    }
+
+
     addPorta(porta) {
         this.portas.push(porta);
     }
+    listenOn(porta, callBack) {
+        this.socket.on(porta, (menssagem) => {
+            if (!menssagem) {
+                console.error("Mensagem inválida recebida na porta", porta);
+                return;
+            }
+            callBack(menssagem);
+        });
+    }
 }
 
-// Classe especializada para tratar transmissões usando o transmissaoModel
+
 class FactorTrasmissaoSocket extends FactorSocketIO {
     constructor(io, socket) {
         super(io, socket, transmissaoModel);
+
+        this.addPorta("score");
+        this.addPorta("nome");
+        this.addPorta("visibilidade");
+        this.addPorta("posicao");
+        this.addPorta("cronometro");
+        this.addPorta("color");
+        this.listenOn("transmissorSetAnuncioPlay", (valor) => {
+            console.log("Play anuncios")
+        });
+
+         this.socket.on("setImagemAnuncio", (menssagem) => {
+            this.io.emit("setImagemAnuncio", menssagem);
+            console.log(menssagem);
+        });
+
+
     }
+
 }
 
-// Classe especializada para tratar anúncios usando o anuncioModel
+
 class FactorAnuncioSocket extends FactorSocketIO {
     constructor(io, socket) {
         super(io, socket, anuncioModel);
+        this.anuncios = [];
+        this.chaves = 0;
+        this.indiceAtual = 0;
+
+        this.gerAnuncios();
+
+
+
+    
+        this.listenOn("backward", (valor) => {
+            const anuncio = this.voltarAnuncio()
+            console.log(anuncio)
+           
+            this.io.emit("setImagemAnuncio",  anuncio);
+        });
+
+
+        this.listenOn("forward", (valor) => {
+            const anuncio = this.avancarAnuncio()
+            console.log(anuncio)
+            this.io.emit("setImagemAnuncio",  anuncio );
+
+        });
+
+       
+
     }
+
+
+    async gerAnuncios() {
+        this.anuncios = await anuncioModel.findAll()
+        this.chaves = Object.keys(this.anuncios);
+    }
+
+    avancarAnuncio() {
+        if (this.indiceAtual < this.chaves.length - 1) {
+            this.indiceAtual++;
+        } else {
+            this.indiceAtual = 0; // loop para o início
+            this.gerAnuncios()
+            console.log("Lista atualizada")
+        }
+        return this.anuncios[this.chaves[this.indiceAtual]];
+    }
+
+    voltarAnuncio() {
+        if (this.indiceAtual > 0) {
+            this.indiceAtual--;
+        } else {
+            this.indiceAtual = this.chaves.length - 1; // loop para o final
+            console.log("Lista atualizada")
+
+            this.gerAnuncios()
+        }
+        return this.anuncios[this.chaves[this.indiceAtual]];
+    }
+
 }
 
 

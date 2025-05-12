@@ -178,6 +178,7 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <ControlesAnuncio :socket="socket" :idTrasnmissao="route.query.id"
+                                    path="anuncios/rotativo"
                                     :anuncio="transmissor.anuncios.rotativo" />
                             </div>
                         </div>

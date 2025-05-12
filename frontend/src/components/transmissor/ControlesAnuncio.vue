@@ -4,7 +4,7 @@
         <i v-if="props.anuncio.play" class="fas fa-pause" @click="play()"></i>
         <i v-else class="fas fa-play" @click="play()"></i>
         <i class="fas fa-step-forward" aria-hidden="true" @click="forward"></i>
-       
+
     </div>
 </template>
 <script setup>
@@ -29,12 +29,22 @@ const props = defineProps({
     }
 
 })
-function backward(){
-   console.log("Voltar")
+function backward() {
+    console.log("Voltar")
+    props.socket.emit(`backward`, {
+        "id": props.idTrasnmissao,
+        socketId: props.socket.id,
+        "acao": "backward"
+    });
 }
-function forward(){
+function forward() {
     console.log("Avançar")
-    
+    props.socket.emit(`forward`, {
+        "id": props.idTrasnmissao,
+        socketId: props.socket.id,
+        "acao": "forward"
+    });
+
 }
 function play() {
     props.anuncio.play = !props.anuncio.play
@@ -48,8 +58,8 @@ function stop() {
 }
 function sendData(key, valor) {
 
-    props.socket.emit(`transmissorSetAnuncioPlay${props.idTrasnmissao}`, {
-        "idTrasnmissao": props.idTrasnmissao,
+    props.socket.emit(`transmissorSetAnuncioPlay`, {
+        "id": props.idTrasnmissao,
         socketId: props.socket.id,
         update: { [`${props.path}/${key}`]: valor },
         valor: valor,
@@ -57,6 +67,12 @@ function sendData(key, valor) {
         path: `${props.path}/${key}`
     });
 }
+
+
+props.socket.on("setImagemAnuncio", (menssagem) => {
+   console.log(menssagem)
+});
+
 
 </script>
 

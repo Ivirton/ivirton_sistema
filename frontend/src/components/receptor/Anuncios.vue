@@ -7,11 +7,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';
-// import axios from 'axios';
-// const anuncios = ref([]);
-// const indice = 0;
-// const interval = null
-// const contador = 0;
+
 const props = defineProps({
     idTrasnmissao: {
         type: String,
@@ -33,47 +29,12 @@ const props = defineProps({
     }
 
 })
-// async function getAnuncio() {
-//     try {
-//         const response = await axios.get('/api/anuncios/');
-//         if (response.data.erro) {
-//             console.log('API não encontrada!');
-//             return [];
-//         } else {
-//             console.log(response.data);
-//             return response.data;
-//         }
-//     } catch (error) {
-//         console.log('Erro ao buscar API:', error);
-//         return [];
-//     }
-// }
 
-async function listen(porta, setValor) {
-    props.socket.on(porta, (menssagem) => {
-        if (menssagem.id == props.idTrasnmissao) {
-            console.log("RX")
-            console.log(menssagem)
-            setValor(menssagem.valor);
-        }
-    });
-}
-
-listen(`setImagemAnuncio${props.idTrasnmissao}`, (valor) => {
-    props.imagem = valor
-})
-
-
-
-
-
-
-
-
-
-
-
-
+props.socket.on("setImagemAnuncio", (menssagem) => {
+    console.log(menssagem)
+    props.imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${menssagem.nome}`
+    
+});
 
 
 // function proximoIndice() {
