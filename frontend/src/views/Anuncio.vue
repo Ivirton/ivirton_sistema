@@ -34,23 +34,16 @@ onMounted(async () => {
 
     <main class="main">
         <div class="header">
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">Ações</button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            data-bs-whatever="@mdo">Adicionar</a></li>
-                    <li><a class="dropdown-item" href="#">Ativar</a></li>
-                    <li><a class="dropdown-item" href="#">Desativar</a></li>
-                    <li><a class="dropdown-item text-danger" href="#">Remover todos</a></li>
-                </ul>
-            </div>
+
+            <li><a  href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    data-bs-whatever="@mdo">Adicionar</a></li>
+            
             <div class="linha"></div>
         </div>
 
         <div class="anuncios">
             <AnuncioRotativo v-for="(anuncio, index) in anuncios" :id="anuncio.id" :duracao="anuncio.duracao"
-                :imagemName="anuncio.nome" />
+                :imagemName="anuncio.nome" :socket="socket" />
         </div>
     </main>
 

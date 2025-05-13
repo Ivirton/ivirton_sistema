@@ -70,7 +70,10 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         this.addPorta("cronometro");
         this.addPorta("color");
         this.addPorta("transmissorSetAnuncioPlay");
-
+        this.addPorta("setContadorAnuncio");
+        this.listenOn("setContadorAnuncio", (data) => {
+            console.log(data);
+        })
     }
 
 }
@@ -94,24 +97,24 @@ class FactorAnuncioSocket extends FactorSocketIO {
         this.contador = 0;
         this.anuncioAtual = { duracao: 10 };
         this.gerAnuncios();
-        
-
-
-
         instanciaUnica = this;
     }
 
     // Define o socket manualmente (por cliente conectado)
     setSocket(socket) {
         this.socket = socket;
-
+        
         this.socket.on("setImagemAnuncio", (menssagem) => {
             this.io.emit("setImagemAnuncio", menssagem);
+        });
+         this.listenOn("duracao", (data) => {
+            console.log(data);
+            this.update(data.id, data.update);
         });
 
         this.listenOn("transmissorSetAnuncioPlay", (data) => {
             this.veificarAnuncio(data);
-           
+
             console.log(data);
         });
 
@@ -141,9 +144,7 @@ class FactorAnuncioSocket extends FactorSocketIO {
                 console.log(this.anuncioAtual)
                 this.contador = 0;
             }
-            console.log("Contador: " + this.contador);
-            console.log("duracao: " + this.anuncioAtual.duracao);
-
+            console.log(this.contador);
             this.contador++;
         }, 1000);
     }
@@ -157,10 +158,11 @@ class FactorAnuncioSocket extends FactorSocketIO {
     }
 
     async gerAnuncios() {
-         this.anuncios = await anuncioModel.findAll();
+        this.anuncios = await anuncioModel.findAll();
         this.chaves = Object.keys(this.anuncios);
         this.anuncioAtual = this.anuncios[this.chaves[0]];
-        console.log(this.anuncioAtual);
+
+        this.avancarAnuncio()
 
     }
 
@@ -172,6 +174,7 @@ class FactorAnuncioSocket extends FactorSocketIO {
             this.gerAnuncios();
         }
         this.anuncioAtual = this.anuncios[this.chaves[this.indiceAtual]];
+        console.log(this.anuncioAtual);
         this.io.emit("setImagemAnuncio", this.anuncioAtual);
     }
 

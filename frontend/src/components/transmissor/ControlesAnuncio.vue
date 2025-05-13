@@ -1,5 +1,12 @@
 <template>
-    
+    <div class="linha">
+         <section class="coluna" >
+            <img class="anunciosImagem" :src="props.imagem" alt="" srcset="">
+            <p>Duracao:{{ props.duracao }}</p>
+            
+
+        </section>
+
         <div style="display: flex;align-content: center; align-items: center;">
             <i class="fas fa-step-backward" aria-hidden="true" @click="backward"></i>
             <i v-if="props.anuncio.play" class="fas fa-pause" @click="play()"></i>
@@ -8,8 +15,8 @@
 
         </div>
 
+    </div>
 
-    
 </template>
 <script setup>
 
@@ -31,6 +38,15 @@ const props = defineProps({
     },
     anuncio: {
         type: Object
+    },
+    imagem: {
+        type: String
+    },
+    duracao: {
+        type: Number
+    },
+    nome: {
+        type: String
     }
 
 })
@@ -84,8 +100,11 @@ props.socket.on(`transmissorSetAnuncioPlay`, (menssagem) => {
     }
 });
 props.socket.on("setImagemAnuncio", (menssagem) => {
-    
-    
+    console.log(menssagem)
+    props.imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${menssagem.nome}`
+    props.duracao = menssagem.duracao
+    props.nome = menssagem.nome
+
 });
 
 
@@ -99,8 +118,11 @@ props.socket.on("setImagemAnuncio", (menssagem) => {
 
 
 .anunciosImagem {
-    max-width: 300px;
+    max-width: 200px;
+    border: 1px solid #3d3c3c;
+    border-radius: 5px;
 }
+
 
 
 

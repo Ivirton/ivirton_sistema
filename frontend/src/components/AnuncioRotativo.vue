@@ -2,10 +2,6 @@
 import CheckBoxInput from '@/components/CheckBoxInput.vue';
 import axios from 'axios';
 const props = defineProps({
-    largura: {
-        type: Number,
-
-    },
     imagemName: {
         type: String
     },
@@ -17,8 +13,10 @@ const props = defineProps({
     },
     anuncio: {
         type: Object
+    },
+    socket: {
+        type: Object
     }
-
 })
 
 const imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${props.imagemName}`
@@ -48,22 +46,35 @@ function removerItem(id) {
     }
 }
 }
+props.socket.on(`duracao`, (menssagem) => {
+    if (props.socket.id != menssagem.socketId && menssagem.id == props.id) {
+        console.log("RX")
+        console.log(menssagem)
+        props.duracao = menssagem.valor
+    }
+});
+
+function sendData() {
+    props.socket.emit(`duracao`, {
+        id: props.id,
+        socketId: props.socket.id,
+        update: { 'duracao': props.duracao },
+        valor: props.duracao
+    });
+}
+
+
 </script>
 
 <template>
     <div class="carde">
-
-
-
-        <img :src="imagem" class="" alt="...">
+        <img :src="imagem" >
         <div class="body_head">
             <CheckBoxInput />
-            <input type="number" class="form-control" placeholder="0" aria-describedby="basic-addon2">
+            <input type="number" class="form-control" placeholder="0" v-model="props.duracao" @input="sendData()" aria-describedby="basic-addon2">
             <a href="#" class="btn btn-danger" @click="removerItem(props.id)" role="button">Remover</a>
             <i class="bi bi-x-square-fill"></i>
         </div>
-
-
     </div>
 
 </template>

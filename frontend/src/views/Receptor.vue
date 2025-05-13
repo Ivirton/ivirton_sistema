@@ -2,7 +2,7 @@
 
     <Scorebord1 path="placar/" :placar="transmissor.placar" :socket="socket" :idTrasnmissao="route.query.id" />
 
-    <Anuncios :imagem="transmissor.anuncios.rotativo.imagem" :idTrasnmissao="transmissor.id" :socket="socket" />
+    <Anuncios path="anuncios/rotativo" :anuncios="transmissor.anuncios.rotativo" :imagem="transmissor.anuncios.rotativo.imagem" :idTrasnmissao="transmissor.id" :socket="socket" />
 
 
 

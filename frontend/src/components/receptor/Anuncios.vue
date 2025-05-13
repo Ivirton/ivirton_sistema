@@ -1,6 +1,7 @@
 <template>
 
-    <section class="anuncios ">
+    <section class="anuncios " v-if="anuncios.visibilidade"
+     :style="{ left: props.anuncios.posicao.x + 'vw', top: props.anuncios.posicao.y + 'vh', zoom: props.anuncios.posicao.z + '%' }" >
         <img class="anunciosImagem" :src='props.imagem'>
     </section>
 
@@ -36,40 +37,29 @@ props.socket.on("setImagemAnuncio", (menssagem) => {
     
 });
 
+function listen(porta, path, setValor) {
+    props.socket.on(porta, (menssagem) => {
+        if (path == menssagem['path'] && props.socket.id != menssagem.socketId && menssagem.id == props.idTrasnmissao) {
+            console.log("RX")
+            console.log(menssagem)
+            setValor(menssagem.valor);
+        }
+    });
+}
+listen("visibilidade", "anuncios/rotativo/visibilidade", (valor) => {
+    props.anuncios.visibilidade = valor
+})
+listen("posicao", "anuncios/rotativo/posicao/x", (valor) => {
+    props.anuncios.posicao.x = valor
+})
+listen("posicao", "anuncios/rotativo/posicao/y", (valor) => {
+    props.anuncios.posicao.y = valor
+})
+listen("posicao", "anuncios/rotativo/posicao/z", (valor) => {
+    props.anuncios.posicao.z = valor
+})
 
-// function proximoIndice() {
-//     if (indice < anuncios.length - 1) {
-//         indice++;
-//     } else {
-//         indice = 0;
-//     }
-//     return indice;
-// }
-// function playAnuncio() {
-//     interval = setInterval(() => {
-//         if (duracao === contador) {
-//             //   this.proximo()
-//             contador = 0
-//         }
 
-//         contador++
-//     }, 1000)
-// }
-
-// function stopAnuncio() {
-//     clearInterval(interval);
-// }
-// function setAnuncio() {
-//     if (anuncios.length > 0) {
-//         props.imagem = anuncios[indice].url;
-//         playAnuncio();
-//     }
-// }
-
-// onMounted(async () => {
-//     // anuncios.value = await getAnuncio();
-
-// });
 </script>
 
 <style scoped>
