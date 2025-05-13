@@ -51,7 +51,9 @@ class FactorSocketIO {
                 console.error("Mensagem inválida recebida na porta", porta);
                 return;
             }
+            this.io.emit(porta, menssagem);
             callBack(menssagem);
+
         });
     }
 }
@@ -67,84 +69,122 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         this.addPorta("posicao");
         this.addPorta("cronometro");
         this.addPorta("color");
-        this.listenOn("transmissorSetAnuncioPlay", (valor) => {
-            console.log("Play anuncios")
-        });
-
-         this.socket.on("setImagemAnuncio", (menssagem) => {
-            this.io.emit("setImagemAnuncio", menssagem);
-            console.log(menssagem);
-        });
-
+        this.addPorta("transmissorSetAnuncioPlay");
 
     }
 
 }
 
 
+let instanciaUnica = null;
+
 class FactorAnuncioSocket extends FactorSocketIO {
-    constructor(io, socket) {
-        super(io, socket, anuncioModel);
+    constructor(io) {
+        if (instanciaUnica) {
+            return instanciaUnica;
+        }
+
+        super(io, null, anuncioModel);
+        this.io = io;
         this.anuncios = [];
-        this.chaves = 0;
+        this.chaves = [];
         this.indiceAtual = 0;
-
+        this.reproduzindo = false;
+        this.interval = null;
+        this.contador = 0;
+        this.anuncioAtual = { duracao: 10 };
         this.gerAnuncios();
+        
 
 
 
-    
-        this.listenOn("backward", (valor) => {
-            const anuncio = this.voltarAnuncio()
-            console.log(anuncio)
-           
-            this.io.emit("setImagemAnuncio",  anuncio);
-        });
-
-
-        this.listenOn("forward", (valor) => {
-            const anuncio = this.avancarAnuncio()
-            console.log(anuncio)
-            this.io.emit("setImagemAnuncio",  anuncio );
-
-        });
-
-       
-
+        instanciaUnica = this;
     }
 
+    // Define o socket manualmente (por cliente conectado)
+    setSocket(socket) {
+        this.socket = socket;
+
+        this.socket.on("setImagemAnuncio", (menssagem) => {
+            this.io.emit("setImagemAnuncio", menssagem);
+        });
+
+        this.listenOn("transmissorSetAnuncioPlay", (data) => {
+            this.veificarAnuncio(data);
+           
+            console.log(data);
+        });
+
+        this.listenOn("backward", () => this.voltarAnuncio());
+        this.listenOn("forward", () => this.avancarAnuncio());
+    }
+
+    veificarAnuncio(data) {
+        if (data.valor === true) {
+            this.startRotativo();
+        } else {
+            this.pararRotativo();
+        }
+    }
+
+    startRotativo() {
+        if (this.reproduzindo || this.anuncios.length === 0) return;
+        this.reproduzindo = true;
+        this.executarAnuncioRotativo();
+    }
+
+    executarAnuncioRotativo() {
+        this.interval = setInterval(() => {
+            if (this.anuncioAtual.duracao <= this.contador) {
+                this.avancarAnuncio();
+                console.log("anuncio atual");
+                console.log(this.anuncioAtual)
+                this.contador = 0;
+            }
+            console.log("Contador: " + this.contador);
+            console.log("duracao: " + this.anuncioAtual.duracao);
+
+            this.contador++;
+        }, 1000);
+    }
+
+    pararRotativo() {
+        this.reproduzindo = false;
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+    }
 
     async gerAnuncios() {
-        this.anuncios = await anuncioModel.findAll()
+         this.anuncios = await anuncioModel.findAll();
         this.chaves = Object.keys(this.anuncios);
+        this.anuncioAtual = this.anuncios[this.chaves[0]];
+        console.log(this.anuncioAtual);
+
     }
 
     avancarAnuncio() {
         if (this.indiceAtual < this.chaves.length - 1) {
             this.indiceAtual++;
         } else {
-            this.indiceAtual = 0; // loop para o início
-            this.gerAnuncios()
-            console.log("Lista atualizada")
+            this.indiceAtual = 0;
+            this.gerAnuncios();
         }
-        return this.anuncios[this.chaves[this.indiceAtual]];
+        this.anuncioAtual = this.anuncios[this.chaves[this.indiceAtual]];
+        this.io.emit("setImagemAnuncio", this.anuncioAtual);
     }
 
     voltarAnuncio() {
         if (this.indiceAtual > 0) {
             this.indiceAtual--;
         } else {
-            this.indiceAtual = this.chaves.length - 1; // loop para o final
-            console.log("Lista atualizada")
-
-            this.gerAnuncios()
+            this.indiceAtual = this.chaves.length - 1;
+            this.gerAnuncios();
         }
-        return this.anuncios[this.chaves[this.indiceAtual]];
+        this.anuncioAtual = this.anuncios[this.chaves[this.indiceAtual]];
+        this.io.emit("setImagemAnuncio", this.anuncioAtual);
     }
-
 }
 
-
-
-// Exporta as classes especializadas para serem usadas em outras partes do projeto
 export { FactorAnuncioSocket, FactorTrasmissaoSocket };

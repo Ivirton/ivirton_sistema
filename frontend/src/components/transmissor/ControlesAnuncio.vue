@@ -1,13 +1,21 @@
 <template>
-    <div style="display: flex;align-content: center; align-items: center;">
-        <i class="fas fa-step-backward" aria-hidden="true" @click="backward"></i>
-        <i v-if="props.anuncio.play" class="fas fa-pause" @click="play()"></i>
-        <i v-else class="fas fa-play" @click="play()"></i>
-        <i class="fas fa-step-forward" aria-hidden="true" @click="forward"></i>
+    
+        <div style="display: flex;align-content: center; align-items: center;">
+            <i class="fas fa-step-backward" aria-hidden="true" @click="backward"></i>
+            <i v-if="props.anuncio.play" class="fas fa-pause" @click="play()"></i>
+            <i v-else class="fas fa-play" @click="play()"></i>
+            <i class="fas fa-step-forward" aria-hidden="true" @click="forward"></i>
 
-    </div>
+        </div>
+
+
+    
 </template>
 <script setup>
+
+
+
+
 const props = defineProps({
     idTrasnmissao: {
         type: String,
@@ -23,9 +31,6 @@ const props = defineProps({
     },
     anuncio: {
         type: Object
-    },
-    imagem: {
-        type: String
     }
 
 })
@@ -69,8 +74,18 @@ function sendData(key, valor) {
 }
 
 
+
+props.socket.on(`transmissorSetAnuncioPlay`, (menssagem) => {
+    console.log(menssagem)
+    if ("anuncios/rotativo/play" == menssagem['path'] && props.socket.id != menssagem.socketId && menssagem.id == props.idTrasnmissao) {
+        console.log("RX")
+        console.log(menssagem)
+        props.anuncio.play = menssagem.valor
+    }
+});
 props.socket.on("setImagemAnuncio", (menssagem) => {
-   console.log(menssagem)
+    
+    
 });
 
 
@@ -81,6 +96,20 @@ props.socket.on("setImagemAnuncio", (menssagem) => {
     display: flex;
     flex-direction: column;
 }
+
+
+.anunciosImagem {
+    max-width: 300px;
+}
+
+
+
+.anuncios {
+    transition: 500ms ease-in-out;
+    position: absolute;
+    animation: slide-up 0.5s ease;
+}
+
 
 .fas {
     font-size: 12px;
