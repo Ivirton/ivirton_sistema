@@ -59,10 +59,37 @@ class FactorSocketIO {
 }
 
 
-class FactorTrasmissaoSocket extends FactorSocketIO {
-    constructor(io, socket) {
-        super(io, socket, transmissaoModel);
+// class FactorTrasmissaoSocket extends FactorSocketIO {
+//     constructor(io, socket) {
+//         super(io, socket, transmissaoModel);
 
+//         this.addPorta("score");
+//         this.addPorta("nome");
+//         this.addPorta("visibilidade");
+//         this.addPorta("posicao");
+//         this.addPorta("cronometro");
+//         this.addPorta("color");
+//         this.addPorta("transmissorSetAnuncioPlay");
+//         this.addPorta("setContadorAnuncio");
+//         this.listenOn("setContadorAnuncio", (data) => {
+//             console.log(data);
+//         })
+//     }
+
+// }
+let instanciaUnicaTransmissao = null;
+class FactorTrasmissaoSocket extends FactorSocketIO {
+    constructor(io) {
+        if (instanciaUnicaTransmissao) {
+            return instanciaUnicaTransmissao;
+        }
+        super(io, null, transmissaoModel);
+        instanciaUnicaTransmissao = this;
+
+
+    }
+    setSocket(socket) {
+        this.socket = socket;
         this.addPorta("score");
         this.addPorta("nome");
         this.addPorta("visibilidade");
@@ -80,7 +107,6 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
 
 
 let instanciaUnica = null;
-
 class FactorAnuncioSocket extends FactorSocketIO {
     constructor(io) {
         if (instanciaUnica) {
@@ -103,11 +129,11 @@ class FactorAnuncioSocket extends FactorSocketIO {
     // Define o socket manualmente (por cliente conectado)
     setSocket(socket) {
         this.socket = socket;
-        
+
         this.socket.on("setImagemAnuncio", (menssagem) => {
             this.io.emit("setImagemAnuncio", menssagem);
         });
-         this.listenOn("duracao", (data) => {
+        this.listenOn("duracao", (data) => {
             console.log(data);
             this.update(data.id, data.update);
         });

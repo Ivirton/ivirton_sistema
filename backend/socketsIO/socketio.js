@@ -11,25 +11,18 @@ const initializeSocket = (server) => {
 
     // Cria uma instância do servidor Socket.io utilizando o servidor HTTP fornecido
     const io = new Server(server);
+    // Cria um gerenciador de sockets para transmissão
+        let transmissaoSocket = new FactorTrasmissaoSocket(io);
     const anunciosSocket = new FactorAnuncioSocket(io);
     // Evento disparado sempre que um novo cliente se conecta ao WebSocket
     io.on('connection', (socket) => {
         console.log('Cliente conectado:', socket.id);
-        // Só executa a lógica abaixo se a flag "ativado" for true
-
-        // Cria um gerenciador de sockets para transmissão
-        let transmissaoSocket = new FactorTrasmissaoSocket(io, socket);
-        // Ativa os listeners das portas adicionadas
+        transmissaoSocket.setSocket(socket);
         transmissaoSocket.listen();
-        // Cria e configura o socket de anúncios
-        // let anunciosSocket = new FactorAnuncioSocket(io, socket);
-
-        // Adiciona portas específicas para o socket de anúncios
-        // anunciosSocket.listen();
+        
+       
         anunciosSocket.setSocket(socket);
 
-
-        // Evento chamado quando um cliente se desconecta
         socket.on('disconnect', () => {
 
         });
