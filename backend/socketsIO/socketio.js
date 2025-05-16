@@ -20,9 +20,8 @@ const initializeSocket = (server) => {
         transmissaoSocket.setSocket(socket);
         transmissaoSocket.listen();
         
-       
+    
         anunciosSocket.setSocket(socket);
-
         socket.on('disconnect', () => {
 
         });

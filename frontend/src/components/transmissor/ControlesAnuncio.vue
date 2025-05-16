@@ -1,18 +1,20 @@
 <template>
     <div class="linha">
-         <section class="coluna" >
+        <section class="coluna">
             <img class="anunciosImagem" :src="props.imagem" alt="" srcset="">
-            <p>Duracao:{{ props.duracao }}</p>
-            
+
+
 
         </section>
+        <div class="coluna">
+            <p>Duracao:{{ props.duracao }}/{{ props.contador }}</p>
+            <div style="display: flex;align-content: center; align-items: center;">
+                <i class="fas fa-step-backward" aria-hidden="true" @click="backward"></i>
+                <i v-if="props.anuncio.play" class="fas fa-pause" @click="play()"></i>
+                <i v-else class="fas fa-play" @click="play()"></i>
+                <i class="fas fa-step-forward" aria-hidden="true" @click="forward"></i>
 
-        <div style="display: flex;align-content: center; align-items: center;">
-            <i class="fas fa-step-backward" aria-hidden="true" @click="backward"></i>
-            <i v-if="props.anuncio.play" class="fas fa-pause" @click="play()"></i>
-            <i v-else class="fas fa-play" @click="play()"></i>
-            <i class="fas fa-step-forward" aria-hidden="true" @click="forward"></i>
-
+            </div>
         </div>
 
     </div>
@@ -47,6 +49,9 @@ const props = defineProps({
     },
     nome: {
         type: String
+    },
+    contador: {
+        type: Number
     }
 
 })
@@ -105,6 +110,10 @@ props.socket.on("setImagemAnuncio", (menssagem) => {
     props.duracao = menssagem.duracao
     props.nome = menssagem.nome
 
+});
+props.socket.on("setContadorAnuncio", (menssagem) => {
+
+    props.contador = menssagem.contador
 });
 
 

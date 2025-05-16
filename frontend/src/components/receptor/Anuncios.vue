@@ -36,6 +36,9 @@ props.socket.on("setImagemAnuncio", (menssagem) => {
     props.imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${menssagem.nome}`
     
 });
+props.socket.on("setContadorAnuncio", (menssagem) => {
+    console.log(menssagem) 
+});
 
 function listen(porta, path, setValor) {
     props.socket.on(porta, (menssagem) => {

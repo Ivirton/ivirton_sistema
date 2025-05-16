@@ -4,7 +4,8 @@
 import transmissaoModel from '../model/transmissaoModel.js';
 import anuncioModel from '../model/anuncioModel.js';
 
-// Classe genérica para criação de sockets dinâmicos que interagem com o banco de dados
+
+
 class FactorSocketIO {
     constructor(io, socket, model) {
         this.io = io;              // Instância do servidor Socket.IO
@@ -51,8 +52,9 @@ class FactorSocketIO {
                 console.error("Mensagem inválida recebida na porta", porta);
                 return;
             }
-            this.io.emit(porta, menssagem);
+
             callBack(menssagem);
+            this.io.emit(porta, menssagem);
 
         });
     }
@@ -84,6 +86,18 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
             return instanciaUnicaTransmissao;
         }
         super(io, null, transmissaoModel);
+        this.id = undefined;
+        this.interval = null;
+        this.rorando = false
+        this.cronometro = {
+            duracao: 60,
+            hora: 0,
+            icone: true,
+            minuto: 0,
+            segundo: 1,
+            tipo: '0',
+            visibilidade: true
+        }
         instanciaUnicaTransmissao = this;
 
 
@@ -94,13 +108,156 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         this.addPorta("nome");
         this.addPorta("visibilidade");
         this.addPorta("posicao");
-        this.addPorta("cronometro");
+        // this.addPorta("cronometro");
         this.addPorta("color");
         this.addPorta("transmissorSetAnuncioPlay");
         this.addPorta("setContadorAnuncio");
         this.listenOn("setContadorAnuncio", (data) => {
             console.log(data);
         })
+
+
+
+        this.listenOn("cronometro", async (data) => {
+            console.log(data);
+            this.id = data.id;
+            this.update(data.id, data.update);
+            switch (data.key) {
+                case "icone":
+                    if (data.valor === true) {
+                        if(!this.rorando){
+                            this.getCronometro(data)
+                        }
+                        this.play()
+                    } else if (data.valor === false) {
+                        this.pause()
+                    }
+                    break
+                case "segundo":
+                    if (!this.cronometroStatus()) {
+                        this.cronometro.segundo = data.valor
+                    }
+
+                    break
+                case "minuto":
+                    if (!this.cronometroStatus()) {
+                        this.cronometro.minuto = data.valor
+                    }
+
+                    break
+                case "duracao":
+                    if (!this.cronometroStatus()) {
+                        this.cronometro.duracao = data.valor
+                    }
+                    break
+                case "tipo":
+                    this.cronometro.tipo = data.valor
+                    break
+            }
+        
+
+        })
+
+
+    }
+    sendData(key, valor) {
+
+        this.io.emit(`cronometro`, {
+            "id": this.id,
+            socketId: this.socket.id,
+            update: { [`placar/cronometro/${key}`]: valor },
+            valor: valor,
+            key: key,
+            path: `placar/cronometro/${key}`
+        });
+    }
+    //cronometro
+    async getCronometro(data) {
+        try {
+            const transmiss = await this.model.findAt(data.id);
+            this.cronometro = transmiss.placar.cronometro;
+        } catch (err) {
+            console.error("Erro ao buscar cronômetro:", err);
+        }
+
+    }
+    play() {
+        if (this.interval) return; // já está rodando
+        this.interval = setInterval(() => {
+            if(!this.rorando){
+                
+            }
+            if (this.cronometro.tipo === '0') {
+                this.contagemProgressiva();
+                this.cronometro.icone = true;
+                this.rorando = true
+            } else if (this.cronometro.tipo === '1') {
+                this.contagemRegressiva();
+                this.cronometro.icone = true;
+                this.rorando = true
+            }
+        }, 1000);
+    }
+    stop() {
+        clearInterval(this.interval);
+        this.interval = null;
+        this.cronometro.minuto = 0
+        this.cronometro.segundo = 0
+        this.cronometro.icone = false;
+        this.rorando = false
+        //enviarMensagemSocket(this.transmissao.id_transmissao, "id_cronometro", this.transmissao.id_cronometro, "minuto", this.transmissao.minuto)
+        //enviarMensagemSocket(this.transmissao.id_transmissao, "id_cronometro", this.transmissao.id_cronometro, "segundo", this.transmissao.segundo)
+    }
+    pause() {
+        clearInterval(this.interval);
+        this.interval = null;
+        this.cronometro.icone = false;
+        this.rorando = false;
+    }
+    cronometroStatus() {
+        return !!(this.rodando && this.cronometro.icone);
+    }
+    contagemProgressiva() {
+        if (this.cronometro.minuto === this.cronometro.duracao) {
+            this.cronometro.minuto = 0
+            this.cronometro.segundo = 0
+        }
+        else {
+            if (this.cronometro.segundo === 59) {
+                this.cronometro.minuto++;
+                this.sendData("minuto", this.cronometro.minuto);
+                this.update(this.id, { [`placar/cronometro/segundo`]: this.cronometro.segundo });
+
+                this.cronometro.segundo = 0;
+            } else {
+                this.cronometro.segundo++
+                this.sendData("segundo", this.cronometro.segundo);
+                this.update(this.id, { [`placar/cronometro/segundo`]: this.cronometro.segundo });
+
+            }
+        }
+    }
+    contagemRegressiva() {
+        if (!this.cronometro.icone && this.cronometro.minuto === 0 && this.cronometro.segundo === 0) {
+            this.cronometro.minuto = this.cronometro.duracao
+            this.cronometro.segundo = 0
+        }
+        if (this.cronometro.minuto === 0 && this.cronometro.segundo === 0) {
+            this.stop();
+        } else {
+            if (this.cronometro.icone) {
+                if (this.cronometro.segundo === 0) {
+                    if (this.cronometro.minuto !== 0) {
+                        this.cronometro.minuto--;
+                        this.cronometro.segundo = 59;
+                        //enviarMensagemSocket(this.transmissao.id_transmissao, "id_cronometro", this.transmissao.id_cronometro, "minuto", this.transmissao.minuto);
+                    }
+                } else {
+                    this.cronometro.segundo--;
+                    //enviarMensagemSocket(this.transmissao.id_transmissao, "id_cronometro", this.transmissao.id_cronometro, "segundo", this.transmissao.segundo);
+                }
+            }
+        }
     }
 
 }
@@ -170,8 +327,10 @@ class FactorAnuncioSocket extends FactorSocketIO {
                 console.log(this.anuncioAtual)
                 this.contador = 0;
             }
-            console.log(this.contador);
+            // console.log(this.contador);
             this.contador++;
+            this.io.emit("setContadorAnuncio", { contador: this.contador, duracao: this.anuncioAtual.duracao });
+
         }, 1000);
     }
 

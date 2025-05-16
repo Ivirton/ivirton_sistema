@@ -2,19 +2,19 @@
     <div class="linha">
         <div class="linha">
             <div class="coluna">
-                <small>min</small>
+                <small>minutos</small>
                 <input class="form-control" min="0" placeholder="0m" type="number" v-model="props.cronometro.minuto"
-                    @input="sendData('minuto', props.cronometro.minuto)">
+                    :disabled="props.cronometro.icone" @input="sendData('minuto', props.cronometro.minuto)">
             </div>
             <div class="coluna">
-                <small>seg</small>
+                <small>segundos</small>
                 <input class="form-control" min="0" placeholder="0s" type="number" v-model="props.cronometro.segundo"
-                    @input="sendData('segundo', props.cronometro.segundo)">
+                    :disabled="props.cronometro.icone" @input="sendData('segundo', props.cronometro.segundo)">
             </div>
             <div class="coluna">
-                <small>duracao</small>
+                <small>duração</small>
                 <input class="form-control" min="0" placeholder="0s" type="number" v-model="props.cronometro.duracao"
-                    @input="sendData('segundo', props.cronometro.segundo)">
+                    :disabled="props.cronometro.icone" @input="sendData('duracao', props.cronometro.duracao)">
             </div>
         </div>
         <div style="display: flex;align-content: center; align-items: center;">
@@ -27,7 +27,7 @@
         <div class="coluna">
             <small>Tipo</small>
             <select class="form-select" id="selectbox" v-model="props.cronometro.tipo"
-                @change="sendData('tipo', props.cronometro.tipo)">
+                :disabled="props.cronometro.icone" @change="sendData('tipo', props.cronometro.tipo)">
                 <option value="" selected="selected" disabled="disabled">Tipo</option>
                 <option value="0">Progressivo</option>
                 <option value="1">Regressivo</option>
@@ -69,16 +69,17 @@ function play() {
     sendData("icone", props.cronometro.icone)
 }
 function stop() {
-    props.cronometro.icone = false
-    sendData("icone", props.cronometro.icone)
     props.cronometro.minuto = 0
     props.cronometro.segundo = 0
+    props.cronometro.icone = false
+    sendData("icone", props.cronometro.icone)
     sendData("minuto", props.cronometro.minuto)
     sendData("segundo", props.cronometro.segundo)
 }
 
 props.socket.on(`cronometro`, (menssagem) => {
-    if (`${props.path}/${menssagem.key}` == menssagem.path && props.socket.id != menssagem.socketId && menssagem.id == props.idTrasnmissao) {
+    console.log(menssagem)
+    if (props.socket.id != menssagem.socketId && menssagem.id == props.idTrasnmissao) {
         console.log("RX")
         console.log(menssagem)
         props.cronometro[menssagem.key] = menssagem.valor
