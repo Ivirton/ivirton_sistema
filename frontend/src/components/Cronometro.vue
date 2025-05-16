@@ -79,7 +79,7 @@ function stop() {
 
 props.socket.on(`cronometro`, (menssagem) => {
     console.log(menssagem)
-    if (props.socket.id != menssagem.socketId && menssagem.id == props.idTrasnmissao) {
+    if ( menssagem.id == props.idTrasnmissao) {
         console.log("RX")
         console.log(menssagem)
         props.cronometro[menssagem.key] = menssagem.valor
