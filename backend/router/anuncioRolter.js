@@ -8,6 +8,7 @@ const upload = multer({ dest: 'uploads/' });
 
 anuncioRouter.post('/', upload.single('imagem'),AnuncioController.create)
 anuncioRouter.get("/", AnuncioController.findAll);              // Buscar todos os documentos
+anuncioRouter.get("/ativos/", AnuncioController.findAllActive);              // Buscar todos os documentos ativos
 anuncioRouter.get("/:id", AnuncioController.findAt);           // Buscar um documento por nome
 anuncioRouter.put("/:id", AnuncioController.update);          // Atualizar um documento
 anuncioRouter.delete("/:id", AnuncioController.delete);      // Deletar um documento

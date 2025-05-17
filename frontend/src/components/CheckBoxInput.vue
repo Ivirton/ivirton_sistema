@@ -1,14 +1,35 @@
 <template>
-    <input type="checkbox" id="che" class="ui-checkbox">
+    <input type="checkbox" id="che" class="ui-checkbox" v-model="props.anuncio.visibilidade" @change="sendData()" />
 </template>
-<script>
+<script setup>
 
+const props = defineProps({
+
+    id: String,
+    socket: Object,
+    anuncio: Object
+});
+function sendData() {
+    props.socket.emit(`anuncio_visibilidade`, {
+        socketId: props.socket.id,
+        update: { 'visibilidade': props.anuncio.visibilidade },
+        valor: props.anuncio.visibilidade,
+        id: props.anuncio.id
+       
+    });
+}
+
+props.socket.on(`anuncio_visibilidade`, (mensagem) => {
+    if (props.socket.id !== mensagem.socketId && mensagem.id === props.id && props.anuncio.id === mensagem.id) {
+        props.anuncio.visibilidade = mensagem.valor;
+    }
+});
 
 </script>
 <style scoped>
 /* From Uiverse.io by Galahhad */
 /* checkbox settings 👇 */
-#che{
+#che {
     /* margin: 10px; */
     /* position: absolute; */
     /* box-shadow: -2px 2px 20px 2px black; */
@@ -16,6 +37,7 @@
     height: 27px;
     border-radius: 100%;
 }
+
 .ui-checkbox {
     /* position: absolute; */
     --primary-color: #1677ff;

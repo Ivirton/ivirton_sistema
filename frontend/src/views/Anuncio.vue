@@ -11,17 +11,16 @@ const anuncios = ref([]);
 async function getAnuncio() {
     try {
         const response = await axios.get('/api/anuncios/');
-        if (response.data.erro) {
-            console.log('API não encontrada!');
-            return [];
-        } else {
-            console.log(response.data);
-            return response.data;
-        }
+        return response.data || [];
     } catch (error) {
-        console.log('Erro ao buscar API:', error);
+        console.error('Erro ao buscar API:', error);
         return [];
     }
+}
+
+// Atualiza lista removendo item por ID
+function removerDaLista(id) {
+    anuncios.value = anuncios.value.filter(anuncio => anuncio.id !== id);
 }
 
 onMounted(async () => {
@@ -34,16 +33,15 @@ onMounted(async () => {
 
     <main class="main">
         <div class="header">
-
-            <li><a  href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                    data-bs-whatever="@mdo">Adicionar</a></li>
-            
-            <div class="linha"></div>
+            <div class="linha">
+                <a href="#" data-bs-toggle="modal" class="btn btn-primary" data-bs-target="#exampleModal">Adicionar</a>
+                
+            </div>
         </div>
 
         <div class="anuncios">
-            <AnuncioRotativo v-for="(anuncio, index) in anuncios" :id="anuncio.id" :duracao="anuncio.duracao"
-                :imagemName="anuncio.nome" :socket="socket" />
+            <AnuncioRotativo :id="anuncio.id" :anuncio="anuncio" v-for="anuncio in anuncios" :socket="socket"
+                @removido="removerDaLista" />
         </div>
     </main>
 

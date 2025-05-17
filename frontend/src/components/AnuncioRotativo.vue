@@ -1,82 +1,58 @@
 <script setup>
+import { defineEmits } from 'vue';
 import CheckBoxInput from '@/components/CheckBoxInput.vue';
 import axios from 'axios';
+
+const emit = defineEmits(['removido']);
+
 const props = defineProps({
-    imagemName: {
-        type: String
-    },
-    id:{
-        type:String
-    },
-    duracao:{
-        type:Number
-    },
-    anuncio: {
-        type: Object
-    },
-    socket: {
-        type: Object
-    }
-})
+    
+    id: String,
+    duracao: Number,
+    socket: Object,
+    anuncio:Object
+});
 
-const imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${props.imagemName}`
-function toggleSelection(card, checkbox) {
-    checkbox.checked = !checkbox.checked;
-    if (checkbox.checked) {
-        card.classList.add("selected");
-    } else {
-        card.classList.remove("selected");
-    }
-}
+const imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens/${props.anuncio.nome}`;
 
-function removerItem(id) {
-    async function getAnuncio() {
+
+
+async function removerItem(id) {
     try {
         const response = await axios.delete(`/api/anuncios/${id}`);
-        if (response.data.erro) {
-            console.log('API não encontrada!');
-            return [];
-        } else {
-           
-            return response.data;
+        if (response.status === 200) {
+            emit('removido', id); // emite evento para o componente pai remover da lista
+            window.location.reload(); // recarrega a página
         }
     } catch (error) {
-        console.log('Erro ao buscar API:', error);
-        return [];
+        console.error('Erro ao remover anúncio:', error);
     }
 }
-}
-props.socket.on(`duracao`, (menssagem) => {
-    if (props.socket.id != menssagem.socketId && menssagem.id == props.id) {
-        console.log("RX")
-        console.log(menssagem)
-        props.duracao = menssagem.valor
+
+props.socket.on(`duracao`, (mensagem) => {
+    if (props.socket.id !== mensagem.socketId && mensagem.id === props.id) {
+        props.anuncio.duracao = mensagem.valor;
     }
 });
 
 function sendData() {
     props.socket.emit(`duracao`, {
-        id: props.id,
+        id: props.anuncio.id,
         socketId: props.socket.id,
-        update: { 'duracao': props.duracao },
-        valor: props.duracao
+        update: { 'duracao': props.anuncio.duracao },
+        valor: props.anuncio.duracao
     });
 }
-
-
 </script>
-
 <template>
     <div class="carde">
-        <img :src="imagem" >
+        <img :src="imagem">
         <div class="body_head">
-            <CheckBoxInput />
-            <input type="number" class="form-control" placeholder="0" v-model="props.duracao" @input="sendData()" aria-describedby="basic-addon2">
-            <a href="#" class="btn btn-danger" @click="removerItem(props.id)" role="button">Remover</a>
-            <i class="bi bi-x-square-fill"></i>
+            <CheckBoxInput :anuncio="props.anuncio" :id="props.id" :socket="props.socket" />
+            <input type="number" class="form-control" placeholder="0" v-model="props.anuncio.duracao" @input="sendData()" />
+            <a  class="btn btn-danger" @click.prevent="removerItem(props.anuncio.id)">Remover</a>
         </div>
     </div>
-
 </template>
 
 
@@ -87,7 +63,7 @@ img{
 .carde {
     display: flex
 ;
-    width: 320px;
+    width: 250px;
     background-color: #fff;
     flex-direction: column;
     height: fit-content;

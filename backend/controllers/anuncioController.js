@@ -8,20 +8,21 @@ const AnuncioController = {
 
     async create(req, res) {
         // Cria o objeto com os dados do anúncio, pegando informações do arquivo e do corpo da requisição
-        
+        const visibilidade = (req.body.visibilidade === 'true') ? true : false;
+
         const anun = {
             nome: verificar.removerCaracteres(req.file.originalname),
-            duracao: req.body.duracao || 0,
-            visibilidade: req.body.visibilidade || false
+            duracao: parseInt(req.body.duracao) || 0,
+            visibilidade: visibilidade || false
         };
-    
+
         // Salva o anúncio no banco
         anuncioModel.create(anun)
             .then((data) => {
                 // Envia o arquivo para a Supabase (no bucket 'imagens')
-                
+
                 multerControler.createFile(req.file, "imagens", res);
-    
+
                 // Exibe e envia resposta de sucesso
                 //  res.status(200).json(data); // Envia como resposta
                 console.log({ message: "Documento criado com sucesso!", data });
@@ -34,18 +35,30 @@ const AnuncioController = {
                 res.status(500).json({ error: "Erro ao criar documento", details: error.message });
             });
     },
-    
+
     async findAll(req, res) {
         try {
             const data = await anuncioModel.findAll(); // Busca todos os anúncios
-            console.log(data);
             res.status(200).json(data); // Envia como resposta
         } catch (error) {
             console.error(error);
             res.status(500).json(error); // Em caso de erro
         }
     },
-    
+
+    async findAllActive(req, res) {
+        try {
+            const data = await anuncioModel.findAll(); // Busca todos os anúncios
+            const ativos = Object.fromEntries(
+                Object.entries(data).filter(([key, value]) => value.visibilidade === true)
+            );
+            console.log(ativos)
+            res.status(200).json(ativos); // Envia como resposta
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(error); // Em caso de erro
+        }
+    },
     async findAt(req, res) {
         const { id } = req.params;
         try {
@@ -56,13 +69,13 @@ const AnuncioController = {
             res.status(500).json({ error: error.message });
         }
     },
-    
+
     async update(req, res) {
 
         const { id } = req.params;
         try {
-           const result = await anuncioModel.update(id, req.body.update); // Atualiza com os novos dados
-           console.log(req.params.id)
+            const result = await anuncioModel.update(id, req.body.update); // Atualiza com os novos dados
+            console.log(req.params.id)
             console.log(req.body);
             res.status(200).json({ message: "Documento atualizado com sucesso!", res: result });
         } catch (err) {
@@ -76,7 +89,7 @@ const AnuncioController = {
             const data = await anuncioModel.findAt(id);
             multerControler.deleteFile(data.nome, "imagens");//remove do subabase
             await anuncioModel.delete(id); // Remove do banco de dados
-            
+
             res.status(200).json({ message: "Documento deletado com sucesso!" });
         } catch (error) {
             res.status(500).json({ error: "Erro ao deletar documento", details: error.message });

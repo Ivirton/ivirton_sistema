@@ -40,6 +40,7 @@ class AnuncioModel {
 
     // Método para buscar todos os anúncios salvos
     async findAll() {
+        
         return get(child(ref(dbFirebase), "/anuncios"))
             .then(snapshot => snapshot.exists() ? snapshot.val() : null)
             .catch(error => {

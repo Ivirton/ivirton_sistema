@@ -2,6 +2,11 @@
     <div class="linha">
         <div class="linha">
             <div class="coluna">
+                <small>duração</small>
+                <input class="form-control" min="0" placeholder="0s" type="number" v-model="props.cronometro.duracao"
+                    :disabled="props.cronometro.icone" @input="sendData('duracao', props.cronometro.duracao)">
+            </div>
+            <div class="coluna">
                 <small>minutos</small>
                 <input class="form-control" min="0" placeholder="0m" type="number" v-model="props.cronometro.minuto"
                     :disabled="props.cronometro.icone" @input="sendData('minuto', props.cronometro.minuto)">
@@ -11,11 +16,7 @@
                 <input class="form-control" min="0" placeholder="0s" type="number" v-model="props.cronometro.segundo"
                     :disabled="props.cronometro.icone" @input="sendData('segundo', props.cronometro.segundo)">
             </div>
-            <div class="coluna">
-                <small>duração</small>
-                <input class="form-control" min="0" placeholder="0s" type="number" v-model="props.cronometro.duracao"
-                    :disabled="props.cronometro.icone" @input="sendData('duracao', props.cronometro.duracao)">
-            </div>
+
         </div>
         <div style="display: flex;align-content: center; align-items: center;">
             <i v-if="cronometro.icone" class="fas fa-pause" @click="play()"></i>
@@ -79,7 +80,7 @@ function stop() {
 
 props.socket.on(`cronometro`, (menssagem) => {
     console.log(menssagem)
-    if ( menssagem.id == props.idTrasnmissao) {
+    if (menssagem.id == props.idTrasnmissao) {
         console.log("RX")
         console.log(menssagem)
         props.cronometro[menssagem.key] = menssagem.valor

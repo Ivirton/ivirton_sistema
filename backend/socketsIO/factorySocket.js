@@ -1,11 +1,6 @@
-// Fábrica padrão para salvar e atualizar os dados de qualquer model via WebSocket
-
 // Importa os modelos de dados usados para manipular no socket
 import transmissaoModel from '../model/transmissaoModel.js';
 import anuncioModel from '../model/anuncioModel.js';
-
-
-
 class FactorSocketIO {
     constructor(io, socket, model) {
         this.io = io;              // Instância do servidor Socket.IO
@@ -59,8 +54,6 @@ class FactorSocketIO {
         });
     }
 }
-
-
 // class FactorTrasmissaoSocket extends FactorSocketIO {
 //     constructor(io, socket) {
 //         super(io, socket, transmissaoModel);
@@ -176,22 +169,29 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         try {
             const transmiss = await this.model.findAt(data.id);
             this.cronometro = transmiss.placar.cronometro;
+            // console.log(this.cronometro);
         } catch (err) {
             console.error("Erro ao buscar cronômetro:", err);
         }
 
     }
     play() {
-        if (this.interval) return; // já está rodando
+        if (this.interval) return;
         this.interval = setInterval(() => {
-            if (!this.rorando) {
+            if (!this.rorando && !this.cronometro.icone) {
                 this.getCronometro(this.id);
             }
             if (this.cronometro.tipo === '0') {
                 this.contagemProgressiva();
                 this.cronometro.icone = true;
                 this.rorando = true
-            } else if (this.cronometro.tipo === '1') {
+            } else {
+                if (this.rorando === false) {
+                    this.cronometro.minuto = this.cronometro.duracao
+                    this.cronometro.segundo = this.cronometro.segundo
+                    this.update(this.id, { [`placar/cronometro/minuto`]: this.cronometro.minuto });
+                    this.update(this.id, { [`placar/cronometro/segundo`]: this.cronometro.segundo });
+                }
                 this.contagemRegressiva();
                 this.cronometro.icone = true;
                 this.rorando = true
@@ -239,11 +239,9 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         }
     }
     contagemRegressiva() {
-        if (!this.cronometro.icone && this.cronometro.minuto === 0 && this.cronometro.segundo === 0) {
-            this.cronometro.minuto = this.cronometro.duracao
-            this.cronometro.segundo = 0
-        }
-        if (this.cronometro.minuto === 0 && this.cronometro.segundo === 0) {
+
+
+        if (this.cronometro.minuto === 0 && this.cronometro.segundo === 0 && this.rorando == true) {
             this.stop();
         } else {
             if (this.cronometro.icone) {
@@ -256,16 +254,18 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
                     }
                 } else {
                     this.cronometro.segundo--;
+
                     this.sendData("segundo", this.cronometro.segundo);
-                    this.update(this.id, { [`placar/cronometro/segundo`]: this.cronometro.segundo });
+                    if (this.cronometro.segundo == 30) {
+                        console.log("Segundo Salvo");
+                        this.update(this.id, { [`placar/cronometro/segundo`]: this.cronometro.segundo });
+                    }
                 }
             }
         }
     }
 
 }
-
-
 let instanciaUnica = null;
 class FactorAnuncioSocket extends FactorSocketIO {
     constructor(io) {
@@ -285,10 +285,14 @@ class FactorAnuncioSocket extends FactorSocketIO {
         this.gerAnuncios();
         instanciaUnica = this;
     }
-
     // Define o socket manualmente (por cliente conectado)
     setSocket(socket) {
         this.socket = socket;
+
+        this.listenOn("anuncio_visibilidade", (data) => {
+            this.update(data.id, data.update);
+            console.log(data);
+        });
 
         this.socket.on("setImagemAnuncio", (menssagem) => {
             this.io.emit("setImagemAnuncio", menssagem);
@@ -347,14 +351,18 @@ class FactorAnuncioSocket extends FactorSocketIO {
 
     async gerAnuncios() {
         this.anuncios = await anuncioModel.findAll();
+        this.anuncios = Object.fromEntries(
+            Object.entries(this.anuncios).filter(([key, value]) => value.visibilidade === true)
+        );
         this.chaves = Object.keys(this.anuncios);
         this.anuncioAtual = this.anuncios[this.chaves[0]];
 
-        this.avancarAnuncio()
+
 
     }
 
     avancarAnuncio() {
+
         if (this.indiceAtual < this.chaves.length - 1) {
             this.indiceAtual++;
         } else {
