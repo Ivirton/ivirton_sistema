@@ -63,6 +63,22 @@ listen("score", "placar/jogo/partida/pontos", (valor) => {
     props.placar.jogo.partida.pontos = valor
 })
 
+props.socket.on("cronometro", (menssagem) => {
+    if ("placar/cronometro/minuto" == menssagem['path'] && menssagem.id == props.idTrasnmissao) {
+        console.log("RX")
+        console.log(menssagem)
+        props.placar.cronometro.minuto = menssagem.valor
+    }
+});
+props.socket.on("cronometro", (menssagem) => {
+    if ("placar/cronometro/segundo" == menssagem['path'] && menssagem.id == props.idTrasnmissao) {
+        console.log("RX")
+        console.log(menssagem)
+        props.placar.cronometro.segundo = menssagem.valor
+    }
+});
+
+
 listen("nome", "placar/jogo/casa/nome", (valor) => props.placar.jogo.casa.nome = valor)
 listen("score", "placar/jogo/casa/pontos", (valor) => props.placar.jogo.casa.pontos = valor)
 
@@ -71,8 +87,8 @@ listen("score", "placar/jogo/visitante/pontos", (valor) => props.placar.jogo.vis
 
 listen("visibilidade", "placar/visibilidade", (valor) => props.placar.visibilidade = valor)
 
-listen("cronometro", "placar/cronometro/minuto", (valor) => props.placar.cronometro.minuto = valor)
-listen("cronometro", "placar/cronometro/segundo", (valor) => props.placar.cronometro.segundo = valor)
+// listen("cronometro", "placar/cronometro/minuto", (valor) => props.placar.cronometro.minuto = valor)
+// listen("cronometro", "placar/cronometro/segundo", (valor) => props.placar.cronometro.segundo = valor)
 listen("visibilidade", "placar/cronometro/visibilidade", (valor) => props.placar.cronometro.visibilidade = valor)
 
 listen("posicao", "placar/posicao/x", (valor) => props.placar.posicao.x = valor)

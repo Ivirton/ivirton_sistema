@@ -23,7 +23,7 @@ const initializeSocket = (server) => {
     
         anunciosSocket.setSocket(socket);
         socket.on('disconnect', () => {
-
+            
         });
     });
 };
