@@ -2,6 +2,9 @@
     <section class="scorebord" v-if="placar.visibilidade"
         :style="{ left: props.placar.posicao.x + 'vw', top: props.placar.posicao.y + 'vh', zoom: props.placar.posicao.z + '%' }">
         <div class="linha">
+             <div>
+                
+            </div>
             <div class="equipes">
                 <div class="linha casa" :style="{ backgroundColor: props.placar.jogo.casa.color }">
                     <strong class="nome">{{ props.placar.jogo.casa.nome }}</strong>
@@ -13,18 +16,18 @@
 
                 </div>
             </div>
-            <div>
-                <div class="linha" v-if="props.placar.cronometro.visibilidade" style="background-color: #242425;">
+            <div class="linha" v-if="props.placar.cronometro.visibilidade" style="background-color: #242425;">
                     <strong class="cronometro" style="display: flex;">
+                        <strong style="padding: 0px 17px 0px 0px;">{{ props.placar.jogo.partida.pontos }}t</strong>
                         <p v-if="props.placar.cronometro.minuto < 10">0{{ props.placar.cronometro.minuto }}</p>
                         <p v-else>{{ props.placar.cronometro.minuto }}</p>
                         :
                         <p v-if="props.placar.cronometro.segundo < 10">0{{ props.placar.cronometro.segundo }}</p>
                         <p v-else>{{ props.placar.cronometro.segundo }}</p>
                     </strong>
-                    <p style="padding: 0px 17px 0px 0px;">{{ props.placar.jogo.partida.pontos }}t°</p>
+                    
                 </div>
-            </div>
+           
         </div>
     </section>
 </template>
