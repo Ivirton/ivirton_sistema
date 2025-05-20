@@ -1,8 +1,7 @@
 <template>
-
-    <section class="anuncios " v-if="anuncios.visibilidade"
-     :style="{ left: props.anuncios.posicao.x + 'vw', top: props.anuncios.posicao.y + 'vh', zoom: props.anuncios.posicao.z + '%' }" >
-        <img class="anunciosImagem" :src='props.imagem'>
+    <section class="logo " v-if="props.logo.visibilidade"
+     :style="{ left: props.logo.posicao.x + '%', top: props.logo.posicao.y + 'vh', zoom: props.logo.posicao.z + '%' }" >
+        <img class="logoImagem" :src='props.logo.url'>
     </section>
 
 </template>
@@ -22,23 +21,14 @@ const props = defineProps({
     path: {
         type: String
     },
-    anuncios: {
+    logo: {
         type: Object
     },
-    imagem: {
-        type: String
-    }
 
 })
 
-props.socket.on("setImagemAnuncio", (menssagem) => {
-    console.log(menssagem)
-    props.imagem = `https://uogqtlofsmvofetnsvug.supabase.co/storage/v1/object/public/imagens//${menssagem.nome}`
-    
-});
-props.socket.on("setContadorAnuncio", (menssagem) => {
-    console.log(menssagem) 
-});
+
+
 
 function listen(porta, path, setValor) {
     props.socket.on(porta, (menssagem) => {
@@ -49,27 +39,41 @@ function listen(porta, path, setValor) {
         }
     });
 }
-listen("visibilidade", "anuncios/rotativo/visibilidade", (valor) => {
-    props.anuncios.visibilidade = valor
+listen("visibilidade", "Logo/visibilidade", (valor) => {
+    props.logo.visibilidade = valor
 })
-listen("posicao", "anuncios/rotativo/posicao/x", (valor) => {
-    props.anuncios.posicao.x = valor
+listen("posicao", "Logo/posicao/x", (valor) => {
+    props.logo.posicao.x = valor
 })
-listen("posicao", "anuncios/rotativo/posicao/y", (valor) => {
-    props.anuncios.posicao.y = valor
+listen("posicao", "Logo/posicao/y", (valor) => {
+    props.logo.posicao.y = valor
 })
-listen("posicao", "anuncios/rotativo/posicao/z", (valor) => {
-    props.anuncios.posicao.z = valor
+listen("posicao", "Logo/posicao/z", (valor) => {
+    props.logo.posicao.z = valor
 })
 
 
 </script>
 
 <style scoped>
-.anunciosImagem {
+.logoImagem {
     max-width: 300px;
 }
 
+
+
+.logo {
+    transition: 500ms ease-in-out;
+    position: absolute;
+    animation: slide-up 0.5s ease;
+}
+
+
+
+.slide-enter-active,
+.slide-leave-active {
+    transition: transform 0.5s, opacity 0.5s;
+}
 @keyframes slide-up {
     from {
         opacity: 0;
@@ -87,20 +91,6 @@ listen("posicao", "anuncios/rotativo/posicao/z", (valor) => {
     transform: translateY(20px);
     opacity: 0;
 }
-
-.anuncios {
-    transition: 500ms ease-in-out;
-    position: absolute;
-    animation: slide-up 0.5s ease;
-}
-
-
-
-.slide-enter-active,
-.slide-leave-active {
-    transition: transform 0.5s, opacity 0.5s;
-}
-
 .slide-enter,
 .slide-leave-to
 

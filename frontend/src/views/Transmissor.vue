@@ -130,8 +130,8 @@
                         </h2>
                         <div id="collapsefive01" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <img src="" alt="">
-                                <h1>ola</h1>
+                               
+                                <LogoUpload :logo="transmissor.Logo" />
                             </div>
                         </div>
                     </div>
@@ -190,6 +190,7 @@
 </template>
 
 <script setup>
+// import LogoUpload  from '@/components/LogoUpload.vue'
 
 import Navegacao from '../components/Navegacao.vue'
 import Camada from '../components/Camada.vue'
@@ -203,6 +204,7 @@ import axios from 'axios';
 import socket from '@/socket';
 import Color from '@/components/Color.vue';
 import ControlesAnuncio from '@/components/transmissor/ControlesAnuncio.vue';
+import LogoUpload from '@/components/LogoUpload.vue';
 
 
 const route = useRoute();

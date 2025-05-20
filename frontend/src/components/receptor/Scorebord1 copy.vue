@@ -137,15 +137,7 @@ props.socket.on("color", (menssagem) => {
     margin: 0px;
     box-sizing: border-box;
 }
-@font-face {
-  font-family: 'DS-DIGI';
-  src: url('/font/DS-DIGIB.TTF') format('truetype');
-  font-weight: 700;
-}
 
-.my-digital-text {
-  font-family: 'DS-DIGI', sans-serif;
-}
 .glass {
     position: relative;
     /* transform: translateX(-50%); */
@@ -213,15 +205,12 @@ props.socket.on("color", (menssagem) => {
 
     min-width: 100px;
     text-align: center;
-    
 }
 
 .pontos {
     padding: 7px 17px 7px 17px;
     background-color: rgba(41, 38, 38, 0.301);
     text-align: center;
-    /* font-family: "DS-DIGI";
-    font-size: 12pt; */
 }
 
 .linha {

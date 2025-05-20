@@ -30,6 +30,12 @@ const router = createRouter({
       name: 'receptor',
       component: () => import('../views/Receptor.vue'),
     },
+    
+    {
+      path: '/anunciospgm',
+      name: 'anunciospgm',
+      component: () => import('../views/AnunciosPGM.vue'),
+    },
   ],
 })
 

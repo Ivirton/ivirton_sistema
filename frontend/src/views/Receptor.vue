@@ -3,7 +3,7 @@
     <Scorebord1 path="placar/" :placar="transmissor.placar" :socket="socket" :idTrasnmissao="route.query.id" />
 
     <Anuncios path="anuncios/rotativo" :anuncios="transmissor.anuncios.rotativo" :imagem="transmissor.anuncios.rotativo.imagem" :idTrasnmissao="transmissor.id" :socket="socket" />
-
+    <Logo :logo="transmissor.Logo" :idTrasnmissao="transmissor.id" :socket="socket" path="Logo/" />
 
 
 </template>
@@ -16,6 +16,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import socket from '@/socket';
 import { onMounted, reactive, ref } from 'vue';
+import Logo from '@/components/receptor/Logo.vue';
 const route = useRoute();
 const id = ref(null);
 
