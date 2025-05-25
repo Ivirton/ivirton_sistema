@@ -130,7 +130,7 @@
                         </h2>
                         <div id="collapsefive01" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                               
+
                                 <LogoUpload :logo="transmissor.Logo" />
                             </div>
                         </div>
@@ -178,8 +178,53 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <ControlesAnuncio :socket="socket" :idTrasnmissao="route.query.id"
-                                    path="anuncios/rotativo"
-                                    :anuncio="transmissor.anuncios.rotativo" />
+                                    path="anuncios/rotativo" :anuncio="transmissor.anuncios.rotativo" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+          
+
+        </article>
+        <article class="aside">
+  <!-- QRCODE -->
+
+            <section class="section card1">
+                <Camada titulo="Qrcode" path="Qrcode/visibilidade" :valor="transmissor.Qrcode.visibilidade"
+                    :idTrasnmissao="route.query.id" :socket="socket" />
+                <div class="accordion" id="accordionExample">
+                    <!-- Acordeon item 1 Posicao-->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseQrcode" aria-expanded="true" aria-controls="collapseQrcode">
+                                Posição
+                            </button>
+                        </h2>
+                        <div id="collapseQrcode" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <Posicao titulo="Largura" path="Qrcode/posicao/x" :valor="transmissor.Qrcode.posicao.x"
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Altura" path="Qrcode/posicao/y" :valor="transmissor.Qrcode.posicao.y""
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
+                                <Posicao titulo="Tamanho" path="Qrcode/posicao/z" :valor="transmissor.Qrcode.posicao.z"" 
+                                    :socket="socket" :idTrasnmissao="route.query.id" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Acordeon item 1 d-->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseQrcode" aria-expanded="true" aria-controls="collapseQrcode">
+                                Imagem
+                            </button>
+                        </h2>
+                        <div id="collapseQrcode" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <img :src="transmissor.Qrcode.url"  style="width: 200px; border: 1px solid;" >
+                               
                             </div>
                         </div>
                     </div>
@@ -212,9 +257,22 @@ const id = ref(null);
 const receptor = ref(null);
 
 let data = null
-let transmissor = reactive({ "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true }, 
-"anuncios": {
-     "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true,"play":false } }, "id": null, "nome": "", "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true } })
+let transmissor = reactive({
+    "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true },
+    "anuncios": {
+        "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true, "play": false }
+    }, "id": null, "nome": "", "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true },
+    espelhamento: {
+        posicao: { x: 0, y: 0, z: 0 },
+        visibilidade: false,
+        url: ""
+    },
+    Qrcode: {
+        posicao: { x: 0, y: 0, z: 0 },
+        url: "",
+        visibilidade: true
+    },
+})
 
 // socket.on(`credenciar`, (menssagem) => {
 //     console.log(menssagem)
@@ -224,7 +282,7 @@ async function getTransmissao() {
     try {
         // const baseURL = import.meta.env.VITE_API_URL || ""; 
         const response = await axios.get(`/api/transmissao/${id.value}`);
-
+        console.log(response.data)
         if (response.data.erro) {
             console.log('API não encontrada!');
         } else {
@@ -246,6 +304,10 @@ onMounted(async () => {
         transmissor.anuncios = data.anuncios;
         transmissor.placar = data.placar;
         document.title += " " + data.nome;
+        transmissor.Qrcode = data.Qrcode;
+        transmissor.espelhamento = data.espelhamento;
+
+
         socket.emit(socket.id, { "idTransmissor": transmissor.id });
     }
 });

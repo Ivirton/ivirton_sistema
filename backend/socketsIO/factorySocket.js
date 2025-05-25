@@ -99,6 +99,8 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         this.socket = socket;
         this.addPorta("score");
         this.addPorta("nome");
+
+
         this.addPorta("visibilidade");
         this.addPorta("posicao");
         // this.addPorta("cronometro");
@@ -108,6 +110,10 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         this.listenOn("setContadorAnuncio", (data) => {
             console.log(data);
         })
+        this.listenOn("playEspelhar", (data) => {
+            console.log(data);
+        })
+
 
 
 
@@ -350,15 +356,16 @@ class FactorAnuncioSocket extends FactorSocketIO {
     }
 
     async gerAnuncios() {
-        this.anuncios = await anuncioModel.findAll();
-        this.anuncios = Object.fromEntries(
-            Object.entries(this.anuncios).filter(([key, value]) => value.visibilidade === true)
-        );
-        this.chaves = Object.keys(this.anuncios);
-        this.anuncioAtual = this.anuncios[this.chaves[0]];
-
-
-
+        try {
+            this.anuncios = await anuncioModel.findAll();
+            this.anuncios = Object.fromEntries(
+                Object.entries(this.anuncios).filter(([key, value]) => value.visibilidade === true)
+            );
+            this.chaves = Object.keys(this.anuncios);
+            this.anuncioAtual = this.anuncios[this.chaves[0]];
+        } catch (err) {
+            console.error("Erro ao buscar anúncios:", err);
+        }
     }
 
     avancarAnuncio() {

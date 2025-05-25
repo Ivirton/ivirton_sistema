@@ -2,8 +2,14 @@
 
     <Scorebord1 path="placar/" :placar="transmissor.placar" :socket="socket" :idTrasnmissao="route.query.id" />
 
-    <Anuncios path="anuncios/rotativo" :anuncios="transmissor.anuncios.rotativo" :imagem="transmissor.anuncios.rotativo.imagem" :idTrasnmissao="transmissor.id" :socket="socket" />
+    <Anuncios path="anuncios/rotativo" :anuncios="transmissor.anuncios.rotativo"
+        :imagem="transmissor.anuncios.rotativo.imagem" :idTrasnmissao="transmissor.id" :socket="socket" />
     <Logo :logo="transmissor.Logo" :idTrasnmissao="transmissor.id" :socket="socket" path="Logo/" />
+    <Qrcode :Qrcode="transmissor.Qrcode" :idTrasnmissao="transmissor.id" :socket="socket" path="Qrcode/"/>
+    
+    <!-- <Espelhar :espelhamento="transmissor.espelhamento" :idTrasnmissao="transmissor.id" :socket="socket"
+        path="espelhamento/" /> -->
+
 
 
 </template>
@@ -11,15 +17,17 @@
 <script setup>
 import Scorebord1 from '@/components/receptor/Scorebord1.vue';
 import Anuncios from '@/components/receptor/Anuncios.vue';
-
+import Espelhar from '@/components/receptor/Espelhar.vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import socket from '@/socket';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, transformVNodeArgs } from 'vue';
 import Logo from '@/components/receptor/Logo.vue';
+import Qrcode from '@/components/receptor/Qrcode.vue';
+
 const route = useRoute();
 const id = ref(null);
-
+const videoEspelhamento = null
 let data = null
 let transmissor = reactive({
     "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true },
@@ -33,7 +41,17 @@ let transmissor = reactive({
             indice: 0
         }
     }, "id": null, "nome": "",
-    "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0, color: "#596b57" }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0, color: "#596b57" } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true }
+    "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0, color: "#596b57" }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0, color: "#596b57" } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true },
+    espelhamento: {
+        posicao: { x: 0, y: 0, z: 0 },
+        visibilidade: false,
+        url: ""
+    },
+    Qrcode: {
+        posicao: { x: 0, y: 0, z: 0 },
+        url: "",
+        visibilidade: false
+    },
 })
 
 async function getTransmissao() {
@@ -61,12 +79,18 @@ onMounted(async () => {
         transmissor.Logo = data.Logo;
         transmissor.anuncios = data.anuncios;
         transmissor.placar = data.placar;
+        transmissor.Qrcode = data.Qrcode;
+        transmissor.espelhamento = data.espelhamento;
         document.title += " " + data.nome;
+
 
 
     }
 });
 window.document.title = "Receptor"
+
+
+
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Jersey+25&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Teko:wght@300..700&display=swap');

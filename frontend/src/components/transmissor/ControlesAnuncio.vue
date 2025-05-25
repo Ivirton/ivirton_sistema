@@ -21,6 +21,8 @@
 
 </template>
 <script setup>
+import { onMounted } from 'vue';
+
 
 
 
@@ -94,6 +96,11 @@ function sendData(key, valor) {
     });
 }
 
+onMounted(async () => {
+    if (props.props.anuncio.play) {
+        sendData("play", props.anuncio.play)
+    }
+})
 
 
 props.socket.on(`transmissorSetAnuncioPlay`, (menssagem) => {
