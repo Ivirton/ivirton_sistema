@@ -134,23 +134,24 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
                     break
                 case "segundo":
                     if (!this.cronometroStatus()) {
-                        // this.cronometro.segundo = data.valor
+                        this.cronometro.segundo = data.valor
+                        
                     }
 
                     break
                 case "minuto":
                     if (!this.cronometroStatus()) {
-                        // this.cronometro.minuto = data.valor
+                        this.cronometro.minuto = data.valor
                     }
 
                     break
                 case "duracao":
                     if (!this.cronometroStatus()) {
-                        // this.cronometro.duracao = data.valor
+                        this.cronometro.duracao = data.valor
                     }
                     break
                 case "tipo":
-                    //this.cronometro.tipo = data.valor
+                    this.cronometro.tipo = data.valor
                     break
             }
 
@@ -193,10 +194,12 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
                 this.rorando = true
             } else {
                 if (this.rorando === false) {
+                    this.getCronometro(this.id)
                     this.cronometro.minuto = this.cronometro.duracao
                     this.cronometro.segundo = this.cronometro.segundo
                     this.update(this.id, { [`placar/cronometro/minuto`]: this.cronometro.minuto });
                     this.update(this.id, { [`placar/cronometro/segundo`]: this.cronometro.segundo });
+
                 }
                 this.contagemRegressiva();
                 this.cronometro.icone = true;
@@ -219,7 +222,7 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         clearInterval(this.interval);
         this.interval = null;
         this.cronometro.icone = false;
-        this.rorando = false;
+        // this.rorando = false;
     }
     cronometroStatus() {
         return !!(this.rodando && this.cronometro.icone);
@@ -260,7 +263,7 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
                     }
                 } else {
                     this.cronometro.segundo--;
-
+                    console.log(this.cronometro)
                     this.sendData("segundo", this.cronometro.segundo);
                     if (this.cronometro.segundo == 30) {
                         console.log("Segundo Salvo");

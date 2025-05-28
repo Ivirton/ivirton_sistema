@@ -12,7 +12,7 @@ const initializeSocket = (server) => {
     // Cria uma instância do servidor Socket.io utilizando o servidor HTTP fornecido
     const io = new Server(server);
     // Cria um gerenciador de sockets para transmissão
-        let transmissaoSocket = new FactorTrasmissaoSocket(io);
+    let transmissaoSocket = new FactorTrasmissaoSocket(io);
     const anunciosSocket = new FactorAnuncioSocket(io);
     // Evento disparado sempre que um novo cliente se conecta ao WebSocket
     io.on('connection', (socket) => {
