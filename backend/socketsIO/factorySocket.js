@@ -115,7 +115,10 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         })
 
 
-
+        this.listenOn("stopcronometro",async(data)=>{
+            this.stop()
+            console.log("stoop")
+        })
 
         this.listenOn("cronometro", async (data) => {
             console.log(data);
@@ -213,6 +216,7 @@ class FactorTrasmissaoSocket extends FactorSocketIO {
         this.cronometro.minuto = 0
         this.cronometro.segundo = 0
         this.cronometro.icone = false;
+        this.rorando = false
         this.sendData("icone", this.cronometro.icone);
 
 

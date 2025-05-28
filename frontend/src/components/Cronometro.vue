@@ -76,6 +76,7 @@ function stop() {
     sendData("icone", props.cronometro.icone)
     sendData("minuto", props.cronometro.minuto)
     sendData("segundo", props.cronometro.segundo)
+    sendData("stopcronometro", props.cronometro)
 }
 
 props.socket.on(`cronometro`, (menssagem) => {
