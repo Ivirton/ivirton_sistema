@@ -98,6 +98,9 @@ listen("posicao", "placar/posicao/x", (valor) => props.placar.posicao.x = valor)
 listen("posicao", "placar/posicao/y", (valor) => props.placar.posicao.y = valor)
 listen("posicao", "placar/posicao/z", (valor) => props.placar.posicao.z = valor)
 
+listen("visibilidade", "placar/texto/visibilidade", (valor) => props.placar.texto.visibilidade = valor)
+
+
 
 
 

@@ -92,6 +92,37 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Acordeon item 1 Caracter-->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseCaracter" aria-expanded="true"
+                                aria-controls="collapseCaracter">
+                                Texto
+                            </button>
+                        </h2>
+                        <!-- texto supeiro  -->
+                        <div id="collapseCaracter" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="linha">
+
+
+                                    <Text :idTrasnmissao="route.query.id" :valor="transmissor.placar.texto.valor"
+                                        :socket="socket" path="placar/texto/valor" 
+                                        style="width: 400px;"
+                                        />
+
+
+                                    <Switch :valor="transmissor.placar.texto.visibilidade"
+                                        path="placar/texto/visibilidade" :idTrasnmissao="route.query.id"
+                                        :socket="socket" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </article>
@@ -184,11 +215,11 @@
                     </div>
                 </div>
             </section>
-          
+
 
         </article>
         <article class="aside">
-  <!-- QRCODE -->
+            <!-- QRCODE -->
 
             <section class="section card1">
                 <Camada titulo="Qrcode" path="Qrcode/visibilidade" :valor="transmissor.Qrcode.visibilidade"
@@ -223,8 +254,8 @@
                         </h2>
                         <div id="collapseQrcode" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <img :src="transmissor.Qrcode.url"  style="width: 200px; border: 1px solid;" >
-                               
+                                <img :src="transmissor.Qrcode.url" style="width: 200px; border: 1px solid;">
+
                             </div>
                         </div>
                     </div>
@@ -236,7 +267,7 @@
 
 <script setup>
 // import LogoUpload  from '@/components/LogoUpload.vue'
-
+import Switch from '@/components/Switch.vue'
 import Navegacao from '../components/Navegacao.vue'
 import Camada from '../components/Camada.vue'
 import Posicao from '@/components/Posicao.vue';
@@ -261,7 +292,13 @@ let transmissor = reactive({
     "Logo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "url": "", "visibilidade": true },
     "anuncios": {
         "rotativo": { "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true, "play": false }
-    }, "id": null, "nome": "", "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true },
+    }, "id": null, "nome": "", "placar":
+    {
+        "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 },
+        "jogo": { "casa": { "nome": "casa", "pontos": 0 }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0 } },
+        "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true,
+        "texto": { "valor": "texto", "visibilidade": false }
+    },
     espelhamento: {
         posicao: { x: 0, y: 0, z: 0 },
         visibilidade: false,

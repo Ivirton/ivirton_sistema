@@ -31,7 +31,8 @@ const transmissorEntity = {
       visitante: { nome: "visitante", pontos: 0 }
     },
     posicao: { x: 0, y: 0, z: 0 },
-    visibilidade: true
+    visibilidade: true,
+    "texto":{"valor":"texto","visibilidade":false}
   },
   espelhamento: {
     posicao: { x: 0, y: 0, z: 0 },

@@ -41,7 +41,12 @@ let transmissor = reactive({
             indice: 0
         }
     }, "id": null, "nome": "",
-    "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 }, "jogo": { "casa": { "nome": "casa", "pontos": 0, color: "#596b57" }, "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0, color: "#596b57" } }, "posicao": { "x": 0, "y": 0, "z": 0 }, "visibilidade": true },
+    "placar": { "cronometro": { "visibilidade": true, "duracao": 0, "icone": true, "minuto": 0, "segundo": 0, "tipo": "1", "hora": 0 },
+     "jogo": { "casa": { "nome": "casa", "pontos": 0, color: "#596b57" },
+      "partida": { pontos: 1 }, "visitante": { "nome": "visitante", "pontos": 0, color: "#596b57" } }, "posicao": { "x": 0, "y": 0, "z": 0 },
+       "visibilidade": true
+        "texto":{"valor":"texto","visiibulidade":false}
+    },
     espelhamento: {
         posicao: { x: 0, y: 0, z: 0 },
         visibilidade: false,
